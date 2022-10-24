@@ -6,13 +6,13 @@ import android.os.Bundle
 import android.view.View
 import com.educards.R
 
-class LoginActivity : AppCompatActivity() {
+class SignInActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_sign_in)
     }
 
-    fun signIn(view: View){
-        startActivity(Intent(this, SignInActivity::class.java))
+    fun logIn(view: View){
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 }

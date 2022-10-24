@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:scrollbars="none"
-    tools:context=".view.LoginActivity">
+    tools:context=".view.SignInActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
             android:background="@color/blue_900"
             android:paddingHorizontal="16dp"
             android:paddingVertical="16dp">
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,20 +50,41 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_bold"
             android:paddingHorizontal="16dp"
-            android:text="Inicia sesión"
+            android:text="Registrate"
             android:textAlignment="center"
-            android:textColor="@color/grey_800"
+            android:textColor="@color/black"
             android:textSize="36sp" />
-
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
+            android:hint="Nombre"
+            android:textColorHint="@color/grey_700"
+            >
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:textColor="@color/blue_700"
+                android:textStyle="bold" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:paddingHorizontal="16dp"
             android:hint="Correo"
             android:textColorHint="@color/grey_700"
@@ -80,11 +102,50 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="+ 503"
+                android:textColor="@color/grey_700"
+                android:textSize="20sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:hint="Telefono"
+                android:textColorHint="@color/grey_700"
+                >
+
+                <EditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:textColor="@color/blue_700"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:paddingHorizontal="16dp"
             android:hint="Contraseña"
             android:textColorHint="@color/grey_700"
@@ -104,11 +165,35 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="16dp"
+            android:hint="Contraseña"
+            android:textColorHint="@color/grey_700"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/blue_700"
+            >
+
+            <EditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/blue_700"
+                android:textStyle="bold" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="36dp">
 
             <ProgressBar
                 android:id="@+id/signInProgressBar"
@@ -118,7 +203,7 @@
                 android:visibility="invisible" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btLogin"
+                android:id="@+id/btSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/blue_700"
@@ -127,7 +212,7 @@
                 android:paddingTop="16dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="16dp"
-                android:text="Entrar"
+                android:text="Ingresar"
                 app:cornerRadius="10dp" />
 
         </FrameLayout>
@@ -135,7 +220,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginVertical="36dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -144,19 +229,19 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
                 android:textStyle="bold"
-                android:text="¿No tienes una cuenta?"
+                android:text="¿Ya tienes una cuenta?"
                 android:textColor="@color/grey_800"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tvSignIn"
+                android:id="@+id/tvLogIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/roboto"
                 android:textStyle="bold"
-                android:text="Registrarse"
-                android:onClick="signIn"
+                android:text="Inicia sesion"
+                android:onClick="logIn"
                 android:textColor="@color/blue_700"
                 android:textSize="14sp" />
 
