@@ -13,4 +13,7 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="Base.TextAppearance.AppCompat.Menu.">
+        <item name="android:color">@color/white</item>
+    </style>
 </resources>

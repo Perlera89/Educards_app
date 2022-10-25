@@ -11,47 +11,14 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        app:titleTextColor="@color/white"
+        app:title="@string/menu_card_title"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight">
 
     </androidx.appcompat.widget.Toolbar>
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:orientation="horizontal">-->
-<!--        -->
-<!--        <ImageButton-->
-<!--            android:id="@+id/ibBack"-->
-<!--            android:layout_width="64dp"-->
-<!--            android:layout_height="64dp"-->
-<!--            android:src="@drawable/ic_arrow_back"-->
-<!--            style="@style/Widget.AppCompat.Button.Borderless"-->
-<!--            android:backgroundTint="@color/blue_900"-->
-<!--            />-->
-
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Titulo"-->
-<!--            android:fontFamily="@font/poppins"-->
-<!--            android:textColor="@color/grey_800"-->
-<!--            android:layout_marginStart="32dp"-->
-<!--            android:layout_weight="6"-->
-<!--            android:textSize="36sp"/>-->
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/ibMore"-->
-<!--            android:layout_width="64dp"-->
-<!--            android:layout_height="64dp"-->
-<!--            android:src="@drawable/ic_more_vert"-->
-<!--            style="@style/Widget.AppCompat.Button.Borderless"-->
-<!--            android:backgroundTint="@color/blue_900"-->
-<!--            />-->
-<!--    </LinearLayout>-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvQuestion"
@@ -101,22 +68,22 @@
         android:layout_marginVertical="16dp"
         >
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/faSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/red_700"
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_cancel"
+            android:background="@drawable/bg_icon_circle_cancel"
             android:layout_marginEnd="16dp"
-            app:rippleColor="#FFFCFD"
-            app:srcCompat="@drawable/ic_cancel" />
+            android:gravity="center_vertical|center_horizontal"
+            />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/faCancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/blue_700"
-            app:rippleColor="#FFFCFD"
-            app:srcCompat="@drawable/ic_navigate_next" />
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_navigate_next"
+            android:background="@drawable/bg_icon_circle_next"
+            android:gravity="center_vertical|center_horizontal"
+            />
     </LinearLayout>
 
 </LinearLayout>

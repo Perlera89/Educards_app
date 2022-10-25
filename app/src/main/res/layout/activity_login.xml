@@ -123,12 +123,12 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/blue_700"
                 android:fontFamily="@font/poppins_bold"
+                android:onClick="addCard"
                 android:paddingStart="10dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="16dp"
                 android:text="@string/tv_log_in"
-                android:onClick="addCard"
                 app:cornerRadius="10dp" />
 
         </FrameLayout>

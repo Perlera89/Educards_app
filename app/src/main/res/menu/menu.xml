@@ -16,10 +16,12 @@
         android:title="@string/menu_card_delete"/>
 
     <item
+        android:iconTint="@color/white"
         android:id="@+id/menuCards"
         android:title="@string/menu_card_list"/>
 
     <item
         android:id="@+id/menuSave"
+        android:iconTint="@color/white"
         android:title="@string/menu_card_save"/>
 </menu>

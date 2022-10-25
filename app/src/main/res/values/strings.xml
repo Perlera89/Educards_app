@@ -20,6 +20,7 @@
     <string name="ed_confirm_password">Confirmar contraseña</string>
 
     <!--    Menu-->
+    <string name="menu_card_title">Tarjeta</string>
     <string name="menu_card_delete">Borrar</string>
     <string name="menu_card_save">Salir y guardar</string>
     <string name="menu_card_reverse">Ver reverso</string>

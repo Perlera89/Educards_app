@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import com.educards.R
 
 class AddCardActivity : AppCompatActivity() {
