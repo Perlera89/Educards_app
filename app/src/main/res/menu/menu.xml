@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menuReverse"
+        android:icon="@drawable/ic_rotate_right"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_card_reverse"/>
+
+    <item
+        android:id="@+id/menuDelete"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_card_delete"/>
+
+    <item
+        android:id="@+id/menuCards"
+        android:title="@string/menu_card_list"/>
+
+    <item
+        android:id="@+id/menuSave"
+        android:title="@string/menu_card_save"/>
+</menu>

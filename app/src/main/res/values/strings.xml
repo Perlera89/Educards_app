@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">Educards</string>
+
+    <!--    LogIn & SignIn-->
+    <string name="log_in_title">Inicia Sesión</string>
+    <string name="log_in_desc">¿Ya tienes una cuenta?</string>
+    <string name="sign_in_title">Regístrate</string>
+    <string name="sign_in_desc">¿No tienes una cuenta?</string>
+
+    <!--    TextView-->
+    <string name="tv_log_in">Entrar</string>
+    <string name="tv_sign_in">Ingresar</string>
+    <string name="tv_country_salvador">+ 503</string>
+
+    <!--    EditText-->
+    <string name="ed_name">Nombre</string>
+    <string name="ed_email">Correo</string>
+    <string name="ed_phone">Telefono</string>
+    <string name="ed_password">Contrasenña</string>
+    <string name="ed_confirm_password">Confirmar contraseña</string>
+
+    <!--    Menu-->
+    <string name="menu_card_delete">Borrar</string>
+    <string name="menu_card_save">Salir y guardar</string>
+    <string name="menu_card_reverse">Ver reverso</string>
+    <string name="menu_card_list">Ver Tarjetas</string>
 </resources>

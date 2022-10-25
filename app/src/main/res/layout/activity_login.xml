@@ -16,7 +16,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue_900"
+            android:background="@color/blue_700"
             android:paddingHorizontal="16dp"
             android:paddingVertical="16dp">
 
@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Educards"
+                android:text="@string/app_name"
                 android:textColor="@color/white"
                 android:textSize="32dp"
                 android:textStyle="bold"
@@ -49,10 +49,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="48dp"
             android:fontFamily="@font/poppins_bold"
             android:paddingHorizontal="16dp"
-            android:text="Inicia sesión"
+            android:text="@string/log_in_title"
             android:textAlignment="center"
             android:textColor="@color/grey_800"
             android:textSize="36sp" />
@@ -62,9 +62,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:paddingHorizontal="16dp"
-            android:hint="Correo"
+            android:layout_marginTop="48dp"
+            android:paddingHorizontal="32dp"
+            android:hint="@string/ed_email"
             android:textColorHint="@color/grey_700"
             >
 
@@ -85,8 +85,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:paddingHorizontal="16dp"
-            android:hint="Contraseña"
+            android:paddingHorizontal="32dp"
+            android:hint="@string/ed_password"
             android:textColorHint="@color/grey_700"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/blue_700"
@@ -107,7 +107,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="32dp"
             android:layout_marginTop="50dp">
 
             <ProgressBar
@@ -127,7 +127,8 @@
                 android:paddingTop="16dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="16dp"
-                android:text="Entrar"
+                android:text="@string/tv_log_in"
+                android:onClick="addCard"
                 app:cornerRadius="10dp" />
 
         </FrameLayout>
@@ -135,7 +136,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="48dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -143,20 +144,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
-                android:textStyle="bold"
-                android:text="¿No tienes una cuenta?"
+                android:text="@string/sign_in_desc"
                 android:textColor="@color/grey_800"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            <TextView
+            <Button
                 android:id="@+id/tvSignIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:fontFamily="@font/roboto"
                 android:textStyle="bold"
-                android:text="Registrarse"
+                android:text="@string/sign_in_title"
                 android:onClick="signIn"
+                android:textAllCaps="false"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:textColor="@color/blue_700"
                 android:textSize="14sp" />
 

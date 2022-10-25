@@ -15,4 +15,8 @@ class LoginActivity : AppCompatActivity() {
     fun signIn(view: View){
         startActivity(Intent(this, SignInActivity::class.java))
     }
+
+    fun addCard(view: View){
+        startActivity(Intent(this, AddCardActivity::class.java))
+    }
 }
