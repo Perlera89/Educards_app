@@ -25,10 +25,12 @@
     <string name="menu_card_delete">Delete</string>
     <string name="menu_card_save">Save and exit</string>
     <string name="menu_card_reverse">View Reverse</string>
-    <string name="menu_card_list">View Cards</string>
+    <string name="menu_set_list">All Sets</string>
+    <string name="menu_favorite_list">All favorites</string>
 
     <string name="nav_about">About</string>
     <string name="nav_donate">Donation</string>
     <string name="nav_my_apps">Settings</string>
     <string name="nav_back">Back</string>
+    <string name="nav_header_text">Click to start main activity</string>
 </resources>
