@@ -11,7 +11,9 @@ import com.educards.R
 
 class AddCardActivity : AppCompatActivity() {
 
-    private lateinit var toolbar: Toolbar
+    companion object{
+        private lateinit var toolbar: Toolbar
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
