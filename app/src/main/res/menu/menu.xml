@@ -18,7 +18,7 @@
     <item
         android:iconTint="@color/white"
         android:id="@+id/menuCards"
-        android:title="@string/menu_card_list"/>
+        android:title="@string/menu_set_list"/>
 
     <item
         android:id="@+id/menuSave"

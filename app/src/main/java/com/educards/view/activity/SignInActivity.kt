@@ -1,4 +1,4 @@
-package com.educards.view
+package com.educards.view.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +13,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     fun logIn(view: View){
+        this.finish()
         startActivity(Intent(this, LoginActivity::class.java))
     }
 }

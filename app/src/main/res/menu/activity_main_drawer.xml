@@ -2,26 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="none">
         <item
-            android:id="@+id/navAllSets"
+            android:id="@+id/nav_all_decks"
             android:icon="@drawable/ic_view_list"
             android:title="@string/menu_set_list" />
         <item
-            android:id="@+id/navFavorite"
+            android:id="@+id/nav_all_favorites"
             android:icon="@drawable/ic_star_rate"
             android:title="@string/menu_favorite_list" />
         <item
-            android:id="@+id/navSettings"
+            android:id="@+id/nav_Settings"
             android:icon="@drawable/ic_settings"
             android:title="@string/nav_my_apps" />
     </group>
 
     <group android:id="@+id/group_about">
         <item
-            android:id="@+id/navAbout"
+            android:id="@+id/nav_about"
             android:icon="@drawable/ic_info"
             android:title="@string/nav_about" />
         <item
-            android:id="@+id/navDonate"
+            android:id="@+id/nav_donate"
             android:icon="@drawable/ic_attach_money"
             android:title="@string/nav_donate" />
     </group>
