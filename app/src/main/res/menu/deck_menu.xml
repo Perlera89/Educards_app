@@ -4,24 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menuReverse"
-        android:icon="@drawable/ic_rotate_right"
-        app:showAsAction="ifRoom"
-        android:title="@string/menu_card_reverse"/>
-
-    <item
-        android:id="@+id/menuDelete"
-        android:icon="@drawable/ic_delete"
-        app:showAsAction="ifRoom"
-        android:title="@string/menu_card_delete"/>
+        android:iconTint="@color/white"
+        android:id="@+id/menu_trash"
+        android:title="@string/menu_trash"/>
 
     <item
         android:iconTint="@color/white"
-        android:id="@+id/menuCards"
+        android:id="@+id/menu_all_decks"
         android:title="@string/menu_set_list"/>
 
     <item
-        android:id="@+id/menuSave"
+        android:id="@+id/menu_save_exit"
         android:iconTint="@color/white"
         android:title="@string/menu_card_save"/>
 </menu>

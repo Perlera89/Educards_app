@@ -33,7 +33,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.activity.AddCardActivity"
+            android:name=".view.activity.DeckActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

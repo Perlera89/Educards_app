@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
-        drawer = findViewById(R.id.drawer_layout)
+        drawer = findViewById(R.id.drawer_main)
         val toggle = ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 val drawer: DrawerLayout =
-                    findViewById(R.id.drawer_layout)
+                    findViewById(R.id.drawer_main)
                 drawer.closeDrawer(GravityCompat.START)
             }
             R.id.fab_main -> {
@@ -191,12 +191,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_about -> {
+            R.id.menu_all_decks -> {
                 Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
 //                val aboutIntent = Intent(this, AboutActivity::class.java)
 //                startActivity(aboutIntent)
             }
-            R.id.menu_donate -> {
+            R.id.menu_save_exit -> {
                 Toast.makeText(this, "Donate", Toast.LENGTH_SHORT).show()
 //                val donateIntent = Intent(this, DonateActivity::class.java)
 //                startActivity(donateIntent)
@@ -209,7 +209,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val intent = Intent()
         when (item.itemId) {
             R.id.nav_all_decks -> {
                 Toast.makeText(this, "All sets", Toast.LENGTH_SHORT).show()
