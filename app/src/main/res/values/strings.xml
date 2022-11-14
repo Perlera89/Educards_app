@@ -43,10 +43,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="app_start_text">Created by Leiva</string>
-    <string name="deck_untitle">Untitled deck</string>
-    <string name="deck_default_text">You can edit text</string>
     <string name="tab_title_decks">Decks</string>
     <string name="app_empty_text">Untitled deck</string>
-    <string name="deck_description">0 flashcards</string>
     <string name="menu_trash">Move to trash</string>
+
+<!--    Decks-->
+    <string name="deck_untitle">Untitled deck</string>
+    <string name="deck_default_text">You can edit text</string>
+    <string name="deck_description">0 flashcards</string>
+    <string name="deck_front_text">You can edit the question</string>
+    <string name="deck_back_text">You can edit the answer</string>
 </resources>

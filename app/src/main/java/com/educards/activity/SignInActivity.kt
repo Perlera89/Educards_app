@@ -1,4 +1,4 @@
-package com.educards.view.activity
+package com.educards.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

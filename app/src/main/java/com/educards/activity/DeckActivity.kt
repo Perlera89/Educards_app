@@ -1,25 +1,25 @@
-package com.educards.view.activity
+package com.educards.activity
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.educards.R
-import com.educards.view.adapter.FragmentAdapter
-import com.educards.view.fragment.DecksFragment
-import com.educards.view.fragment.FavoritesFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
@@ -28,19 +28,26 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     NavigationView.OnNavigationItemSelectedListener {
     private lateinit var activity: DeckActivity
     private lateinit var drawer: DrawerLayout
-    private lateinit var fab: FloatingActionButton
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager: ViewPager
-    private lateinit var relative_main: RelativeLayout
-    private lateinit var page_start: ImageView
     private lateinit var toolbar: Toolbar
+    private lateinit var cardQuestion: CardView
+    private lateinit var cardAnswer: CardView
+    private lateinit var btReverse: ImageButton
+
+    private lateinit var frontAnim: AnimatorSet
+    private lateinit var backAnim: AnimatorSet
+    private var isFront = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deck)
 
+        cardQuestion = findViewById(R.id.cv_question)
+        cardAnswer = findViewById(R.id.cv_answer)
+        btReverse = findViewById(R.id.bt_revert)
+
         activity = this
         initView()
+        deckAnimation()
     }
 
     private fun initView() {
@@ -127,4 +134,30 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         return true
     }
 
+    private fun deckAnimation(){
+        val scale = applicationContext.resources.displayMetrics.density
+        cardQuestion.cameraDistance = 8000 * scale
+        cardAnswer.cameraDistance = 8000 * scale
+
+        frontAnim = AnimatorInflater.loadAnimator(applicationContext, R.animator.front_animation) as AnimatorSet
+        backAnim = AnimatorInflater.loadAnimator(applicationContext, R.animator.back_animation) as AnimatorSet
+
+        btReverse.setOnClickListener{
+            if(isFront){
+                frontAnim.setTarget(cardQuestion)
+                backAnim.setTarget(cardAnswer)
+                frontAnim.start()
+                backAnim.start()
+
+                isFront = false
+            } else{
+                frontAnim.setTarget(cardAnswer)
+                backAnim.setTarget(cardQuestion)
+                backAnim.start()
+                frontAnim.start()
+
+                isFront = true
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.educards.view.activity
+package com.educards.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -25,9 +25,9 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.educards.R
-import com.educards.view.adapter.FragmentAdapter
-import com.educards.view.fragment.DecksFragment
-import com.educards.view.fragment.FavoritesFragment
+import com.educards.adapter.FragmentAdapter
+import com.educards.fragment.DecksFragment
+import com.educards.fragment.FavoritesFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -86,9 +86,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             relative_main.visibility = View.VISIBLE
             Glide.with(this@MainActivity).load(R.mipmap.ic_launcher_round).into(page_start)
             if (sharedPreferences.getBoolean("isFirst", true)) {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 2000)
             } else {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 3000)
+                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 100)
             }
             isShowPageStart = false
         }
@@ -130,8 +129,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewPager = findViewById(R.id.view_pager_main)
 
         val titles: MutableList<String> = ArrayList()
-        titles.add(getString(R.string.tab_title_decks))
-        titles.add(getString(R.string.tab_title_favorites))
+        titles.add("All Decks")
+        titles.add("Favorites")
         tabLayout.addTab(tabLayout.newTab().setText(titles[0]))
         tabLayout.addTab(tabLayout.newTab().setText(titles[1]))
 

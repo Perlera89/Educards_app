@@ -1,4 +1,4 @@
-package com.educards.view.fragment
+package com.educards.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,17 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.educards.R
 
-class SetsFragment : Fragment() {
+class CardsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_sets, container, false)
+        return inflater.inflate(R.layout.fragment_cards, container, false)
     }
-
 }

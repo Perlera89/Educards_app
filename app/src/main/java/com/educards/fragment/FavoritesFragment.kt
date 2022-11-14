@@ -1,4 +1,4 @@
-package com.educards.view.fragment
+package com.educards.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
