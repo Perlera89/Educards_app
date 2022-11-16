@@ -1,4 +1,4 @@
-package com.educards.domain.entities
+package com.educards.model.entities
 
 import java.util.*
 

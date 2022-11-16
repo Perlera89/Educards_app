@@ -50,7 +50,7 @@
 <!--    Decks-->
     <string name="deck_untitle">Untitled deck</string>
     <string name="deck_default_text">You can edit text</string>
-    <string name="deck_description">0 flashcards</string>
+    <string name="deck_description">flashcards</string>
     <string name="deck_front_text">You can edit the question</string>
     <string name="deck_back_text">You can edit the answer</string>
 </resources>

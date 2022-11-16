@@ -1,6 +1,6 @@
-package com.educards.domain
+package com.educards.model
 
-import com.educards.domain.entities.Card
+import com.educards.model.entities.Card
 import java.util.*
 
 data class Deck(
