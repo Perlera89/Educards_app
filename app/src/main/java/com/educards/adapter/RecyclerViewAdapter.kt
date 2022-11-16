@@ -21,37 +21,33 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.activity.MainActivity
+import com.educards.model.Deck
 import com.educards.util.OnCardSelectListener
 import org.w3c.dom.Text
 import java.util.*
 import kotlin.collections.ArrayList
 
-class RecyclerViewAdapter(onCardSelectListener: OnCardSelectListener) :
+class RecyclerViewAdapter(var decks: MutableList<Deck>) :
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
-
-    private val titles = arrayOf("Matematicas", "Fisica", "Redes")
-    private val count = arrayOf("10", "12", "5")
-    private var cardListener: OnCardSelectListener = onCardSelectListener
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
         val holder = LayoutInflater.from(viewGroup.context).inflate(R.layout.deck_item, viewGroup, false)
-        return ViewHolder(holder, cardListener)
+        return ViewHolder(holder)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.title.text = titles[position]
-        holder.countCards.text = count[position]
+        val deck = decks.get(position)
+        holder.bind(deck)
     }
 
     override fun getItemCount(): Int {
-        return titles.size
+        return decks.size
     }
-        inner class ViewHolder(itemView: View, onCardSelectListener: OnCardSelectListener): RecyclerView.ViewHolder(itemView), View.OnClickListener{
+        inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
             var title: TextView
             var countCards: TextView
             var favorite: ImageView
             var delete: ImageView
-            private var onCardSelectListener: OnCardSelectListener? = null
 
             init {
                 title = itemView.findViewById(R.id.tv_title_deck)
@@ -60,16 +56,12 @@ class RecyclerViewAdapter(onCardSelectListener: OnCardSelectListener) :
                 delete = itemView.findViewById(R.id.iv_delete)
             }
 
-            fun bind(){
+            fun bind(deck: Deck){
+                title.text = deck.title
+                countCards.text = deck.count.toString()
                 itemView.setOnClickListener(View.OnClickListener {
                     Toast.makeText(MainActivity(), "Carta", Toast.LENGTH_SHORT).show()
                 })
-            }
-
-            override fun onClick(view: View?) {
-                favorite.setOnClickListener{
-                    onCardSelectListener!!.onCardClick(adapterPosition)
-                }
             }
         }
 }

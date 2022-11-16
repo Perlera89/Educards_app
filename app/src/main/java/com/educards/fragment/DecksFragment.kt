@@ -10,10 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.activity.MainActivity
 import com.educards.adapter.RecyclerViewAdapter
+import com.educards.model.Deck
 import com.educards.util.OnCardSelectListener
 import java.util.zip.Inflater
 
-class DecksFragment : Fragment(), OnCardSelectListener {
+class DecksFragment : Fragment() {
     private lateinit var recyclerDeck: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,13 +33,18 @@ class DecksFragment : Fragment(), OnCardSelectListener {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerDeck = view.findViewById(R.id.recycler_decks)
-        val adapter = RecyclerViewAdapter(this)
+        val adapter = RecyclerViewAdapter(getDeck())
 
         recyclerDeck.layoutManager = LinearLayoutManager(MainActivity())
         recyclerDeck.adapter = adapter
     }
 
-    override fun onCardClick(position: Int) {
+    fun getDeck(): MutableList<Deck>{
+        val decks: MutableList<Deck> = ArrayList()
+        decks.add(Deck("Matemáticas", 11))
+        decks.add(Deck("Física", 6))
+        decks.add(Deck("Programación", 22))
 
+        return decks
     }
 }
