@@ -39,8 +39,6 @@ class DecksFragment : Fragment(), OnCardSelectListener {
     }
 
     override fun onCardClick(position: Int) {
-        when(position){
 
-        }
     }
 }

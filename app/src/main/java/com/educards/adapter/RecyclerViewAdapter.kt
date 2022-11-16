@@ -30,7 +30,7 @@ class RecyclerViewAdapter(onCardSelectListener: OnCardSelectListener) :
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     private val titles = arrayOf("Matematicas", "Fisica", "Redes")
-    private val countCards = arrayOf("10", "12", "5")
+    private val count = arrayOf("10", "12", "5")
     private var cardListener: OnCardSelectListener = onCardSelectListener
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
@@ -40,7 +40,7 @@ class RecyclerViewAdapter(onCardSelectListener: OnCardSelectListener) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text = titles[position]
-        holder.countCards.text = countCards[position]
+        holder.countCards.text = count[position]
     }
 
     override fun getItemCount(): Int {
@@ -58,12 +58,17 @@ class RecyclerViewAdapter(onCardSelectListener: OnCardSelectListener) :
                 countCards = itemView.findViewById(R.id.tv_count_cards)
                 favorite = itemView.findViewById(R.id.iv_favorite)
                 delete = itemView.findViewById(R.id.iv_delete)
-                this.onCardSelectListener = onCardSelectListener
+            }
+
+            fun bind(){
+                itemView.setOnClickListener(View.OnClickListener {
+                    Toast.makeText(MainActivity(), "Carta", Toast.LENGTH_SHORT).show()
+                })
             }
 
             override fun onClick(view: View?) {
                 favorite.setOnClickListener{
-                    Toast.makeText(context, "Favoritos en ${titles[adapterPosition]}").show()
+                    onCardSelectListener!!.onCardClick(adapterPosition)
                 }
             }
         }
