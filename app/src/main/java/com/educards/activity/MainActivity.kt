@@ -1,6 +1,8 @@
 package com.educards.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
@@ -21,6 +23,7 @@ import android.view.animation.Animation
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -28,6 +31,7 @@ import com.educards.R
 import com.educards.adapter.FragmentAdapter
 import com.educards.fragment.DecksFragment
 import com.educards.fragment.FavoritesFragment
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
@@ -39,6 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var relative_main: RelativeLayout
     private lateinit var page_start: ImageView
     private lateinit var toolbar: Toolbar
+    private lateinit var context: Context
 
     private var isShowPageStart = true
     private val MESSAGE_SHOW_DRAWER_LAYOUT = 0x001
@@ -76,11 +81,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         initView()
         initViewPager()
 
         val sharedPreferences = getSharedPreferences("app", MODE_PRIVATE)
+        context = this
 
         if (isShowPageStart) {
             relative_main.visibility = View.VISIBLE
@@ -144,28 +149,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
         fab.show()
-//        viewPager.addOnPageChangeListener(pageChangeListener)
     }
-
-//    private val pageChangeListener: ViewPager.OnPageChangeListener =
-//        object : ViewPager.OnPageChangeListener {
-//            override fun onPageScrolled(
-//                position: Int,
-//                positionOffset: Float,
-//                positionOffsetPixels: Int
-//            ) {
-//            }
-//
-//            override fun onPageSelected(position: Int) {
-//                if (position == 0) {
-//                    fab.show()
-//                } else {
-//                    fab.hide()
-//                }
-//            }
-//
-//            override fun onPageScrollStateChanged(state: Int) {}
-//        }
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -177,10 +161,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 drawer.closeDrawer(GravityCompat.START)
             }
             R.id.fab_main -> {
-                val deckIntent = Intent(this, DeckActivity::class.java)
-                startActivity(deckIntent)
+                val builder = AlertDialog.Builder(this)
+                val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
+                builder.setView(view)
+
+                val dialog = builder.create()
+                dialog.show()
             }
         }
+    }
+
+    fun createDeck(view: View){
+        val deckIntent = Intent(this, DeckActivity::class.java)
+        startActivity(deckIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -192,8 +185,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.menu_all_decks -> {
                 Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
-//                val aboutIntent = Intent(this, AboutActivity::class.java)
-//                startActivity(aboutIntent)
             }
             R.id.menu_save_exit -> {
                 Toast.makeText(this, "Donate", Toast.LENGTH_SHORT).show()

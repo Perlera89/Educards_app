@@ -7,6 +7,4 @@ data class Deck(
     val title: String,
     val count: Int
 //    val cards: List<Card>
-) {
-
-}
+) {}

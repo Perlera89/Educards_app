@@ -25,12 +25,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_decks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/activity_background"
             android:paddingStart="@dimen/zero_horizontal_margin_big_activity"
-            android:paddingEnd="@dimen/zero_horizontal_margin_big_activity"
-            android:background="@color/activity_background" />
+            android:paddingEnd="@dimen/zero_horizontal_margin_big_activity" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

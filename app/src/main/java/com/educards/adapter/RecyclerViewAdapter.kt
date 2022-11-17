@@ -1,38 +1,24 @@
 package com.educards.adapter
 
 import android.app.Activity
-import android.app.ActivityOptions
+import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.ListAdapter
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
-import com.educards.activity.MainActivity
 import com.educards.model.Deck
-import com.educards.util.OnCardSelectListener
-import org.w3c.dom.Text
-import java.util.*
-import kotlin.collections.ArrayList
+import com.google.android.material.snackbar.Snackbar
 
-class RecyclerViewAdapter(var decks: MutableList<Deck>) :
+class RecyclerViewAdapter(var decks: MutableList<Deck>, val context: Context?, val activity: Activity?) :
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
         val holder = LayoutInflater.from(viewGroup.context).inflate(R.layout.deck_item, viewGroup, false)
-        return ViewHolder(holder)
+        return ViewHolder(holder, context, activity)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -43,25 +29,50 @@ class RecyclerViewAdapter(var decks: MutableList<Deck>) :
     override fun getItemCount(): Int {
         return decks.size
     }
-        inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
+    fun showAlertDialog(){
+
+    }
+        inner class ViewHolder(view: View, context: Context?, activity: Activity?): RecyclerView.ViewHolder(view){
             var title: TextView
             var countCards: TextView
             var favorite: ImageView
             var delete: ImageView
+            var builder: AlertDialog.Builder
 
             init {
-                title = itemView.findViewById(R.id.tv_title_deck)
-                countCards = itemView.findViewById(R.id.tv_count_cards)
-                favorite = itemView.findViewById(R.id.iv_favorite)
-                delete = itemView.findViewById(R.id.iv_delete)
+                title = view.findViewById(R.id.tv_title_deck)
+                countCards = view.findViewById(R.id.tv_count_cards)
+                favorite = view.findViewById(R.id.iv_favorite)
+                delete = view.findViewById(R.id.iv_delete)
+                builder = AlertDialog.Builder(context)
             }
 
             fun bind(deck: Deck){
                 title.text = deck.title
                 countCards.text = deck.count.toString()
-                itemView.setOnClickListener(View.OnClickListener {
-                    Toast.makeText(MainActivity(), "Carta", Toast.LENGTH_SHORT).show()
-                })
+
+                delete.setOnClickListener{
+                    builder.setTitle("Confirm to delete")
+                        .setMessage("\nDo you want to remove ${deck.title} deck?")
+                        .setCancelable(true)
+                        .setPositiveButton("Yes"){dialogInterface, it ->
+//                          TODO: Delete deck
+                        }
+                        .setNegativeButton("No"){dialogInterface, it ->
+                            dialogInterface.cancel()
+                        }
+                        .setNeutralButton("Cancel"){dialogInterface, it ->
+                            dialogInterface.cancel()
+                        }
+                        .show()
+                }
+
+                favorite.setOnClickListener{
+//                    TODO: Move to favorites
+                    val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main), "${deck.title} deck move to favorites", Snackbar.LENGTH_LONG)
+                    snackBar.show()
+                }
             }
         }
 }

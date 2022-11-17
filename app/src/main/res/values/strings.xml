@@ -53,4 +53,5 @@
     <string name="deck_description">flashcards</string>
     <string name="deck_front_text">You can edit the question</string>
     <string name="deck_back_text">You can edit the answer</string>
+    <string name="snack_favorite_deck">Deck moved to favorites</string>
 </resources>
