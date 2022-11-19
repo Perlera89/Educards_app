@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "24812329883",
+    "project_id": "educards-app",
+    "storage_bucket": "educards-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24812329883:android:6cc5a900ab71a61ef65f3e",
+        "android_client_info": {
+          "package_name": "com.educards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24812329883-fivtd9462lql0n0mlcs18acs5n70189q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBc9HNoYDa--LHlbJWdVag8Af_ngPgeQJA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24812329883-fivtd9462lql0n0mlcs18acs5n70189q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
