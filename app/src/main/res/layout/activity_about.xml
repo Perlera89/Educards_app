@@ -46,6 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/blue_900"
+        app:borderWidth="0dp"
+        android:elevation="6dp"
+        app:tint="@color/blue_700"
         android:src="@drawable/ic_share" />
 </FrameLayout>

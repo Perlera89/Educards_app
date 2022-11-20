@@ -64,5 +64,8 @@
     <string name="about_github">Source code on GitHub</string>
     <string name="about_licenses">Open source licenses</string>
     <string name="app_designed_by">Designed by July</string>
+    <string name="about_not_found_email">Not found email app</string>
+    <string name="about_email_intent">About:Educard App</string>
+    <string name="share_with">Share with</string>
 
 </resources>

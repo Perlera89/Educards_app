@@ -25,7 +25,7 @@
             android:id="@+id/view_card_about_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/blue_100" />
+            android:background="@color/blue_700" />
 
         <LinearLayout
             android:id="@+id/ll_card_about_email"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/text_margin"
-                android:src="@drawable/ic_email" />
+                android:src="@drawable/ic_github" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/text_margin"
-                android:src="@drawable/ic_email" />
+                android:src="@drawable/ic_license" />
 
             <TextView
                 android:layout_width="wrap_content"
