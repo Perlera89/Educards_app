@@ -40,6 +40,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deck)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
 
         cardQuestion = findViewById(R.id.cv_question)
         cardAnswer = findViewById(R.id.cv_answer)
@@ -119,9 +120,6 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             }
             R.id.nav_all_favorites -> {
                 Toast.makeText(this, "All favorites", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_Settings -> {
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_about -> {
                 Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()

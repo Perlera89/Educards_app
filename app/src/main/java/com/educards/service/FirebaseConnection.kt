@@ -1,4 +1,4 @@
-package com.educards.services
+package com.educards.service
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

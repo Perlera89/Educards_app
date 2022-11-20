@@ -1,4 +1,4 @@
-package com.educards.services
+package com.educards.service
 
 import android.util.Log
 import com.educards.model.MDeck

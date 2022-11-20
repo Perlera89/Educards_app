@@ -1,4 +1,4 @@
-package com.educards.services
+package com.educards.service
 
 import android.content.Context
 import android.util.Log

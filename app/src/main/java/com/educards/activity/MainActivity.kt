@@ -201,13 +201,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_all_decks -> {
-                Toast.makeText(this, "All sets", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "All decks", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_all_favorites -> {
                 Toast.makeText(this, "All favorites", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_Settings -> {
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_about -> {
                 Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()

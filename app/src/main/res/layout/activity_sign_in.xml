@@ -116,7 +116,7 @@
                 android:fontFamily="@font/roboto"
                 android:text="@string/tv_country_salvador"
                 android:textColor="@color/grey_700"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:paddingHorizontal="32dp"
-            android:hint="Contraseña"
+            android:hint="@string/ed_password"
             android:textColorHint="@color/grey_700"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/blue_700"

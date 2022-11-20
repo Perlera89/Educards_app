@@ -9,8 +9,8 @@ import android.widget.EditText
 import android.widget.Toast
 import com.educards.R
 import com.educards.model.User
-import com.educards.services.FirebaseConnection
-import com.educards.services.SUser
+import com.educards.service.FirebaseConnection
+import com.educards.service.SUser
 import com.educards.util.UTextView
 import kotlinx.coroutines.*
 

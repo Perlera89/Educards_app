@@ -1,4 +1,4 @@
-package com.educards.services
+package com.educards.service
 
 import android.util.Log
 import com.educards.model.entities.Card
@@ -16,7 +16,7 @@ object SCard {
             .addOnCompleteListener { task->
                 if (task.isSuccessful){
                     Log.d("dao/DCards","Nuevo card creado existosamente")
-                    SDeck.updateCountInDeck(_documentPathToCard,1.0)
+                    SDeck.updateCountInDeck(_documentPathToCard, 1.0)
                 }
             }.addOnFailureListener{
                 Log.d("data/dao/DCards","Error al crear nuevo card. Detalles: "+it.toString())
@@ -66,7 +66,7 @@ object SCard {
             .document(_idCard).delete()
             .addOnSuccessListener {
                 Log.d("dao/DCards","El card se ha eliminado exitosamente")
-                SDeck.updateCountInDeck(_documentPathToCard,-1.0)
+                SDeck.updateCountInDeck(_documentPathToCard, -1.0)
             }.addOnFailureListener{
                 Log.d("dao/DCards", "Error al eliminar el card. Detalles: $it")
 

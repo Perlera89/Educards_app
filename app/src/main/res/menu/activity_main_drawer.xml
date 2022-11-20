@@ -9,10 +9,6 @@
             android:id="@+id/nav_all_favorites"
             android:icon="@drawable/ic_favorite_select"
             android:title="@string/menu_favorite_list" />
-        <item
-            android:id="@+id/nav_Settings"
-            android:icon="@drawable/ic_settings"
-            android:title="@string/nav_my_apps" />
     </group>
 
     <group android:id="@+id/group_about">

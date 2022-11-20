@@ -35,7 +35,6 @@
     <string name="nav_header_text">Click to Log In </string>
     <string name="navigation_drawer_open">Open navigation page</string>
     <string name="navigation_drawer_close">Close navigation page</string>
-    <string name="tab_title_sets">Sets</string>
     <string name="tab_title_cards">Cards</string>
     <string name="tab_title_favorites">Favorites</string>
     <string name="main_snack_bar">This is snack_bar</string>
@@ -47,11 +46,23 @@
     <string name="app_empty_text">Untitled deck</string>
     <string name="menu_trash">Move to trash</string>
 
-<!--    Decks-->
+    <!--    Decks-->
+    <string name="deck_name">Deck</string>
     <string name="deck_untitle">Untitled deck</string>
     <string name="deck_default_text">You can edit text</string>
     <string name="deck_description">flashcards</string>
     <string name="deck_front_text">You can edit the question</string>
     <string name="deck_back_text">You can edit the answer</string>
     <string name="snack_favorite_deck">Deck moved to favorites</string>
+
+    <!--    About-->
+    <string name="about_name">About</string>
+    <string name="about_title_app">Educards App</string>
+    <string name="about_version">Version: 1.0</string>
+    <string name="about_contact">Contact Us</string>
+    <string name="about_email">Contact us by E-mail</string>
+    <string name="about_github">Source code on GitHub</string>
+    <string name="about_licenses">Open source licenses</string>
+    <string name="app_designed_by">Designed by July</string>
+
 </resources>
