@@ -2,6 +2,7 @@ package com.educards.services
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -14,4 +15,7 @@ object FirebaseConnection {
      */
     val firebaseFirestoreDB: FirebaseFirestore by lazy{Firebase.firestore}
     val firebaseAuth: FirebaseAuth by lazy { Firebase.auth }
+    val refCollectionGlobal: CollectionReference by lazy {
+        firebaseFirestoreDB.collection("${SUser.getCurrentUserDetailData().getIdUser()}_DATA")
+    }
 }

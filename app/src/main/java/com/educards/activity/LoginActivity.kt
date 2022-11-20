@@ -53,30 +53,20 @@ class LoginActivity : AppCompatActivity() {
                     SUser.loginToApp(this@LoginActivity, User)
                     Thread.sleep(3000)
 
-                    SUser.getCurrentUserDetailData().let {
-                        println("id: "+it.getIdUser())
-                        println("nombre: " + it.getDisplayName())
-                        println("email: " + it.getEmail())
-                        println("verificación: " + it.getVerified())
-                    }
-
                     if (SUser.getCurrentUserDetailData().getVerified() && SUser.getCurrentUserDetailData().getIdUser() != "") {
                         this@LoginActivity.finish()
                         startActivity(Intent(applicationContext, MainActivity::class.java))
-                    }else{
+                    }else if(SUser.getCurrentUserDetailData().getVerified()==false && SUser.getCurrentUserDetailData().getIdUser() != ""){
                         Log.d("activity/LoginActivity","Debe verificar su correo correo electrónico para iniciar sesión.")
-                        //Toast.makeText(this, "Debe verificar su correo correo electrónico para iniciar sesión.", Toast.LENGTH_LONG).show()
-                    }
-
+                        Toast.makeText(this@LoginActivity, "Debe verificar su correo correo electrónico para iniciar sesión.", Toast.LENGTH_LONG).show()
+                    }else{ }
                 }
-
             }
-
         }
     }
 
     fun signIn(view: View){
-        this.finish()
-        startActivity(Intent(this, SignInActivity::class.java))
+        this@LoginActivity.finish()
+        startActivity(Intent(applicationContext, SignInActivity::class.java))
     }
 }
