@@ -75,24 +75,15 @@ object SUser {
     signInWithEmailAndPassword que permite iniciar sesion con correo y contraseña
     3. Agreamaos el metodo addOnCompleteListener para detectar si todo se realizó bien. A este puento la propiedad currentUser
     ya tiene los datos del usuario loguedo
-    4. Con el método getCurrentUserDetailData accedemos a las propiedades del usuario logueado, y si este en su propiedad
-    isEmailVerified es falso le indicamos por mensaje que debe verificarlo
-    5. Agregamos el método addOnFailureListener para escuchar errores y mandar mensajes de alerte
+    4. Agregamos el método addOnFailureListener para escuchar errores y mandar mensajes de alerte
      */
     fun loginToApp(_context: Context,_user:User){
         FirebaseConnection.firebaseAuth.signInWithEmailAndPassword(_user.getEmail(),_user.getPassword())
             .addOnCompleteListener { task ->
                 if (task.isSuccessful){
                     Log.d("service/SUser","El usuario ${getCurrentUserDetailData().getEmail()} ha iniciado sesión exitosamente")
-                    if (getCurrentUserDetailData().getVerified()==false){
-                        Toast.makeText(_context, "Debe verificar su correo correo electrónico para iniciar sesión.", Toast.LENGTH_LONG).show()
-                    }
                 }
-                /*getCurrentUserDetailData().let {
-                    println("nombre: "+it.getDisplayName())
-                    println("email: "+it.getEmail())
-                    println("verificación: "+it.getVerified())
-                }*/
+
             }.addOnFailureListener{ e ->
                 Toast.makeText(_context,"Error al iniciar sesión. Ingrese datos válidos o regístrese. \nDetalles: "+e.toString(), Toast.LENGTH_LONG).show()
                 Log.d("service/SUser","Error al iniciar sesión, detalles: "+e.toString())

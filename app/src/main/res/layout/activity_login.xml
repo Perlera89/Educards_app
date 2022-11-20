@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/blue_700"
                 android:fontFamily="@font/poppins_bold"
-                android:onClick="addCard"
+                android:onClick="logIn"
                 android:paddingStart="10dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="10dp"

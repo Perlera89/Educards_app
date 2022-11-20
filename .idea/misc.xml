@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Willian/Desktop/Proyecto/Educards_app/app/src/main/res/layout/activity_login.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Willian/Desktop/Proyecto/Educards_app/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Willian/Desktop/Proyecto/Educards_app/app/src/main/res/layout/activity_sign_in.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Willian/Desktop/Proyecto/Educards_app/app/src/main/res/layout/app_bar_main.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Willian/Desktop/Proyecto/Educards_app/app/src/main/res/layout/deck_item.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Willian/Desktop/Proyecto/Educards_app/app/src/main/res/layout/nav_header_main.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Willian/Desktop/Proyecto/Educards_app/app/src/main/res/layout/page_start.xml" value="0.27447916666666666" />
       </map>
     </option>
   </component>
