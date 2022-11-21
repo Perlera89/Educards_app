@@ -21,23 +21,5 @@ class EstudyActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
         setContentView(R.layout.activity_estudy)
-
-        var horizontalLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-        recyclerCard = findViewById(R.id.recycler_cards_study)
-
-        val adapter = RecyclerCardAdapter(getCards())
-        recyclerCard.setHasFixedSize(true)
-        recyclerCard.layoutManager = horizontalLayoutManager
-        recyclerCard.adapter = adapter
-    }
-
-    private fun getCards(): MutableList<Card>{
-        val cards: MutableList<Card> = ArrayList()
-        cards.add(Card("1", "Pregunta 1", "Respuesta 1"))
-        cards.add(Card("2", "Pregunta 2", "Respuesta 2"))
-        cards.add(Card("3", "Pregunta 3", "Respuesta 3"))
-
-        return cards
     }
 }

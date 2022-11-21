@@ -41,6 +41,9 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var cardAnswer: CardView
     private lateinit var btReverse: ImageButton
 
+    private lateinit var fabStudy: FloatingActionButton
+    private lateinit var fabAdd: FloatingActionButton
+
     private lateinit var frontAnim: AnimatorSet
     private lateinit var backAnim: AnimatorSet
     private var isFront = true
@@ -51,6 +54,8 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         recyclerCard = findViewById(R.id.recycler_cards)
+        fabStudy = findViewById(R.id.fab_study)
+        fabAdd = findViewById(R.id.fab_add)
 //        cardQuestion = findViewById(R.layout.card_front_item)
 //        cardAnswer = findViewById(R.layout.card_back_item)
 //        btReverse = findViewById(R.id.bt_revert)
@@ -88,6 +93,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         val nav_header = headerView.findViewById<LinearLayout>(R.id.nav_header)
         nav_header.setOnClickListener(this)
 
+        fabStudy.setOnClickListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -128,6 +134,11 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             }
 
             R.id.fab_revert -> Toast.makeText(this, "Reverse", Toast.LENGTH_SHORT).show()
+
+            R.id.fab_study -> {
+                val estudyIntent = Intent(this, EstudyActivity::class.java)
+                startActivity(estudyIntent)
+            }
         }
     }
 
