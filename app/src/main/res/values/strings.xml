@@ -28,8 +28,9 @@
     <string name="menu_set_list">All Decks</string>
     <string name="menu_favorite_list">All favorites</string>
 
+    <!--    Nav menu-->
     <string name="nav_about">About</string>
-    <string name="nav_donate">Donation</string>
+    <string name="nav_donate">Donations</string>
     <string name="nav_my_apps">Settings</string>
     <string name="nav_back">Back</string>
     <string name="nav_header_text">Click to Log In </string>
@@ -39,16 +40,16 @@
     <string name="tab_title_favorites">Favorites</string>
     <string name="main_snack_bar">This is snack_bar</string>
     <string name="main_snack_bar_action">Ok</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="app_start_text">Created by Leiva</string>
     <string name="tab_title_decks">Decks</string>
-    <string name="app_empty_text">Untitled deck</string>
+    <string name="app_empty_text">Empty decks</string>
     <string name="menu_trash">Move to trash</string>
 
     <!--    Decks-->
     <string name="deck_name">Deck</string>
-    <string name="deck_untitle">Untitled deck</string>
+    <string name="deck_untitled">Untitled deck</string>
     <string name="deck_default_text">You can edit text</string>
     <string name="deck_description">flashcards</string>
     <string name="deck_front_text">You can edit the question</string>
@@ -68,4 +69,10 @@
     <string name="about_email_intent">About:Educard App</string>
     <string name="share_with">Share with</string>
 
+    <!--    Donate-->
+    <string name="donate_title">Donate</string>
+    <string name="donate_text">Donate</string>
+    <string name="donate_header">You can support the Educards project by donating!</string>
+    <string name="donate_low">1.99 USD</string>
+    <string name="donate_high">9.99 USD</string>
 </resources>

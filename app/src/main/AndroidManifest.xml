@@ -13,10 +13,28 @@
         android:theme="@style/Theme.Educards_app"
         tools:targetApi="31">
         <activity
-            android:name=".activity.AboutActivity"
+            android:name=".activity.EstudyActivity"
+            android:theme="@style/Theme.Educards_app.NoActionBar"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.DonateActivity"
+            android:exported="false"
+            android:label="@string/donate_title"
             android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/Theme.Educards_app.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activity.AboutActivity"
             android:exported="false"
             android:label="@string/about_name"
+            android:parentActivityName=".activity.MainActivity"
             android:theme="@style/Theme.Educards_app.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"

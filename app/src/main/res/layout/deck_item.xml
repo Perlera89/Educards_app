@@ -28,7 +28,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/deck_untitle"
+            android:text="@string/deck_untitled"
             android:textColor="@color/black" />
         <TextView
             android:id="@+id/tv_count_cards"

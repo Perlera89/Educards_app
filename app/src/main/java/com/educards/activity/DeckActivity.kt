@@ -24,6 +24,7 @@ import androidx.viewpager.widget.ViewPager
 import com.educards.R
 import com.educards.adapter.RecyclerCardAdapter
 import com.educards.adapter.RecyclerDeckAdapter
+import com.educards.fragment.FavoritesFragment
 import com.educards.model.Deck
 import com.educards.model.entities.Card
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -123,25 +124,29 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
                 val drawer: DrawerLayout =
                     findViewById(R.id.drawer_main)
                 drawer.closeDrawer(GravityCompat.START)
+                finish()
             }
 
-            R.id.bt_revert -> Toast.makeText(this, "Reverse", Toast.LENGTH_SHORT).show()
+            R.id.fab_revert -> Toast.makeText(this, "Reverse", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_all_decks -> {
-                Toast.makeText(this, "All sets", Toast.LENGTH_SHORT).show()
+                val mainIntent = Intent(this, MainActivity::class.java)
+                startActivity(mainIntent)
             }
             R.id.nav_all_favorites -> {
-                Toast.makeText(this, "All favorites", Toast.LENGTH_SHORT).show()
+                val fragmentFavorites = supportFragmentManager.findFragmentById(R.id.favorites_fragment) as FavoritesFragment
             }
             R.id.nav_about -> {
-                Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
+                val aboutIntent = Intent(this, AboutActivity::class.java)
+                startActivity(aboutIntent)
             }
             R.id.nav_donate -> {
-                Toast.makeText(this, "Donate", Toast.LENGTH_SHORT).show()
+                val donateIntent = Intent(this, DonateActivity::class.java)
+                startActivity(donateIntent)
             }
         }
         drawer.closeDrawer(GravityCompat.START)

@@ -8,7 +8,7 @@
     tools:background="@color/black">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_add_deck"
+        android:id="@+id/cv_add_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                android:text="Add deck"
+                android:text="Add question"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
                 android:layout_below="@id/tv_header"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:hint="Title"
+                android:hint="Question"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -68,7 +68,7 @@
                 android:onClick="createDeck"
                 android:paddingVertical="16dp"
                 android:tag="button_create"
-                android:text="Create"
+                android:text="Enter"
                 android:textColor="@android:color/white"
                 android:visibility="visible"
                 app:cornerRadius="16dp" />

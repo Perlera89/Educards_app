@@ -31,7 +31,6 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck>, val context: Con
     }
 
     fun showAlertDialog(){
-
     }
         inner class ViewHolder(view: View, context: Context?, activity: Activity?): RecyclerView.ViewHolder(view){
             var title: TextView

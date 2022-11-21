@@ -32,22 +32,22 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>) :
         return cards.size
     }
 
-    fun showAlertDialog(){
-
-    }
+    fun showAlertDialog(){}
         inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+            var id: Int = 0
             var question: TextView
             var answer: TextView
 
             init {
                 question = view.findViewById(R.id.et_question)
                 answer = view.findViewById(R.id.et_answer)
-
             }
 
             fun bind(card: Card){
+//                itemView.id = card.id
                 question.text = card.question
                 answer.text = card.answer
             }
+
         }
 }

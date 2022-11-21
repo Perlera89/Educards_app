@@ -149,6 +149,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.show()
     }
 
+    private lateinit var dialog: AlertDialog
     override fun onClick(view: View) {
         when (view.id) {
             R.id.nav_header -> {
@@ -163,7 +164,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
                 builder.setView(view)
 
-                val dialog = builder.create()
+                dialog = builder.create()
                 dialog.show()
             }
         }
@@ -172,6 +173,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun createDeck(view: View){
         val deckIntent = Intent(this, DeckActivity::class.java)
         startActivity(deckIntent)
+        dialog.hide()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -186,11 +188,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.menu_save_exit -> {
                 Toast.makeText(this, "Donate", Toast.LENGTH_SHORT).show()
-//                val donateIntent = Intent(this, DonateActivity::class.java)
-//                startActivity(donateIntent)
-            }
-            R.id.menu_settings -> {
-                Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -199,17 +196,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_all_decks -> {
-                Toast.makeText(this, "All decks", Toast.LENGTH_SHORT).show()
+                val mainIntent = Intent(this, MainActivity::class.java)
+                startActivity(mainIntent)
             }
             R.id.nav_all_favorites -> {
-                Toast.makeText(this, "All favorites", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Favorites", Toast.LENGTH_SHORT).show()
             }
             R.id.nav_about -> {
                 val aboutIntent = Intent(this, AboutActivity::class.java)
                 startActivity(aboutIntent)
             }
             R.id.nav_donate -> {
-                Toast.makeText(this, "Donate", Toast.LENGTH_SHORT).show()
+                val donateIntent = Intent(this, DonateActivity::class.java)
+                startActivity(donateIntent)
             }
         }
         drawer.closeDrawer(GravityCompat.START)
