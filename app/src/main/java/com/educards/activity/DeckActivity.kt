@@ -105,18 +105,12 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         when (item.itemId) {
             R.id.menu_trash -> {
                 Toast.makeText(this, "All decks", Toast.LENGTH_SHORT).show()
-//                val aboutIntent = Intent(this, AboutActivity::class.java)
-//                startActivity(aboutIntent)
             }
             R.id.menu_all_decks -> {
                 Toast.makeText(this, "All decks", Toast.LENGTH_SHORT).show()
-//                val aboutIntent = Intent(this, AboutActivity::class.java)
-//                startActivity(aboutIntent)
             }
             R.id.menu_save_exit -> {
                 Toast.makeText(this, "Save and exit", Toast.LENGTH_SHORT).show()
-//                val donateIntent = Intent(this, DonateActivity::class.java)
-//                startActivity(donateIntent)
             }
         }
         return super.onOptionsItemSelected(item)

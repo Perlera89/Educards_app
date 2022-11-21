@@ -12,7 +12,7 @@
     android:layout_marginBottom="36dp"
     android:backgroundTint="@color/blue_100"
     app:cardCornerRadius="5dp"
-    app:cardElevation="2dp"
+    app:cardElevation="0dp"
     tools:context=".activity.DeckActivity">
     <ImageView
         android:id="@+id/bt_more"
