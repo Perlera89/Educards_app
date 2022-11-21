@@ -18,14 +18,21 @@ import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.educards.R
+import com.educards.adapter.RecyclerCardAdapter
+import com.educards.adapter.RecyclerDeckAdapter
+import com.educards.model.Deck
+import com.educards.model.entities.Card
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 
 class DeckActivity : AppCompatActivity(), View.OnClickListener,
     NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var recyclerCard: RecyclerView
     private lateinit var activity: DeckActivity
     private lateinit var drawer: DrawerLayout
     private lateinit var toolbar: Toolbar
@@ -42,13 +49,22 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         setContentView(R.layout.activity_deck)
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        cardQuestion = findViewById(R.id.cv_question)
-        cardAnswer = findViewById(R.id.cv_answer)
-        btReverse = findViewById(R.id.bt_revert)
+        recyclerCard = findViewById(R.id.recycler_cards)
+//        cardQuestion = findViewById(R.layout.card_front_item)
+//        cardAnswer = findViewById(R.layout.card_back_item)
+//        btReverse = findViewById(R.id.bt_revert)
 
         activity = this
+
+        var horizontalLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        val adapter = RecyclerCardAdapter(getCards())
+        recyclerCard.setHasFixedSize(true)
+        recyclerCard.layoutManager = horizontalLayoutManager
+        recyclerCard.adapter = adapter
+
         initView()
-        deckAnimation()
+//        cardAnimation()
     }
 
     private fun initView() {
@@ -132,7 +148,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         return true
     }
 
-    private fun deckAnimation(){
+    private fun cardAnimation(){
         val scale = applicationContext.resources.displayMetrics.density
         cardQuestion.cameraDistance = 8000 * scale
         cardAnswer.cameraDistance = 8000 * scale
@@ -157,5 +173,14 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
                 isFront = true
             }
         }
+    }
+
+    private fun getCards(): MutableList<Card>{
+        val cards: MutableList<Card> = ArrayList()
+        cards.add(Card("1", "Pregunta 1", "Respuesta 1"))
+        cards.add(Card("2", "Pregunta 2", "Respuesta 2"))
+        cards.add(Card("3", "Pregunta 3", "Respuesta 3"))
+
+        return cards
     }
 }

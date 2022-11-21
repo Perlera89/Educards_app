@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_question"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginStart="48dp"
+    android:layout_marginTop="48dp"
+    android:layout_marginEnd="48dp"
+    android:layout_marginBottom="48dp"
+    android:backgroundTint="@color/blue_100"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp"
+    tools:context=".activity.DeckActivity">
+    <ImageView
+        android:id="@+id/bt_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/main_card_margin_vertical"
+        android:layout_marginTop="@dimen/main_card_margin_horizontal"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="4dp"
+        android:src="@drawable/ic_more_vert"
+        app:tint="@color/gray_deep" />
+
+    <ImageView
+        android:id="@+id/bt_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/main_card_margin_horizontal"
+        android:layout_marginEnd="@dimen/main_card_margin_vertical"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:padding="4dp"
+        android:src="@drawable/ic_cancel"
+        app:tint="@color/gray_deep" />
+
+    <TextView
+        android:id="@+id/et_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="16dp"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:text="@string/deck_front_text"
+        android:textAlignment="center"
+        android:textSize="22sp" />
+</androidx.cardview.widget.CardView>

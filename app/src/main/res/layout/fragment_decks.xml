@@ -31,8 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/activity_background"
-            android:paddingStart="@dimen/zero_horizontal_margin_big_activity"
-            android:paddingEnd="@dimen/zero_horizontal_margin_big_activity" />
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
-import com.educards.activity.MainActivity
-import com.educards.adapter.RecyclerViewAdapter
+import com.educards.adapter.RecyclerDeckAdapter
 import com.educards.model.Deck
 
 class DecksFragment : Fragment() {
@@ -30,7 +29,7 @@ class DecksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerDeck = view.findViewById(R.id.recycler_decks)
-        val adapter = RecyclerViewAdapter(getDeck(), context, activity)
+        val adapter = RecyclerDeckAdapter(getDeck(), context, activity)
 
         recyclerDeck.setHasFixedSize(true)
         recyclerDeck.layoutManager = LinearLayoutManager(context)

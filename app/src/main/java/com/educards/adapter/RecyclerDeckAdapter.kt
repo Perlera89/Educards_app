@@ -13,8 +13,8 @@ import com.educards.R
 import com.educards.model.Deck
 import com.google.android.material.snackbar.Snackbar
 
-class RecyclerViewAdapter(var decks: MutableList<Deck>, val context: Context?, val activity: Activity?) :
-    RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+class RecyclerDeckAdapter(private var decks: MutableList<Deck>, val context: Context?, val activity: Activity?) :
+    RecyclerView.Adapter<RecyclerDeckAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
         val holder = LayoutInflater.from(viewGroup.context).inflate(R.layout.deck_item, viewGroup, false)
@@ -22,7 +22,7 @@ class RecyclerViewAdapter(var decks: MutableList<Deck>, val context: Context?, v
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val deck = decks.get(position)
+        val deck = decks[position]
         holder.bind(deck)
     }
 

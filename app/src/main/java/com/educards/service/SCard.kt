@@ -7,8 +7,8 @@ import com.google.firebase.firestore.FieldValue
 object SCard {
     fun saveCard(_documentPathToCard: String,_card:Card) {
         val newCard = hashMapOf(
-            "question" to _card.getQuestion(),
-            "answer" to _card.getAnswer(),
+            "question" to _card.question,
+            "answer" to _card.answer,
             "creationDate" to FieldValue.serverTimestamp(),
             "lastUpdateDate" to FieldValue.serverTimestamp()
         )
@@ -44,12 +44,12 @@ object SCard {
 
     fun updateCards(_documentPathToCard: String,_card:Card) {
         val updateCard = hashMapOf(
-            "question" to _card.getQuestion(),
-            "answer" to _card.getAnswer(),
+            "question" to _card.question,
+            "answer" to _card.answer,
             "lastUpdateDate" to FieldValue.serverTimestamp()
         )
         FirebaseConnection.refCollectionGlobal.document(_documentPathToCard).collection("cards")
-            .document(Card.getId()).update(updateCard)
+            .document(_card.id).update(updateCard)
             .addOnCompleteListener { task->
                 if (task.isSuccessful){
                     Log.d("dao/DCards","Card actualizado existosamente")

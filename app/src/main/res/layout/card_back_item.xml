@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_answer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_margin="48dp"
+    android:layout_weight="7"
+    android:alpha="0"
+    android:backgroundTint="@color/red_100"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="5dp"
+    tools:context=".activity.DeckActivity">
+    <TextView
+        android:id="@+id/et_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="16dp"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:text="@string/deck_back_text"
+        android:textAlignment="center"
+        android:textSize="22sp" />
+</androidx.cardview.widget.CardView>
