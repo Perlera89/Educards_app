@@ -37,16 +37,10 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var activity: DeckActivity
     private lateinit var drawer: DrawerLayout
     private lateinit var toolbar: Toolbar
-    private lateinit var cardQuestion: CardView
-    private lateinit var cardAnswer: CardView
     private lateinit var btReverse: ImageButton
 
     private lateinit var fabStudy: FloatingActionButton
     private lateinit var fabAdd: FloatingActionButton
-
-    private lateinit var frontAnim: AnimatorSet
-    private lateinit var backAnim: AnimatorSet
-    private var isFront = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,16 +50,15 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         recyclerCard = findViewById(R.id.recycler_cards)
         fabStudy = findViewById(R.id.fab_study)
         fabAdd = findViewById(R.id.fab_add)
-//        cardQuestion = findViewById(R.layout.card_front_item)
-//        cardAnswer = findViewById(R.layout.card_back_item)
-//        btReverse = findViewById(R.id.bt_revert)
+
+        btReverse = findViewById(R.id.fab_revert)
 
         activity = this
 
         var horizontalLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        val adapter = RecyclerCardAdapter(getCards())
-        recyclerCard.setHasFixedSize(true)
+        val adapter = RecyclerCardAdapter(getCards(),this.applicationContext,btReverse)
+        //recyclerCard.setHasFixedSize(true)
         recyclerCard.layoutManager = horizontalLayoutManager
         recyclerCard.adapter = adapter
 
@@ -158,32 +151,6 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         return true
     }
 
-    private fun cardAnimation(){
-        val scale = applicationContext.resources.displayMetrics.density
-        cardQuestion.cameraDistance = 8000 * scale
-        cardAnswer.cameraDistance = 8000 * scale
-
-        frontAnim = AnimatorInflater.loadAnimator(applicationContext, R.animator.front_animation) as AnimatorSet
-        backAnim = AnimatorInflater.loadAnimator(applicationContext, R.animator.back_animation) as AnimatorSet
-
-        btReverse.setOnClickListener{
-            if(isFront){
-                frontAnim.setTarget(cardQuestion)
-                backAnim.setTarget(cardAnswer)
-                frontAnim.start()
-                backAnim.start()
-
-                isFront = false
-            } else{
-                frontAnim.setTarget(cardAnswer)
-                backAnim.setTarget(cardQuestion)
-                backAnim.start()
-                frontAnim.start()
-
-                isFront = true
-            }
-        }
-    }
 
     private fun getCards(): MutableList<Card>{
         val cards: MutableList<Card> = ArrayList()
