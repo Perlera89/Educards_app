@@ -1,104 +1,75 @@
 package com.educards.service
 
 import android.util.Log
-import com.educards.model.MDeck
-import com.google.firebase.firestore.FieldValue
+import com.educards.model.Deck
+import com.educards.model.entities.Card
+import com.educards.util.IndexDeckOrCard
+import com.google.firebase.database.ServerValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 object SDeck {
-
-    fun saveDeck(_deck: MDeck) {
-        val newDeck = hashMapOf(
-            "title" to _deck.getTitle(),
-            "description" to _deck.getDescription(),
-            "isFavorite" to _deck.isFavorite(),
-            "count" to _deck.getCount(),
-            "creationDate" to FieldValue.serverTimestamp(),
-            "lastUpdateDate" to FieldValue.serverTimestamp()
-        )
-        FirebaseConnection.refCollectionGlobal.add(newDeck)
-            .addOnCompleteListener { task->
-                if (task.isSuccessful){
-                    Log.d("TAG","Nuevo deck(mazo) creado existosamente")
-                }
-            }.addOnFailureListener{
-                Log.d("data/dao/DDecks","Error al crear nuevo deck. Detalles: "+it.toString())
-            }
-    }
-
-    fun showDecks():ArrayList<Array<String>> {
-        var decks = ArrayList<Array<String>>()
-        FirebaseConnection.refCollectionGlobal.orderBy("creationDate").get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                Log.d("service/SDeck", "Lista de decks del usuario generada con exito")
-                for (i in it.result.documents) {
-                    /*Deckss.setId(i.id)
-                    Deckss.setTitle(i.data?.get("title").toString())
-                    Deckss.setDescription(i.data?.get("description").toString())
-                    Deckss.setFavorite(i.data?.get("isFavorite").toString().toBoolean())*/
-                    decks.add(
-                        arrayOf(
-                            i.id,
-                            i.data?.get("title").toString(),
-                            i.data?.get("description").toString(),
-                            i.data?.get("isFavorite").toString(),
-                            i.data?.get("count").toString()
-                        )
-                    )
-                }
-            }
-        }
-        return decks
-    }
-
-    fun updateDecks(_deck: MDeck) {
-        val updateDeck = hashMapOf(
-            "title" to _deck.getTitle(),
-            "description" to _deck.getDescription(),
-            "isFavorite" to _deck.isFavorite(),
-            "count" to _deck.getCount(),
-            "lastUpdateDate" to FieldValue.serverTimestamp()
-        )
-        FirebaseConnection.refCollectionGlobal.document(_deck.getId()).update(updateDeck)
-            .addOnCompleteListener { task->
-                if (task.isSuccessful){
-                    Log.d("service/SDeck","Deck actualizados existosamente")
-                }
-            }.addOnFailureListener{
-                Log.d("service/SDeck","Error al actualizar decks. Detalles: "+it.toString())
-            }
-    }
-    fun deleteDeck(_documentDeckIdPath:String){
-        CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.IO) {
-                SCard.deleteAllCards(_documentDeckIdPath)
-            }
-            withContext(Dispatchers.IO) {
-                FirebaseConnection.refCollectionGlobal.document(_documentDeckIdPath).delete()
-                    .addOnCompleteListener {
-                        Log.d("service/SDeck", "El deck y sus documentos se han borrado con exito"
-                        )
-                    }
-                    .addOnFailureListener {
-                        Log.d("service/SDeck", "Error al eliminar el deck y sus documentos. Detalles: $it"
-                        )
-                    }
-            }
-        }
-    }
-
-    fun updateCountInDeck(_documentDeckIdPath:String, _value:Double){
-        FirebaseConnection.refCollectionGlobal.document(_documentDeckIdPath)
-            .update("count",FieldValue.increment(_value))
+    var refGlobal = FirebaseConnection.firebaseRealTimeDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
+    fun saveDeck(_deck: Deck) {
+        //agregamos un indice para ordenar los datos
+        _deck.id = IndexDeckOrCard.lastKeyDeck?.toInt()?.plus(1).toString()
+        refGlobal.child("/decks/${_deck.id}").setValue(_deck)
             .addOnCompleteListener {
-                if (it.isSuccessful){
-                    Log.d("service/SDeck", "Conteo de tarjetas en el mazo aumentado/disminuido con existo")
+                if (it.isSuccessful) {
+                    Log.d("service/RSDecks", "Mazo agregado exitosamente")
+                    IndexDeckOrCard.selectedDeckKey = _deck.id!!
+                    IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
+                    CoroutineScope(Dispatchers.IO).launch{
+                        Thread.sleep(1000)
+                        SCard.saveCard(Card("","Click to edit this question","Click to edit this answer"))
+                    }
                 }
-            }.addOnFailureListener{e->
-                Log.d("service/SDeck", "Error al contar las tarjetas en el mazo aumentado/disminuido. Detalles: ${e.toString()}")
+            }.addOnFailureListener {
+                Log.d("service/RSDecks", "Error al agregar mazo, Detalles: \n $it")
+            }
+    }
+
+    fun updateDeck(_deck: Deck){
+        //agregar el id del deck en la clase
+        //var selectedDeck = IndexDeckOrCard.selectedDeckKey
+        val deck = mapOf(
+            "id" to _deck.id,
+            "title" to _deck.title,
+            "description" to _deck.description,
+            "isFavorite" to _deck.isFavorite,
+            "count" to _deck.count
+        )
+        refGlobal.child("/decks/${_deck.id}").updateChildren(deck)
+            .addOnSuccessListener {
+                Log.d("RSDeck","El deck de id <${_deck.id}> se ha actualizado con éxito")
+            }.addOnFailureListener{
+                Log.d("RSDeck","Error al actualizar el deck de id <${_deck.id}> . Detalles: \n ${it}")
+            }
+    }
+
+    fun deleteDeck(_deckId: String){
+        //agregar el id del deck en la clase
+        //var selectedDeck = IndexDeckOrCard.selectedDeckKey
+        refGlobal.child("/decks/${_deckId}").removeValue()
+            .addOnSuccessListener {
+                Log.d("RSDeck","El deck de id <${_deckId}> se ha eliminado con éxito")
+                //se borran las cards que tengan el mismo id del deck
+                SCard.deleteAllCards()
+            }.addOnFailureListener{
+                Log.d("RSDeck","Error al eliminar el deck de id <${_deckId}> . Detalles: \n ${it}")
+            }
+    }
+
+    fun updateCountInDeck(_deckId: String,_incrementValue:Long){
+        //agregar el id del deck en la clase
+        //var selectedDeck = IndexDeckOrCard.selectedDeckKey
+
+        refGlobal.child("/decks/${_deckId}").child("count").setValue(ServerValue.increment(_incrementValue))
+            .addOnSuccessListener {
+                Log.d("RSDeck","El contador del deck de id <${_deckId}> se ha actualizado con éxito")
+            }.addOnFailureListener{
+                Log.d("RSDeck","Error al actualizar el contador del deck de id <${_deckId}> . Detalles: \n ${it}")
             }
     }
 }

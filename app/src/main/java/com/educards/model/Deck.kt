@@ -1,7 +1,9 @@
 package com.educards.model
 
 data class Deck(
+    var id: String?,
     val title: String,
-    val count: Int
-//    val cards: List<Card>
+    val description: String,
+    val isFavorite:Boolean = false,
+    val count:Int = 0
 ) {}

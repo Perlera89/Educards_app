@@ -2,87 +2,62 @@ package com.educards.service
 
 import android.util.Log
 import com.educards.model.entities.Card
-import com.google.firebase.firestore.FieldValue
+import com.educards.util.IndexDeckOrCard
 
 object SCard {
-    fun saveCard(_documentPathToCard: String,_card:Card) {
-        val newCard = hashMapOf(
-            "question" to _card.question,
-            "answer" to _card.answer,
-            "creationDate" to FieldValue.serverTimestamp(),
-            "lastUpdateDate" to FieldValue.serverTimestamp()
-        )
-        FirebaseConnection.refCollectionGlobal.document(_documentPathToCard).collection("cards").add(newCard)
-            .addOnCompleteListener { task->
-                if (task.isSuccessful){
-                    Log.d("dao/DCards","Nuevo card creado existosamente")
-                    SDeck.updateCountInDeck(_documentPathToCard, 1.0)
-                }
-            }.addOnFailureListener{
-                Log.d("data/dao/DCards","Error al crear nuevo card. Detalles: "+it.toString())
-            }
-    }
+    var refGlobal = FirebaseConnection.firebaseRealTimeDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
 
-    fun showCards(_documentPathToCard: String):ArrayList<Array<String>> {
-        var cards = ArrayList<Array<String>>()
-        FirebaseConnection.refCollectionGlobal.document(_documentPathToCard).collection("cards")
-            .orderBy("creationDate").get().addOnCompleteListener {
+    fun saveCard(_card: Card) {
+        _card.id = "${IndexDeckOrCard.lastKeyCardDeckSelected?.toInt()?.plus(1)}"
+        refGlobal.child("/cards/${IndexDeckOrCard.selectedDeckKey}/${_card.id}").setValue(_card)
+            .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Log.d("dao/DSets", "Lista de cards del usuario generada con exito")
-                    for (i in it.result.documents) {
-                        cards.add(arrayOf(
-                            i.id,
-                            i.data?.get("question").toString(),
-                            i.data?.get("answer").toString()
-                        ))
-                    }
+                    Log.d("service/SCard", "Card agregado exitosamente al mazo de id <${IndexDeckOrCard.selectedDeckKey}>")
+                    //Actualizar el numero de cards en el dec
+                    SDeck.updateCountInDeck(IndexDeckOrCard.selectedDeckKey,1L)
                 }
-
+            }.addOnFailureListener {
+                Log.d("service/SCard", "Error al agregar card al mazo de id <${IndexDeckOrCard.selectedDeckKey}, Detalles: \n $it")
             }
-        return cards
     }
-
-    fun updateCards(_documentPathToCard: String,_card:Card) {
-        val updateCard = hashMapOf(
+    fun updateCard(_card: Card) {
+        //agregar el key en el id del card
+        val card = mapOf(
+            "id" to _card.id,
             "question" to _card.question,
-            "answer" to _card.answer,
-            "lastUpdateDate" to FieldValue.serverTimestamp()
+            "answer" to _card.answer
         )
-        FirebaseConnection.refCollectionGlobal.document(_documentPathToCard).collection("cards")
-            .document(_card.id).update(updateCard)
-            .addOnCompleteListener { task->
-                if (task.isSuccessful){
-                    Log.d("dao/DCards","Card actualizado existosamente")
+        refGlobal.child("/cards/${IndexDeckOrCard.selectedDeckKey}/${_card.id}").updateChildren(card)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d("service/SCard", "Card de id<${_card.id}> actualizado exitosamente en el mazo de id <${IndexDeckOrCard.selectedDeckKey}>")
                 }
-            }.addOnFailureListener{
-                Log.d("data/dao/DCards","Error al actualizar card. Detalles: "+it.toString())
-            }
-
-
-    }
-
-    fun deleteCard(_documentPathToCard: String,_idCard:String){
-        FirebaseConnection.refCollectionGlobal.document(_documentPathToCard).collection("cards")
-            .document(_idCard).delete()
-            .addOnSuccessListener {
-                Log.d("dao/DCards","El card se ha eliminado exitosamente")
-                SDeck.updateCountInDeck(_documentPathToCard, -1.0)
-            }.addOnFailureListener{
-                Log.d("dao/DCards", "Error al eliminar el card. Detalles: $it")
-
+            }.addOnFailureListener {
+                Log.d("service/SCard", "Error al actualizar card de id<${_card.id}> en el mazo de id <${IndexDeckOrCard.selectedDeckKey}, Detalles: \n $it")
             }
     }
-
-    fun deleteAllCards(_documentCardIdPath:String){
-        FirebaseConnection.refCollectionGlobal.document(_documentCardIdPath).collection("cards").get()
-            .addOnSuccessListener { querySnapshop->
-                if (!querySnapshop.isEmpty){
-                    querySnapshop.documents.forEach{document->
-                        deleteCard(_documentCardIdPath,document.id)
-                    }
+    fun deleteCard(_cardId: String) {
+        //agregar el key en el id del card
+        refGlobal.child("/cards/${IndexDeckOrCard.selectedDeckKey}/${_cardId}").removeValue()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d("service/SCard", "Card de id<${_cardId}> eliminado exitosamente en el mazo de id <${IndexDeckOrCard.selectedDeckKey}>")
+                    //se disminuye el contador de cards del mazo
+                    SDeck.updateCountInDeck(IndexDeckOrCard.selectedDeckKey,-1L)
                 }
-            }.addOnFailureListener{
-                Log.d("dao/DCards", "Error al eliminar los cards. Detalles: $it")
+            }.addOnFailureListener {
+                Log.d("service/SCard", "Error al eliminar card de id<${_cardId}> en el mazo de id <${IndexDeckOrCard.selectedDeckKey}, Detalles: \n $it")
+            }
+    }
+    fun deleteAllCards() {
+        //agregar el key en el id del card
+        refGlobal.child("/cards/${IndexDeckOrCard.selectedDeckKey}").removeValue()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d("service/SCard", "Todos los cards se han eliminado exitosamente en el mazo de id <${IndexDeckOrCard.selectedDeckKey}>")
+                }
+            }.addOnFailureListener {
+                Log.d("service/SCard", "Error al eliminar todos los cards en el mazo de id <${IndexDeckOrCard.selectedDeckKey}, Detalles: \n $it")
             }
     }
 }

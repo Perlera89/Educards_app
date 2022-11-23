@@ -38,9 +38,9 @@ class DecksFragment : Fragment() {
 
     private fun getDeck(): MutableList<Deck>{
         val decks: MutableList<Deck> = ArrayList()
-        decks.add(Deck("Matemáticas", 11))
-        decks.add(Deck("Física", 6))
-        decks.add(Deck("Programación", 22))
+        decks.add(Deck("1","Matemáticas", "Examen",false,11))
+        decks.add(Deck("2","Física", "Laboratorio",false,6))
+        decks.add(Deck("3","Programación", "Prueba de uso",true,22))
 
         return decks
     }
