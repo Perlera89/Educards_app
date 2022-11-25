@@ -4,6 +4,7 @@ import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -25,7 +26,13 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _con
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val card = cards[position]
         holder.bind(card)
-        holder.itemView.setOnClickListener { holder.cardAnimation()}
+        //holder.itemView.setOnClickListener { holder.cardAnimation()}
+        holder.itemView.setOnTouchListener(object : View.OnTouchListener{
+            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                holder.cardAnimation()
+                return true
+            }
+        })
 
     }
 
