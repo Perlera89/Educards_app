@@ -1,8 +1,10 @@
 package com.educards.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +13,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.Deck
+import com.educards.service.FirebaseConnection
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 
-class RecyclerDeckAdapter(private var decks: MutableList<Deck>, val context: Context?, val activity: Activity?) :
+class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Context?, val activity: Activity?) :
     RecyclerView.Adapter<RecyclerDeckAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
@@ -47,13 +54,13 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck>, val context: Con
                 builder = AlertDialog.Builder(context)
             }
 
-            fun bind(deck: Deck){
-                title.text = deck.title
-                countCards.text = deck.count.toString()
+            fun bind(deck: Deck?){
+                title.text = deck?.getTitle()
+                countCards.text = deck?.getCount().toString()
 
                 delete.setOnClickListener{
                     builder.setTitle("Confirm to delete")
-                        .setMessage("\nDo you want to remove ${deck.title} deck?")
+                        .setMessage("\nDo you want to remove ${deck?.getTitle()} deck?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
 //                          TODO: Delete deck
@@ -69,7 +76,7 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck>, val context: Con
 
                 favorite.setOnClickListener{
 //                    TODO: Move to favorites
-                    val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main), "${deck.title} deck move to favorites", Snackbar.LENGTH_LONG)
+                    val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main), "${deck?.getTitle()} deck move to favorites", Snackbar.LENGTH_LONG)
                     snackBar.show()
                 }
             }

@@ -13,12 +13,12 @@ object SDeck {
     var refGlobal = FirebaseConnection.firebaseRealTimeDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
     fun saveDeck(_deck: Deck) {
         //agregamos un indice para ordenar los datos
-        _deck.id = IndexDeckOrCard.lastKeyDeck?.toInt()?.plus(1).toString()
-        refGlobal.child("/decks/${_deck.id}").setValue(_deck)
+        _deck.setId(IndexDeckOrCard.lastKeyDeck?.toInt()?.plus(1).toString())
+        refGlobal.child("/decks/${_deck.getId()}").setValue(_deck)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.d("service/RSDecks", "Mazo agregado exitosamente")
-                    IndexDeckOrCard.selectedDeckKey = _deck.id!!
+                    IndexDeckOrCard.selectedDeckKey = _deck.getId()!!
                     IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
                     CoroutineScope(Dispatchers.IO).launch{
                         Thread.sleep(1000)
@@ -34,17 +34,17 @@ object SDeck {
         //agregar el id del deck en la clase
         //var selectedDeck = IndexDeckOrCard.selectedDeckKey
         val deck = mapOf(
-            "id" to _deck.id,
-            "title" to _deck.title,
-            "description" to _deck.description,
-            "isFavorite" to _deck.isFavorite,
-            "count" to _deck.count
+            "id" to _deck.getId(),
+            "title" to _deck.getTitle(),
+            "description" to _deck.getDescription(),
+            "isFavorite" to _deck.isFavorite(),
+            "count" to _deck.getCount()
         )
-        refGlobal.child("/decks/${_deck.id}").updateChildren(deck)
+        refGlobal.child("/decks/${_deck.getId()}").updateChildren(deck)
             .addOnSuccessListener {
-                Log.d("RSDeck","El deck de id <${_deck.id}> se ha actualizado con éxito")
+                Log.d("RSDeck","El deck de id <${_deck.getId()}> se ha actualizado con éxito")
             }.addOnFailureListener{
-                Log.d("RSDeck","Error al actualizar el deck de id <${_deck.id}> . Detalles: \n ${it}")
+                Log.d("RSDeck","Error al actualizar el deck de id <${_deck.getId()}> . Detalles: \n ${it}")
             }
     }
 
