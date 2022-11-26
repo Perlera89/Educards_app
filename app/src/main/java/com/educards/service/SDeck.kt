@@ -37,7 +37,7 @@ object SDeck {
             "id" to _deck.getId(),
             "title" to _deck.getTitle(),
             "description" to _deck.getDescription(),
-            "isFavorite" to _deck.isFavorite(),
+            "isFavorite" to _deck.getIsFavorite(),
             "count" to _deck.getCount()
         )
         refGlobal.child("/decks/${_deck.getId()}").updateChildren(deck)

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
+import com.educards.service.SDeck
 import com.google.android.material.snackbar.Snackbar
 /*
 import com.google.firebase.database.DataSnapshot
@@ -78,9 +80,21 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
                 }
 
                 favorite.setOnClickListener{
-//                    TODO: Move to favorites
-                    val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main), "${deck?.getTitle()} deck move to favorites", Snackbar.LENGTH_LONG)
+                    var message = ""
+                if(deck!=null){
+                    if (deck.getIsFavorite()){
+                        deck.setIsFavorite(false)
+                        SDeck.updateDeck(deck)
+                        message ="${deck?.getTitle()} deck remove to favorites"
+                    }else{
+                        deck.setIsFavorite(true)
+                        SDeck.updateDeck(deck)
+                        message = "${deck?.getTitle()} deck move to favorites"
+                    }
+                    val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main),message, Snackbar.LENGTH_LONG)
                     snackBar.show()
+                }
+
                 }
             }
         }

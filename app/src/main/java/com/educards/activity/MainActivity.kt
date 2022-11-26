@@ -143,10 +143,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return titles
     }
 
-    private fun getFragments(_decks: ArrayList<Deck?>):MutableList<Fragment>{
+    private fun getFragments(_allDecks: ArrayList<Deck?>,_favoriteDecks: ArrayList<Deck?>):MutableList<Fragment>{
         val fragments: MutableList<Fragment> = ArrayList()
-        fragments.add(DecksFragment(_decks))
-        fragments.add(FavoritesFragment())
+        fragments.add(DecksFragment(_allDecks))
+        fragments.add(FavoritesFragment(_favoriteDecks))
         return fragments
     }
 
@@ -155,14 +155,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewPager = findViewById(R.id.view_pager_main)
 
         var deckData = ArrayList<Deck?>()
+        var deckFavoriteData = ArrayList<Deck?>()
 
         viewPager.offscreenPageLimit = 2
 
-        val mFragmentAdapter = FragmentAdapter(supportFragmentManager, getFragments(deckData), getTitles())
+        val mFragmentAdapter = FragmentAdapter(supportFragmentManager, getFragments(deckData,deckFavoriteData), getTitles())
         FirebaseConnection.refGlobal.child("/decks").addValueEventListener(object:ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 deckData.clear()
+                deckFavoriteData.clear()
                 snapshot.children.forEach{
+                    if (it?.getValue<Deck?>()?.getIsFavorite()==true){
+                        deckFavoriteData.add(it.getValue<Deck?>())
+                    }
                     deckData.add(it.getValue<Deck?>())
                 }
                 viewPager.adapter = mFragmentAdapter

@@ -30,11 +30,11 @@ class Deck() {
     fun setTitle(_title: String) {
         this.title = _title
     }
-    fun isFavorite(): Boolean {
+    fun getIsFavorite(): Boolean {
         return this.isFavorite
     }
 
-    fun setFavorite(_isFavorite: Boolean) {
+    fun setIsFavorite(_isFavorite: Boolean) {
         this.isFavorite = _isFavorite
     }
 
