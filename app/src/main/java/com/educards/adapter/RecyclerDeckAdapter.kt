@@ -15,10 +15,13 @@ import com.educards.R
 import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
 import com.google.android.material.snackbar.Snackbar
+/*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
+
+ */
 
 class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Context?, val activity: Activity?) :
     RecyclerView.Adapter<RecyclerDeckAdapter.ViewHolder>() {

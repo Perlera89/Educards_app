@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -28,9 +29,15 @@ import com.educards.R
 import com.educards.adapter.FragmentAdapter
 import com.educards.fragment.DecksFragment
 import com.educards.fragment.FavoritesFragment
+import com.educards.model.Deck
+import com.educards.service.FirebaseConnection
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     View.OnClickListener {
@@ -127,23 +134,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         page_start = findViewById(R.id.img_page_start)
     }
 
-    private fun initViewPager() {
-        tabLayout = findViewById(R.id.tab_layout_main)
-        viewPager = findViewById(R.id.view_pager_main)
-
+    private fun getTitles():MutableList<String>{
         val titles: MutableList<String> = ArrayList()
         titles.add("All Decks")
         titles.add("Favorites")
         tabLayout.addTab(tabLayout.newTab().setText(titles[0]))
         tabLayout.addTab(tabLayout.newTab().setText(titles[1]))
+        return titles
+    }
 
+    private fun getFragments(_decks: ArrayList<Deck?>):MutableList<Fragment>{
         val fragments: MutableList<Fragment> = ArrayList()
-        fragments.add(DecksFragment())
+        fragments.add(DecksFragment(_decks))
         fragments.add(FavoritesFragment())
+        return fragments
+    }
+
+    private fun initViewPager() {
+        tabLayout = findViewById(R.id.tab_layout_main)
+        viewPager = findViewById(R.id.view_pager_main)
+
+        var deckData = ArrayList<Deck?>()
+
         viewPager.offscreenPageLimit = 2
 
-        val mFragmentAdapter = FragmentAdapter(supportFragmentManager, fragments, titles)
-        viewPager.adapter = mFragmentAdapter
+        val mFragmentAdapter = FragmentAdapter(supportFragmentManager, getFragments(deckData), getTitles())
+        FirebaseConnection.refGlobal.child("/decks").addValueEventListener(object:ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                deckData.clear()
+                snapshot.children.forEach{
+                    deckData.add(it.getValue<Deck?>())
+                }
+                viewPager.adapter = mFragmentAdapter
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("mainActivity", "Error al escuchar los cambios en la rama /decks. detalles: $error")
+            }
+        })
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
         fab.show()

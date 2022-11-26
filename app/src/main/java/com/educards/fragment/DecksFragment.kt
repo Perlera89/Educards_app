@@ -11,7 +11,7 @@ import com.educards.R
 import com.educards.adapter.RecyclerDeckAdapter
 import com.educards.model.Deck
 
-class DecksFragment : Fragment() {
+class DecksFragment(var _decks: ArrayList<Deck?>) : Fragment() {
     private lateinit var recyclerDeck: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +29,14 @@ class DecksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerDeck = view.findViewById(R.id.recycler_decks)
-        val adapter = RecyclerDeckAdapter(getDeck(), context, activity)
+        val adapter = RecyclerDeckAdapter(_decks, context, activity)
 
         recyclerDeck.setHasFixedSize(true)
         recyclerDeck.layoutManager = LinearLayoutManager(context)
         recyclerDeck.adapter = adapter
     }
 
+    /*
     private fun getDeck(): MutableList<Deck>{
         val decks: MutableList<Deck> = ArrayList()
         decks.add(Deck("1","Matemáticas", "Examen",false,11))
@@ -44,5 +45,7 @@ class DecksFragment : Fragment() {
 
         return decks
     }
+
+     */
 
 }
