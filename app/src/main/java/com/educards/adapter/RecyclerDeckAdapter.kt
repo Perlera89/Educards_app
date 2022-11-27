@@ -16,6 +16,7 @@ import com.educards.R
 import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
 import com.educards.service.SDeck
+import com.educards.util.IndexDeckOrCard
 import com.google.android.material.snackbar.Snackbar
 /*
 import com.google.firebase.database.DataSnapshot
@@ -68,7 +69,10 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
                         .setMessage("\nDo you want to remove ${deck?.getTitle()} deck?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
-//                          TODO: Delete deck
+                            if(deck != null){
+                                IndexDeckOrCard.selectedDeckKey = deck.getId()
+                                SDeck.deleteDeck(deck.getId())
+                            }
                         }
                         .setNegativeButton("No"){dialogInterface, it ->
                             dialogInterface.cancel()
