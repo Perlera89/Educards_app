@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -31,6 +32,8 @@ import com.educards.fragment.DecksFragment
 import com.educards.fragment.FavoritesFragment
 import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
+import com.educards.service.SDeck
+import com.educards.util.IndexDeckOrCard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
@@ -105,6 +108,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (sharedPreferences.getBoolean("isFirst", true)) {
             mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_DRAWER_LAYOUT, 2500)
         }
+
+        IndexDeckOrCard.realTimeIndexDeck()
+        IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
     }
 
     private fun initView() {
@@ -183,6 +189,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private lateinit var dialog: AlertDialog
+    private lateinit var etTitle: EditText
+
     override fun onClick(view: View) {
         when (view.id) {
             R.id.nav_header -> {
@@ -195,6 +203,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.fab_main -> {
                 val builder = AlertDialog.Builder(this)
                 val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
+                etTitle = view.findViewById(R.id.et_title)
                 builder.setView(view)
 
                 dialog = builder.create()
@@ -204,8 +213,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun createDeck(view: View){
-        val deckIntent = Intent(this, DeckActivity::class.java)
-        startActivity(deckIntent)
+        //val deckIntent = Intent(this, DeckActivity::class.java)
+        //startActivity(deckIntent)
+        SDeck.saveDeck(Deck("", etTitle.text.toString(), "Click para editar descripcion", false, 0))
         dialog.hide()
     }
 
