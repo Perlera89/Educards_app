@@ -18,7 +18,7 @@ object SDeck {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.d("service/RSDecks", "Mazo agregado exitosamente")
-                    IndexDeckOrCard.selectedDeckKey = _deck.getId()!!
+                    IndexDeckOrCard.selectedDeckKey = _deck.getId()
                     IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
                     CoroutineScope(Dispatchers.IO).launch{
                         Thread.sleep(1000)
@@ -61,11 +61,9 @@ object SDeck {
             }
     }
 
-    fun updateCountInDeck(_deck: Deck,_incrementValue:Int){
+    fun updateCountInDeck(_deck: Deck){
         //agregar el id del deck en la clase
-        //var selectedDeck = IndexDeckOrCard.selectedDeckKey
-
-        refGlobal.child("/decks/${_deck.getId()}").child("count").setValue(_deck.getCount().plus(_incrementValue))
+        refGlobal.child("/decks/${_deck.getId()}").child("count").setValue(IndexDeckOrCard.itemsCardInDeckSelected)
             .addOnSuccessListener {
                 Log.d("RSDeck","El contador del deck de id <${_deck.getId()}> se ha actualizado con éxito")
             }.addOnFailureListener{

@@ -18,6 +18,8 @@ object IndexDeckOrCard {
     var lastKeyCardDeckSelected:String?=""
     //deck seleccionado en un momento determinado
     var selectedDeckKey:String = "0"
+    //contiene la cantidad de cards en el deck seleccionado
+    var itemsCardInDeckSelected = 0
 
     fun realTimeIndexDeck(){
         if (!SUser.getCurrentUserDetailData().getIdUser().isEmpty()) {
@@ -57,6 +59,7 @@ object IndexDeckOrCard {
             if (!selectedDeckKey.isNullOrEmpty()){
                 if(dataSnapshot.hasChildren() && dataSnapshot.hasChildren()){
                     lastKeyCardDeckSelected = dataSnapshot.children.last().key
+                    itemsCardInDeckSelected = dataSnapshot.children.count()
                     //println("LLAVE DE LA ULTIMA TARJETA DEL DECK <$selectedDeckKey>: $lastKeyCardDeckSelected")
                 }else{
                     lastKeyCardDeckSelected = "0"
