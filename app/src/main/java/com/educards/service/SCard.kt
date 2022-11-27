@@ -1,6 +1,7 @@
 package com.educards.service
 
 import android.util.Log
+import com.educards.model.Deck
 import com.educards.model.entities.Card
 import com.educards.util.IndexDeckOrCard
 
@@ -14,7 +15,9 @@ object SCard {
                 if (it.isSuccessful) {
                     Log.d("service/SCard", "Card agregado exitosamente al mazo de id <${IndexDeckOrCard.selectedDeckKey}>")
                     //Actualizar el numero de cards en el dec
-                    SDeck.updateCountInDeck(IndexDeckOrCard.selectedDeckKey,1L)
+                    var deck = Deck()
+                    deck.setId(IndexDeckOrCard.selectedDeckKey)
+                    SDeck.updateCountInDeck(deck,1)
                 }
             }.addOnFailureListener {
                 Log.d("service/SCard", "Error al agregar card al mazo de id <${IndexDeckOrCard.selectedDeckKey}, Detalles: \n $it")
@@ -43,7 +46,9 @@ object SCard {
                 if (it.isSuccessful) {
                     Log.d("service/SCard", "Card de id<${_cardId}> eliminado exitosamente en el mazo de id <${IndexDeckOrCard.selectedDeckKey}>")
                     //se disminuye el contador de cards del mazo
-                    SDeck.updateCountInDeck(IndexDeckOrCard.selectedDeckKey,-1L)
+                    var deck = Deck()
+                    deck.setId(IndexDeckOrCard.selectedDeckKey)
+                    SDeck.updateCountInDeck(deck,-1)
                 }
             }.addOnFailureListener {
                 Log.d("service/SCard", "Error al eliminar card de id<${_cardId}> en el mazo de id <${IndexDeckOrCard.selectedDeckKey}, Detalles: \n $it")

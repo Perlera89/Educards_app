@@ -61,15 +61,15 @@ object SDeck {
             }
     }
 
-    fun updateCountInDeck(_deckId: String,_incrementValue:Long){
+    fun updateCountInDeck(_deck: Deck,_incrementValue:Int){
         //agregar el id del deck en la clase
         //var selectedDeck = IndexDeckOrCard.selectedDeckKey
 
-        refGlobal.child("/decks/${_deckId}").child("count").setValue(ServerValue.increment(_incrementValue))
+        refGlobal.child("/decks/${_deck.getId()}").child("count").setValue(_deck.getCount().plus(_incrementValue))
             .addOnSuccessListener {
-                Log.d("RSDeck","El contador del deck de id <${_deckId}> se ha actualizado con éxito")
+                Log.d("RSDeck","El contador del deck de id <${_deck.getId()}> se ha actualizado con éxito")
             }.addOnFailureListener{
-                Log.d("RSDeck","Error al actualizar el contador del deck de id <${_deckId}> . Detalles: \n ${it}")
+                Log.d("RSDeck","Error al actualizar el contador del deck de id <${_deck.getId()}> . Detalles: \n ${it}")
             }
     }
 }
