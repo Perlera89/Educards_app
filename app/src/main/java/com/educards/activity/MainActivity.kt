@@ -183,6 +183,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Log.d("mainActivity", "Error al escuchar los cambios en la rama /decks. detalles: $error")
             }
         })
+
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
         fab.show()

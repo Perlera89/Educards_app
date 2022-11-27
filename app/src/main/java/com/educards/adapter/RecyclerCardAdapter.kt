@@ -2,20 +2,23 @@ package com.educards.adapter
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.entities.Card
 
-class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _context:Context,private var _btReverse:ImageButton) :
+class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btReverse:ImageButton, private var _context:Context, private val activity: Activity?) :
     RecyclerView.Adapter<RecyclerCardAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
@@ -33,7 +36,6 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _con
                 return true
             }
         })
-
     }
 
     override fun getItemCount(): Int {
@@ -45,6 +47,10 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _con
             private var answer: TextView
             private var cardQuestion: CardView?
             private var cardAnswer: CardView?
+            private lateinit var dialog: AlertDialog
+
+            private var editQuestion: EditText
+            private var editAnswer: EditText
 
             private lateinit var frontAnim: AnimatorSet
             private lateinit var backAnim: AnimatorSet
@@ -55,12 +61,25 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _con
                 answer = view.findViewById(R.id.et_answer)
                 cardQuestion = view.findViewById(R.id.cv_question)
                 cardAnswer = view.findViewById(R.id.cv_answer)
+                editQuestion = view.findViewById(R.id.et_card_question)
+                editAnswer = view.findViewById(R.id.et_card_answer)
+
             }
 
             fun bind(card: Card){
-                question.text = card.question
-                answer.text = card.answer
+                question.text = card.getQuestion()
+                answer.text = card.getAnswer()
+
+                question.setOnClickListener {
+                    val builder = AlertDialog.Builder(_context)
+                    val viewDialog = activity?.layoutInflater?.inflate(R.layout.dialog_input_question, null)
+                    builder.setView(viewDialog)
+
+                    dialog = builder.create()
+                    dialog.show()
+                }
             }
+
             fun cardAnimation(){
                 val scale = _context.resources.displayMetrics.density
                 cardQuestion?.cameraDistance = 8000 * scale
@@ -87,6 +106,5 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _con
                     }
                 }
             }
-
-        }
+    }
 }

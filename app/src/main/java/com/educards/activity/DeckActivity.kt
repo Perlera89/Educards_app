@@ -2,6 +2,7 @@ package com.educards.activity
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -41,6 +42,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
     private lateinit var fabStudy: FloatingActionButton
     private lateinit var fabAdd: FloatingActionButton
+    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,17 +55,16 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
         btReverse = findViewById(R.id.fab_revert)
 
-        activity = this
+        context = this
 
-        var horizontalLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        var horizontalLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        val adapter = RecyclerCardAdapter(getCards(),this.applicationContext,btReverse)
+        val adapter = RecyclerCardAdapter(getCards(), btReverse, context, activity)
         //recyclerCard.setHasFixedSize(true)
         recyclerCard.layoutManager = horizontalLayoutManager
         recyclerCard.adapter = adapter
 
         initView()
-//        cardAnimation()
     }
 
     private fun initView() {
@@ -136,7 +137,6 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
                 startActivity(mainIntent)
             }
             R.id.nav_all_favorites -> {
-                val fragmentFavorites = supportFragmentManager.findFragmentById(R.id.favorites_fragment) as FavoritesFragment
             }
             R.id.nav_about -> {
                 val aboutIntent = Intent(this, AboutActivity::class.java)
@@ -151,6 +151,13 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         return true
     }
 
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
 
     private fun getCards(): MutableList<Card>{
         val cards: MutableList<Card> = ArrayList()
