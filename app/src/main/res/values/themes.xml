@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="Theme.Educards_app.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Educards_app.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Educards_app.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

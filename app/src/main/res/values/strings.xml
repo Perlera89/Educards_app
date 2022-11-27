@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">Educards</string>
+    <string name="app_test_text">Texto de prueba</string>
+
+    <!--    LogIn & SignIn-->
+    <string name="log_in_title">Log In</string>
+    <string name="log_in_desc">Do you already have an account?</string>
+    <string name="sign_in_title">Sign In</string>
+    <string name="sign_in_desc">You don\'t have an account?</string>
+
+    <!--    TextView-->
+    <string name="tv_log_in">Enter</string>
+    <string name="tv_sign_in">Register</string>
+    <string name="tv_country_salvador">+ 503</string>
+
+    <!--    EditText-->
+    <string name="ed_name">Name</string>
+    <string name="ed_email">Email</string>
+    <string name="ed_phone">Phone</string>
+    <string name="ed_password">Password</string>
+    <string name="ed_confirm_password">Confirm Password</string>
+
+    <!--    Menu-->
+    <string name="menu_card_title">Card</string>
+    <string name="menu_card_delete">Delete</string>
+    <string name="menu_card_save">Save and exit</string>
+    <string name="menu_card_reverse">View Reverse</string>
+    <string name="menu_set_list">All Decks</string>
+    <string name="menu_favorite_list">All favorites</string>
+
+    <!--    Nav menu-->
+    <string name="nav_about">About</string>
+    <string name="nav_donate">Donations</string>
+    <string name="nav_my_apps">Settings</string>
+    <string name="nav_back">Back</string>
+    <string name="nav_header_text">Click to Log In </string>
+    <string name="navigation_drawer_open">Open navigation page</string>
+    <string name="navigation_drawer_close">Close navigation page</string>
+    <string name="tab_title_cards">Cards</string>
+    <string name="tab_title_favorites">Favorites</string>
+    <string name="main_snack_bar">This is snack_bar</string>
+    <string name="main_snack_bar_action">Ok</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="app_start_text">Created by July</string>
+    <string name="tab_title_decks">Decks</string>
+    <string name="app_empty_text">Empty decks</string>
+    <string name="menu_trash">Move to trash</string>
+
+    <!--    Decks-->
+    <string name="deck_name">Deck</string>
+    <string name="deck_untitled">Untitled deck</string>
+    <string name="deck_default_text">You can edit text</string>
+    <string name="deck_description">flashcards</string>
+    <string name="deck_description_deck">This is a description</string>
+    <string name="deck_front_text">You can edit the question</string>
+    <string name="deck_back_text">You can edit the answer</string>
+    <string name="snack_favorite_deck">Deck moved to favorites</string>
+
+    <!--    About-->
+    <string name="about_name">About</string>
+    <string name="about_title_app">Educards App</string>
+    <string name="about_version">Version: 1.0</string>
+    <string name="about_contact">Contact Us</string>
+    <string name="about_email">Contact us by E-mail</string>
+    <string name="about_github">Source code on GitHub</string>
+    <string name="about_licenses">Open source licenses</string>
+    <string name="app_designed_by">Designed by July</string>
+    <string name="about_not_found_email">Not found email app</string>
+    <string name="about_email_intent">About:Educard App</string>
+    <string name="share_with">Share with</string>
+
+    <!--    Donate-->
+    <string name="donate_title">Donate</string>
+    <string name="donate_text">Donate</string>
+    <string name="donate_header">You can support the Educards project by donating!</string>
+    <string name="donate_low">1.99 USD</string>
+    <string name="donate_high">9.99 USD</string>
+
+<!--    Dialog-->
+    <string name="dialog_buttom_question">Enter question, title, word...</string>
+    <string name="dialog_buttom_answer">Enter answer, definition, descriptions...</string>
+</resources>

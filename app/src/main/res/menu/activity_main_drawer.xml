@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_all_decks"
+            android:icon="@drawable/ic_view_list"
+            android:title="@string/menu_set_list" />
+        <item
+            android:id="@+id/nav_all_favorites"
+            android:icon="@drawable/ic_favorite_select"
+            android:title="@string/menu_favorite_list" />
+    </group>
+
+    <group android:id="@+id/group_about">
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info"
+            android:title="@string/nav_about" />
+        <item
+            android:id="@+id/nav_donate"
+            android:icon="@drawable/ic_attach_money"
+            android:title="@string/nav_donate" />
+    </group>
+</menu>
