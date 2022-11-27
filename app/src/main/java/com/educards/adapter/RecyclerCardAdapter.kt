@@ -99,7 +99,7 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                 }
 
                 deleteCard.setOnClickListener{
-                    builder.setTitle("Confirm to delete")
+                    builder.setTitle("Confirm delete")
                         .setMessage("\nDo you want to remove card?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->

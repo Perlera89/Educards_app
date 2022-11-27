@@ -65,7 +65,7 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
                 countCards.text = deck?.getCount().toString()
 
                 delete.setOnClickListener{
-                    builder.setTitle("Confirm to delete")
+                    builder.setTitle("Confirm delete")
                         .setMessage("\nDo you want to remove ${deck?.getTitle()} deck?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
