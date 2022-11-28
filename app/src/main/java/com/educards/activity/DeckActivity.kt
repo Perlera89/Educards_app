@@ -130,6 +130,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.setItemIconTintList(null)
 
+
         val headerView: View = navigationView.getHeaderView(0)
         val nav_header = headerView.findViewById<LinearLayout>(R.id.nav_header)
         nav_header.setOnClickListener(this)
@@ -172,8 +173,10 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             R.id.fab_revert -> Toast.makeText(this, "Reverse", Toast.LENGTH_SHORT).show()
 
             R.id.fab_study -> {
-                val estudyIntent = Intent(this, EstudyActivity::class.java)
-                startActivity(estudyIntent)
+              if (cardsData.size > 0){
+                  val estudyIntent = Intent(this, EstudyActivity::class.java)
+                  startActivity(estudyIntent)
+              }
             }
             R.id.fab_add -> {
                 IndexDeckOrCard.realTimeIndexCardInSelectedDeck()

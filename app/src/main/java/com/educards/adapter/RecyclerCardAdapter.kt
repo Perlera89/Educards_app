@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.entities.Card
+import com.educards.service.SCard
 import com.educards.service.SDeck
 import com.educards.util.IndexDeckOrCard
 
@@ -103,7 +104,7 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                         .setMessage("\nDo you want to remove card?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
-//                            TODO: Delete Card
+                           SCard.deleteCard(card.getId())
                         }
                         .setNegativeButton("No"){dialogInterface, it ->
                             dialogInterface.cancel()
