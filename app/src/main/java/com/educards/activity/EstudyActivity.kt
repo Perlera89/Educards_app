@@ -1,5 +1,7 @@
 package com.educards.activity
 
+import android.animation.AnimatorInflater
+import android.animation.AnimatorSet
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -49,7 +51,10 @@ class EstudyActivity : AppCompatActivity() {
         btReverse = findViewById(R.id.fab_flip)
         btNext = findViewById(R.id.fab_next)
 
+        tvStudyTitle.text = this.intent.extras?.getString("title")
+
         getCards()
+        cardAnimation()
     }
 
     var cardsData = ArrayList<Card>()
@@ -73,5 +78,36 @@ class EstudyActivity : AppCompatActivity() {
 
             }
 
+    }
+
+    private lateinit var frontAnim: AnimatorSet
+    private lateinit var backAnim: AnimatorSet
+    private var isFront = true
+
+    fun cardAnimation(){
+        val scale = this.resources.displayMetrics.density
+        questionCard.cameraDistance = 8000 * scale
+        answerCard.cameraDistance = 8000 * scale
+
+        frontAnim = AnimatorInflater.loadAnimator(this, R.animator.front_animation) as AnimatorSet
+        backAnim = AnimatorInflater.loadAnimator(this, R.animator.back_animation) as AnimatorSet
+
+        btReverse.setOnClickListener{
+            if(isFront){
+                frontAnim.setTarget(questionCard)
+                backAnim.setTarget(answerCard)
+                frontAnim.start()
+                backAnim.start()
+
+                isFront = false
+            } else{
+                frontAnim.setTarget(answerCard)
+                backAnim.setTarget(questionCard)
+                backAnim.start()
+                frontAnim.start()
+
+                isFront = true
+            }
+        }
     }
 }

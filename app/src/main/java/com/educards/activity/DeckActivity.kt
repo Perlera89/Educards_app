@@ -2,6 +2,7 @@ package com.educards.activity
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
+import android.content.ClipDescription
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,10 +16,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +58,8 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
     private lateinit var fabStudy: FloatingActionButton
     private lateinit var fabAdd: FloatingActionButton
+    private lateinit var tvTitle: TextView
+    private lateinit var tvDescription: TextView
 
     var cardsData = ArrayList<Card>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +70,14 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         recyclerCard = findViewById(R.id.recycler_cards)
         fabStudy = findViewById(R.id.fab_study)
         fabAdd = findViewById(R.id.fab_add)
-
+        tvDescription = findViewById(R.id.card_description)
         btReverse = findViewById(R.id.fab_revert)
 
         activity = this
         val bundle = this.intent.extras
+
+        tvDescription.text = bundle?.getString("description")
+
         IndexDeckOrCard.realTimeIndexDeck()
         IndexDeckOrCard.selectedDeckKey = bundle?.getString("idDeck").toString()
         IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
@@ -174,8 +182,9 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
             R.id.fab_study -> {
               if (cardsData.size > 0){
-                  val estudyIntent = Intent(this, EstudyActivity::class.java)
-                  startActivity(estudyIntent)
+                  val studyIntent = Intent(this, EstudyActivity::class.java)
+                  studyIntent.putExtra("title", this.intent.extras?.getString("title"))
+                  startActivity(studyIntent)
               }
             }
             R.id.fab_add -> {

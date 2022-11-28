@@ -110,6 +110,8 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
                     if(deck != null && context != null){
                         val intentCard = Intent(context, DeckActivity::class.java)
                         intentCard.putExtra("idDeck",deck.getId())
+                        intentCard.putExtra("title",deck.getTitle())
+                        intentCard.putExtra("description",deck.getDescription())
                         startActivity(context,intentCard, Bundle())
                     }
                 }
