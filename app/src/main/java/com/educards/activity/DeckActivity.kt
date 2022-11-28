@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.KeyEvent.DispatcherState
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -29,6 +31,7 @@ import com.educards.fragment.FavoritesFragment
 import com.educards.model.Deck
 import com.educards.model.entities.Card
 import com.educards.service.FirebaseConnection
+import com.educards.service.SCard
 import com.educards.util.IndexDeckOrCard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -38,6 +41,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firestore.admin.v1.Index
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DeckActivity : AppCompatActivity(), View.OnClickListener,
     NavigationView.OnNavigationItemSelectedListener {
@@ -84,13 +90,26 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-
+                    Log.d("DeckActivity", "Error al mostrar las tarjetas del deck seleccionado. ${error}")
                 }
 
             })
-        //recyclerCard.setHasFixedSize(true)
+        recyclerCard.setHasFixedSize(true)
         recyclerCard.layoutManager = horizontalLayoutManager
-       // recyclerCard.adapter = adapter
+        recyclerCard.adapter = adapter
+        recyclerCard.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener{
+            override fun onChildViewAttachedToWindow(view: View) {
+                recyclerCard?.getChildAdapterPosition(view)
+                    ?.let { recyclerCard.layoutManager?.scrollToPosition(it) }
+                println("vista agregada")
+            }
+            override fun onChildViewDetachedFromWindow(view: View) {
+                recyclerCard?.getChildAdapterPosition(view)
+                    ?.let { recyclerCard.layoutManager?.scrollToPosition(it) }
+                println("vista eliminada")
+            }
+
+        })
 
         initView()
     }
@@ -116,6 +135,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         nav_header.setOnClickListener(this)
 
         fabStudy.setOnClickListener(this)
+        fabAdd.setOnClickListener(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -154,6 +174,13 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             R.id.fab_study -> {
                 val estudyIntent = Intent(this, EstudyActivity::class.java)
                 startActivity(estudyIntent)
+            }
+            R.id.fab_add -> {
+                IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
+                CoroutineScope(Dispatchers.IO).launch {
+                    Thread.sleep(1000)
+                    SCard.saveCard(Card("", "Click to edit this question ${cardsData.size+1}", "Click to edit this answer ${cardsData.size+1}"))
+                }
             }
         }
     }
