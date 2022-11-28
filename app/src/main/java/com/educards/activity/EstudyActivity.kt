@@ -55,9 +55,11 @@ class EstudyActivity : AppCompatActivity() {
 
         getCards()
         cardAnimation()
+        initStudy()
     }
 
     var cardsData = ArrayList<Card>()
+    var cardsRandom = ArrayList<Card>()
 
     private fun getCards(){
 
@@ -67,17 +69,12 @@ class EstudyActivity : AppCompatActivity() {
                     it.children.forEach{
                         it.getValue<Card>()?.let { it1 -> cardsData.add(it1) }
                     }
-                    if (cardsData.size > 0){
-                        tvQuestion.text = cardsData[0].getQuestion()
-                        tvAnswer.text = cardsData[0].getAnswer()
-                        tvCounter.text = "1/${cardsData.size}"
-                    }
+                    generateRandomCardsArray()
                 }
             }.addOnFailureListener{
                 Log.d("EstudyActivity", "Error al mostrar las tarjetas del mazo seleccionado. ${it}")
 
             }
-
     }
 
     private lateinit var frontAnim: AnimatorSet
@@ -107,6 +104,41 @@ class EstudyActivity : AppCompatActivity() {
                 frontAnim.start()
 
                 isFront = true
+            }
+        }
+    }
+
+    private fun generateRandomCardsArray(){
+        var cardRandom = Card()
+        if(cardsData.size > 0){
+            for(i in 1..cardsData.size){
+                cardRandom = cardsData.random()
+                cardsRandom.add(cardRandom)
+                cardsData.remove(cardRandom)
+            }
+            initCard()
+            cardsRandom.forEach{
+                println(it.getId())
+            }
+        }
+    }
+
+    private fun initCard(){
+        if (cardsRandom.size > 0){
+            tvQuestion.text = cardsRandom[0].getQuestion()
+            tvAnswer.text = cardsRandom[0].getAnswer()
+            tvCounter.text = "1/${cardsRandom.size}"
+        }
+    }
+
+    private fun initStudy(){
+        var indexCardShow = 0
+        btNext.setOnClickListener{
+            if (indexCardShow < cardsRandom.size-1){
+                indexCardShow++
+                tvQuestion.text = cardsRandom[indexCardShow].getQuestion()
+                tvAnswer.text = cardsRandom[indexCardShow].getAnswer()
+                tvCounter.text = "${indexCardShow+1}/${cardsRandom.size}"
             }
         }
     }
