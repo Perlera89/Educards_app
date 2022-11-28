@@ -28,9 +28,16 @@ import com.educards.adapter.RecyclerDeckAdapter
 import com.educards.fragment.FavoritesFragment
 import com.educards.model.Deck
 import com.educards.model.entities.Card
+import com.educards.service.FirebaseConnection
+import com.educards.util.IndexDeckOrCard
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import com.google.firestore.admin.v1.Index
 
 class DeckActivity : AppCompatActivity(), View.OnClickListener,
     NavigationView.OnNavigationItemSelectedListener {
@@ -43,6 +50,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var fabStudy: FloatingActionButton
     private lateinit var fabAdd: FloatingActionButton
 
+    var cardsData = ArrayList<Card>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deck)
@@ -55,13 +63,34 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         btReverse = findViewById(R.id.fab_revert)
 
         activity = this
+        val bundle = this.intent.extras
+        IndexDeckOrCard.realTimeIndexDeck()
+        IndexDeckOrCard.selectedDeckKey = bundle?.getString("idDeck").toString()
+        IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
 
         var horizontalLayoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+        val adapter = RecyclerCardAdapter(cardsData, btReverse, this, activity)
 
-        val adapter = RecyclerCardAdapter(getCards(), btReverse, this, activity)
+        FirebaseConnection.refGlobal.child("/cards").child("${bundle?.getString("idDeck").toString()}")
+            .addValueEventListener(object :ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    cardsData.clear()
+                    snapshot.children.forEach{
+                        if (it != null){
+                            cardsData.add(it.getValue<Card>() as Card)
+                        }
+                    }
+                    recyclerCard.adapter = adapter
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
         //recyclerCard.setHasFixedSize(true)
         recyclerCard.layoutManager = horizontalLayoutManager
-        recyclerCard.adapter = adapter
+       // recyclerCard.adapter = adapter
 
         initView()
     }
@@ -166,12 +195,12 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         Toast.makeText(this, "Se ha agregado la respuesta", Toast.LENGTH_SHORT).show()
     }
 
-    private fun getCards(): MutableList<Card>{
+  /*  private fun getCards(): MutableList<Card>{
         val cards: MutableList<Card> = ArrayList()
         cards.add(Card("1", "Pregunta 1", "Respuesta 1"))
         cards.add(Card("2", "Pregunta 2", "Respuesta 2"))
         cards.add(Card("3", "Pregunta 3", "Respuesta 3"))
 
         return cards
-    }
+    }*/
 }

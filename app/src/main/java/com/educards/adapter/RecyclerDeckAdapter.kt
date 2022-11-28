@@ -4,15 +4,20 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView.ItemView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
+import com.educards.activity.DeckActivity
 import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
 import com.educards.service.SDeck
@@ -100,6 +105,13 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
                     snackBar.show()
                 }
 
+                }
+                itemView.setOnClickListener{
+                    if(deck != null && context != null){
+                        val intentCard = Intent(context, DeckActivity::class.java)
+                        intentCard.putExtra("idDeck",deck.getId())
+                        startActivity(context,intentCard, Bundle())
+                    }
                 }
             }
         }
