@@ -31,7 +31,7 @@ import com.google.firebase.database.ktx.getValue
 
  */
 
-class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Context?, val activity: Activity?) :
+class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Context?, val activity: Activity?) :
     RecyclerView.Adapter<RecyclerDeckAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
@@ -52,6 +52,7 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
     }
         inner class ViewHolder(view: View, context: Context?, activity: Activity?): RecyclerView.ViewHolder(view){
             var title: TextView
+            var index: TextView
             var countCards: TextView
             var favorite: ImageView
             var delete: ImageView
@@ -59,6 +60,7 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
 
             init {
                 title = view.findViewById(R.id.tv_title_deck)
+                index = view.findViewById(R.id.tv_card_index)
                 countCards = view.findViewById(R.id.tv_count_cards)
                 favorite = view.findViewById(R.id.iv_favorite)
                 delete = view.findViewById(R.id.iv_delete)
@@ -67,6 +69,14 @@ class RecyclerDeckAdapter(private var decks: ArrayList<Deck?>, val context: Cont
 
             fun bind(deck: Deck?){
                 title.text = deck?.getTitle()
+                if(title.text.length > 20){
+                    title.text = title.text.substring(0, 18) + "..."
+                }
+
+                index.text = deck?.getTitle()?.first()?.uppercaseChar()?.toString()
+                if(adapterPosition > 0 && index.text == decks[adapterPosition - 1]?.getTitle()?.first()?.uppercaseChar()?.toString()){
+                    index.alpha = 0f
+                }
                 countCards.text = deck?.getCount().toString()
 
                 delete.setOnClickListener{
