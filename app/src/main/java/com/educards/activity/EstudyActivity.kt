@@ -5,6 +5,7 @@ import android.animation.AnimatorSet
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
 import com.google.firestore.admin.v1.Index
 
+@Suppress("DEPRECATION")
 class EstudyActivity : AppCompatActivity() {
     private lateinit var recyclerCard: RecyclerView
     private lateinit var tvStudyTitle:TextView
@@ -91,6 +93,7 @@ class EstudyActivity : AppCompatActivity() {
 
         btReverse.setOnClickListener{
             if(isFront){
+                answerCard.visibility = View.VISIBLE
                 frontAnim.setTarget(questionCard)
                 backAnim.setTarget(answerCard)
                 frontAnim.start()
@@ -98,6 +101,7 @@ class EstudyActivity : AppCompatActivity() {
 
                 isFront = false
             } else{
+                answerCard.visibility = View.GONE
                 frontAnim.setTarget(answerCard)
                 backAnim.setTarget(questionCard)
                 backAnim.start()

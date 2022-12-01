@@ -30,22 +30,21 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:id="@+id/card_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/poppins"
-            android:textColor="@color/blue_700"
-            android:text="@string/deck_description_deck"
-            android:layout_gravity="center"
-            android:textSize="16dp"
-            />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="10">
+            <TextView
+                android:id="@+id/card_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/blue_700"
+                android:text="@string/deck_description_deck"
+                android:gravity="center"
+                android:textSize="16dp"
+                />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_cards"
                 android:layout_width="match_parent"
@@ -55,6 +54,7 @@
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:orientation="horizontal"
+                android:layout_below="@id/card_description"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
         </RelativeLayout>
 

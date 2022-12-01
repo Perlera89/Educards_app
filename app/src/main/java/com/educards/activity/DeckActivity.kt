@@ -12,13 +12,9 @@ import android.view.KeyEvent.DispatcherState
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
@@ -36,6 +32,7 @@ import com.educards.model.entities.Card
 import com.educards.service.FirebaseConnection
 import com.educards.service.SCard
 import com.educards.util.IndexDeckOrCard
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
@@ -62,6 +59,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var tvDescription: TextView
 
     var cardsData = ArrayList<Card>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_deck)
@@ -77,13 +75,14 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         val bundle = this.intent.extras
 
         tvDescription.text = bundle?.getString("description")
+        title = bundle?.getString("title")
 
         IndexDeckOrCard.realTimeIndexDeck()
         IndexDeckOrCard.selectedDeckKey = bundle?.getString("idDeck").toString()
         IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
 
         var horizontalLayoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = RecyclerCardAdapter(cardsData, btReverse, this, activity)
+        val adapter = RecyclerCardAdapter(getCards(), btReverse, this, activity)
 
         FirebaseConnection.refGlobal.child("/cards").child("${bundle?.getString("idDeck").toString()}")
             .addValueEventListener(object :ValueEventListener{
@@ -107,13 +106,13 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         recyclerCard.adapter = adapter
         recyclerCard.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener{
             override fun onChildViewAttachedToWindow(view: View) {
-                recyclerCard?.getChildAdapterPosition(view)
-                    ?.let { recyclerCard.layoutManager?.scrollToPosition(it) }
+                recyclerCard.getChildAdapterPosition(view)
+                    .let { recyclerCard.layoutManager?.scrollToPosition(it) }
                 println("vista agregada")
             }
             override fun onChildViewDetachedFromWindow(view: View) {
-                recyclerCard?.getChildAdapterPosition(view)
-                    ?.let { recyclerCard.layoutManager?.scrollToPosition(it) }
+                recyclerCard.getChildAdapterPosition(view)
+                    .let { recyclerCard.layoutManager?.scrollToPosition(it) }
                 println("vista eliminada")
             }
 
@@ -122,8 +121,33 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         initView()
     }
 
+    private lateinit var dialog: AlertDialog
+    private lateinit var etTitle: EditText
+    private lateinit var etHeader: TextView
+    private lateinit var btUpdate: MaterialButton
+
     private fun initView() {
         toolbar = findViewById(R.id.toolbar_deck)
+        toolbar.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
+            btUpdate = view.findViewById(R.id.bt_create)
+            etTitle = view.findViewById(R.id.et_title)
+            etHeader = view.findViewById(R.id.tv_header)
+
+            etHeader.text = "Rename deck"
+            btUpdate.text = "Update"
+            builder.setView(view)
+
+            dialog = builder.create()
+            dialog.show()
+
+            btUpdate.setOnClickListener {
+//                TODO: Actualizar titulo
+                title = etTitle.text
+                dialog.hide()
+            }
+        }
         setSupportActionBar(toolbar)
 
         drawer = findViewById(R.id.drawer_deck)
@@ -140,8 +164,8 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
 
         val headerView: View = navigationView.getHeaderView(0)
-        val nav_header = headerView.findViewById<LinearLayout>(R.id.nav_header)
-        nav_header.setOnClickListener(this)
+        val navHeader = headerView.findViewById<LinearLayout>(R.id.nav_header)
+        navHeader.setOnClickListener(this)
 
         fabStudy.setOnClickListener(this)
         fabAdd.setOnClickListener(this)
@@ -226,20 +250,12 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
-    fun addQuestion(view: View){
-        Toast.makeText(this, "Se ha agregado la pregunta", Toast.LENGTH_SHORT).show()
-    }
-
-    fun addAnswer(view: View){
-        Toast.makeText(this, "Se ha agregado la respuesta", Toast.LENGTH_SHORT).show()
-    }
-
-  /*  private fun getCards(): MutableList<Card>{
+    private fun getCards(): MutableList<Card>{
         val cards: MutableList<Card> = ArrayList()
         cards.add(Card("1", "Pregunta 1", "Respuesta 1"))
         cards.add(Card("2", "Pregunta 2", "Respuesta 2"))
         cards.add(Card("3", "Pregunta 3", "Respuesta 3"))
 
         return cards
-    }*/
+    }
 }

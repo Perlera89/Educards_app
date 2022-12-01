@@ -44,8 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="10">
-            <include layout="@layout/card_back_item"/>
-            <include layout="@layout/card_front_item"/>
+            <include layout="@layout/card_item"/>
 
 
         </RelativeLayout>

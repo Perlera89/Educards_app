@@ -202,15 +202,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 drawer.closeDrawer(GravityCompat.START)
             }
             R.id.fab_main -> {
-                val builder = AlertDialog.Builder(this)
-                val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
-                etTitle = view.findViewById(R.id.et_title)
-                builder.setView(view)
-
-                dialog = builder.create()
-                dialog.show()
-//                val deckIntent = Intent(this, DeckActivity::class.java)
-//                startActivity(deckIntent)
+//                val builder = AlertDialog.Builder(this)
+//                val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
+//                etTitle = view.findViewById(R.id.et_title)
+//                builder.setView(view)
+//
+//                dialog = builder.create()
+//                dialog.show()
+                val deckIntent = Intent(this, DeckActivity::class.java).apply {
+                    putExtra("title", "Prueba titulo")
+                }
+                startActivity(deckIntent)
             }
         }
     }
