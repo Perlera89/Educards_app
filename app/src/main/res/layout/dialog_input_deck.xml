@@ -30,7 +30,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:text="Add deck"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -52,7 +52,10 @@
                     android:id="@+id/et_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
+                    android:maxLines="5"
+                    android:minLines="1"
+                    android:lines="5"
                     android:padding="16dp"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
