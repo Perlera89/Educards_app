@@ -8,7 +8,7 @@
     tools:background="@color/black">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_add_card"
+        android:id="@+id/cv_add_deck"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
@@ -24,58 +24,60 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_header_card"
+                android:id="@+id/tv_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                android:text="Add question"
+                android:text="Add deck"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/titl_card"
+                android:id="@+id/titl_title"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_header_card"
+                android:layout_below="@id/tv_header"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:hint="@string/dialog_buttom_question"
+                android:textColor="@color/blue_700"
+                android:hint="Title"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_card"
+                    android:id="@+id/et_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:maxLines="5"
                     android:minLines="1"
                     android:lines="5"
-                    android:textColor="@color/blue_700"
                     android:padding="16dp"
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/bt_add_card"
+                android:id="@+id/bt_create"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/titl_card"
+                android:layout_below="@id/titl_title"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="16dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:paddingVertical="16dp"
                 android:tag="button_create"
-                android:text="Add"
+                android:text="Create"
                 android:textColor="@android:color/white"
                 android:visibility="visible"
                 app:cornerRadius="16dp" />
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.educards.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -12,10 +13,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -34,9 +37,11 @@ import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
 import com.educards.service.SDeck
 import com.educards.util.IndexDeckOrCard
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -52,6 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var page_start: ImageView
     private lateinit var toolbar: Toolbar
     private lateinit var context: Context
+    private lateinit var logout: Button
 
     private var isShowPageStart = true
     private val MESSAGE_SHOW_DRAWER_LAYOUT = 0x001
@@ -130,8 +136,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navigationView.setItemIconTintList(null)
 
         val headerView: View = navigationView.getHeaderView(0)
-        val nav_header = headerView.findViewById<LinearLayout>(R.id.nav_header)
-        nav_header.setOnClickListener(this)
+        logout = headerView.findViewById(R.id.bt_logout)
+
+        logout.setOnClickListener(this)
 
         fab = findViewById(R.id.fab_main)
         fab.setOnClickListener(this)
@@ -191,35 +198,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var dialog: AlertDialog
     private lateinit var etTitle: EditText
+    private lateinit var btAddDeck: MaterialButton
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.nav_header -> {
+            R.id.bt_logout -> {
+//                TODO: Cerrar sesion. Mostrar este boton solo si esta logueado
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 val drawer: DrawerLayout =
                     findViewById(R.id.drawer_main)
                 drawer.closeDrawer(GravityCompat.START)
+                this.finish()
             }
+
             R.id.fab_main -> {
-//                val builder = AlertDialog.Builder(this)
-//                val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
-//                etTitle = view.findViewById(R.id.et_title)
-//                builder.setView(view)
-//
-//                dialog = builder.create()
-//                dialog.show()
-                val deckIntent = Intent(this, DeckActivity::class.java).apply {
-                    putExtra("title", "Prueba titulo")
+                val builder = AlertDialog.Builder(this)
+                val view = layoutInflater.inflate(R.layout.dialog_input, null)
+                btAddDeck = view.findViewById(R.id.bt_create)
+                etTitle = view.findViewById(R.id.et_title)
+                btAddDeck = view.findViewById(R.id.bt_create)
+
+                builder.setView(view)
+
+                dialog = builder.create()
+                dialog.show()
+
+                btAddDeck.setOnClickListener{
+                    SDeck.saveDeck(Deck("", etTitle.text.toString(), "Click para editar descripcion", false, 0))
+                    dialog.hide()
                 }
-                startActivity(deckIntent)
+//                val deckIntent = Intent(this, DeckActivity::class.java).apply {
+//                    putExtra("title", "Prueba titulo")
+//                }
+//                startActivity(deckIntent)
             }
         }
-    }
-
-    fun createDeck(view: View){
-        SDeck.saveDeck(Deck("", etTitle.text.toString(), "Click para editar descripcion", false, 0))
-        dialog.hide()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -229,11 +243,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_all_decks -> {
-                Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
+            R.id.menu_about -> {
+                val aboutIntent = Intent(this, AboutActivity::class.java)
+                startActivity(aboutIntent)
             }
-            R.id.menu_save_exit -> {
-                Toast.makeText(this, "Donate", Toast.LENGTH_SHORT).show()
+            R.id.menu_donate -> {
+                val donateIntent = Intent(this, DonateActivity::class.java)
+                startActivity(donateIntent)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -244,6 +260,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_all_decks -> {
                 val mainIntent = Intent(this, MainActivity::class.java)
                 startActivity(mainIntent)
+                this.finish()
             }
             R.id.nav_all_favorites -> {
                 Toast.makeText(this, "Favorites", Toast.LENGTH_SHORT).show()

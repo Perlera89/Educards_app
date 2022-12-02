@@ -1,14 +1,9 @@
 package com.educards.activity
 
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
-import android.content.ClipDescription
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent.DispatcherState
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,18 +11,12 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
-import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.educards.R
 import com.educards.adapter.RecyclerCardAdapter
-import com.educards.adapter.RecyclerDeckAdapter
-import com.educards.fragment.FavoritesFragment
-import com.educards.model.Deck
 import com.educards.model.entities.Card
 import com.educards.service.FirebaseConnection
 import com.educards.service.SCard
@@ -35,12 +24,10 @@ import com.educards.util.IndexDeckOrCard
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import com.google.firestore.admin.v1.Index
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -130,7 +117,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         toolbar = findViewById(R.id.toolbar_deck)
         toolbar.setOnClickListener {
             val builder = AlertDialog.Builder(this)
-            val view = layoutInflater.inflate(R.layout.dialog_input_deck, null)
+            val view = layoutInflater.inflate(R.layout.dialog_input, null)
             btUpdate = view.findViewById(R.id.bt_create)
             etTitle = view.findViewById(R.id.et_title)
             etHeader = view.findViewById(R.id.tv_header)
@@ -226,6 +213,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             R.id.nav_all_decks -> {
                 val mainIntent = Intent(this, MainActivity::class.java)
                 startActivity(mainIntent)
+                this.finish()
             }
             R.id.nav_all_favorites -> {
             }

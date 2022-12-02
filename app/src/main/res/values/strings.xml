@@ -6,6 +6,7 @@
     <string name="log_in_title">Log In</string>
     <string name="log_in_desc">Do you already have an account?</string>
     <string name="sign_in_title">Sign In</string>
+    <string name="log_out">Logout</string>
     <string name="sign_in_desc">You don\'t have an account?</string>
 
     <!--    TextView-->
@@ -33,7 +34,7 @@
     <string name="nav_donate">Donations</string>
     <string name="nav_my_apps">Settings</string>
     <string name="nav_back">Back</string>
-    <string name="nav_header_text">Click to Log In </string>
+    <string name="nav_header_text">usuario@mail.com</string>
     <string name="navigation_drawer_open">Open navigation page</string>
     <string name="navigation_drawer_close">Close navigation page</string>
     <string name="tab_title_cards">Cards</string>

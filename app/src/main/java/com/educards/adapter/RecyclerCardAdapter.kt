@@ -17,6 +17,7 @@ import com.educards.R
 import com.educards.model.entities.Card
 import com.educards.service.SCard
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
 class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btReverse:ImageButton, private var _context:Context, private val activity: Activity?) :
@@ -51,7 +52,8 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
             private var deleteCard: ImageView
             var builder: android.app.AlertDialog.Builder
 
-            private lateinit var tvEditCard: TextInputLayout
+            private lateinit var tvEditCardTitle: TextInputLayout
+            private lateinit var tvEditCard: TextInputEditText
             private lateinit var cardHeader: TextView
             private lateinit var addCard: MaterialButton
 
@@ -74,16 +76,19 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                 question.text = card.getQuestion()
                 answer.text = card.getAnswer()
 
-                val viewCard = activity?.layoutInflater?.inflate(R.layout.dialog_input_card, null)
-                tvEditCard = viewCard!!.findViewById(R.id.titl_card)
-                cardHeader = viewCard!!.findViewById(R.id.tv_header_card)
-                addCard = viewCard!!.findViewById(R.id.bt_add_card)
+                val viewCard = activity?.layoutInflater?.inflate(R.layout.dialog_input, null)
+                tvEditCardTitle = viewCard!!.findViewById(R.id.titl_title)
+                tvEditCard = viewCard!!.findViewById(R.id.et_title)
+                cardHeader = viewCard!!.findViewById(R.id.tv_header)
+                addCard = viewCard!!.findViewById(R.id.bt_create)
 
                 question.setOnClickListener {
                     cardQuestion?.isEnabled
                     cardAnswer?.isEnabled = false
                     question.selectionStart
                     val builder = AlertDialog.Builder(_context)
+                    tvEditCardTitle.hint = _context.getString(R.string.dialog_buttom_question)
+                    cardHeader.text = "Add question"
                     builder.setView(viewCard)
 
                     dialog = builder.create()
@@ -101,7 +106,7 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                     cardQuestion?.isEnabled = false
                     answer.selectionStart
                     val builder = AlertDialog.Builder(_context)
-                    tvEditCard.hint = _context.getString(R.string.dialog_buttom_answer)
+                    tvEditCardTitle.hint = _context.getString(R.string.dialog_buttom_answer)
                     cardHeader.text = "Add answer"
                     builder.setView(viewCard)
 
