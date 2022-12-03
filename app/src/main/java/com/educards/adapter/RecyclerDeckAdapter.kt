@@ -73,9 +73,11 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                     title.text = title.text.substring(0, 18) + "..."
                 }
 
-                index.text = deck?.getTitle()?.first()?.uppercaseChar()?.toString()
-                if(adapterPosition > 0 && index.text == decks[adapterPosition - 1]?.getTitle()?.first()?.uppercaseChar()?.toString()){
-                    index.alpha = 0f
+                if(deck != null){
+                    index.text = deck?.getTitle()?.first()?.uppercaseChar()?.toString()
+                    if(index.text == decks[adapterPosition - 1]?.getTitle()?.first()?.uppercaseChar()?.toString()){
+                        index.alpha = 0f
+                    }
                 }
                 countCards.text = deck?.getCount().toString()
 

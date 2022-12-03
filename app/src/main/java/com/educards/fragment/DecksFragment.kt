@@ -32,7 +32,7 @@ class DecksFragment(var _decks: ArrayList<Deck?>) : Fragment() {
 
         recyclerDeck = view.findViewById(R.id.recycler_decks)
         emptyDecks = view.findViewById(R.id.empty_deck)
-        val adapter = RecyclerDeckAdapter(getDecks().sortedWith(compareBy { it?.getTitle() }) as MutableList<Deck?>, context, activity)
+        val adapter = RecyclerDeckAdapter(_decks.sortedWith(compareBy { it?.getTitle() }) as MutableList<Deck?>, context, activity)
 
         if(_decks.size > 0){
             recyclerDeck.setHasFixedSize(true)

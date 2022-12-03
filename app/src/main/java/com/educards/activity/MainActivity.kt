@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Glide.with(this@MainActivity).load(R.mipmap.ic_launcher_round).into(page_start)
             if (sharedPreferences.getBoolean("isFirst", true)) {
             } else {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 100)
+                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 3000)
             }
             isShowPageStart = false
         }
