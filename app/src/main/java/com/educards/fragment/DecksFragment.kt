@@ -32,7 +32,7 @@ class DecksFragment(var _decks: ArrayList<Deck?>) : Fragment() {
 
         recyclerDeck = view.findViewById(R.id.recycler_decks)
         emptyDecks = view.findViewById(R.id.empty_deck)
-        val adapter = RecyclerDeckAdapter(_decks.sortedWith(compareBy { it?.getTitle() }) as MutableList<Deck?>, context, activity)
+        val adapter = RecyclerDeckAdapter(getDecks().sortedWith(compareBy { it?.getTitle() }) as MutableList<Deck?>, context, activity)
 
         if(_decks.size > 0){
             recyclerDeck.setHasFixedSize(true)
@@ -47,11 +47,11 @@ class DecksFragment(var _decks: ArrayList<Deck?>) : Fragment() {
     fun getDecks(): MutableList<Deck?>{
         val decks = mutableListOf<Deck?>()
         decks.add(Deck("1","Programacion","Una descripcion",false,6))
-        decks.add(Deck("2","Mercadeo","Una descripcion",false,6))
-        decks.add(Deck("3","Fisica","Una descripcion",false,12))
-        decks.add(Deck("3","Filosofia con mucho texto","Una descripcion",false,12))
-        decks.add(Deck("4","Matematicas","Una descripcion",false,5))
-        decks.add(Deck("5","Metodologia","Una descripcion",false,5))
+//        decks.add(Deck("2","Mercadeo","Una descripcion",false,6))
+//        decks.add(Deck("3","Fisica","Una descripcion",false,12))
+//        decks.add(Deck("3","Filosofia con mucho texto","Una descripcion",false,12))
+//        decks.add(Deck("4","Matematicas","Una descripcion",false,5))
+//        decks.add(Deck("5","Metodologia","Una descripcion",false,5))
 
         return decks
     }
