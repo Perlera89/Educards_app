@@ -63,6 +63,7 @@ object IndexDeckOrCard {
                     //println("LLAVE DE LA ULTIMA TARJETA DEL DECK <$selectedDeckKey>: $lastKeyCardDeckSelected")
                 }else{
                     lastKeyCardDeckSelected = "0"
+                    itemsCardInDeckSelected = dataSnapshot.children.count()
                     //println("LLAVE DE LA ULTIMA TARJETA DEL DECK <$selectedDeckKey>: $lastKeyCardDeckSelected")
                 }
             }

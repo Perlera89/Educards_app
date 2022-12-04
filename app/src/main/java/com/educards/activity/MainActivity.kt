@@ -199,7 +199,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     viewPager.adapter = mFragmentAdapter
                     if (currentTabSelectedPosition == 1){
                         tabLayout.selectTab(tabLayout.getTabAt(currentTabSelectedPosition))
-                        println("se habia seleccionado favoritos")
                     }
                 }
                 Listeners.deckListener = deckListener
@@ -254,7 +253,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             0))
                         dialog.dismiss()
                     }
-                    viewPager.setCurrentItem(oldPosition,true)
+                    viewPager.setCurrentItem(oldPosition,false)
                 }
             }
         }

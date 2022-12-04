@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.core.view.allViews
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.entities.Card
@@ -20,8 +22,16 @@ import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btReverse:ImageButton, private var _context:Context, private val activity: Activity?) :
+class RecyclerCardAdapter(
+    private var cards: MutableList<Card>,
+    private var _btReverse:ImageButton,
+    private var _context:Context,
+    private val activity: Activity?,
+    private val recyclerCard:RecyclerView) :
     RecyclerView.Adapter<RecyclerCardAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, item: Int): ViewHolder {
@@ -29,7 +39,9 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
         return ViewHolder(holder)
     }
 
-   // @SuppressLint("ClickableViewAccessibility")
+   //@SuppressLint("ClickableViewAccessibility")
+   var currentPositionCard = 0
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val card = cards[position]
         holder.bind(card)
@@ -37,6 +49,7 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
         holder.itemView.setOnTouchListener(object : View.OnTouchListener{
             override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
                 holder.cardAnimation()
+                currentPositionCard = holder.adapterPosition
                 return true
             }
 
@@ -46,6 +59,12 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
     override fun getItemCount(): Int {
         return cards.size
     }
+
+    /*private fun returnToPosition(_position:Int){
+        //println(_position)
+        Thread.sleep(1000)
+        recyclerCard.scrollToPosition(_position)
+    }*/
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
             private var question: TextView
@@ -75,7 +94,8 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
             fun bind(card: Card){
                 question.text = card.getQuestion()
                 answer.text = card.getAnswer()
-
+                UTextView.adjustTextInTextView(question)
+                UTextView.adjustTextInTextView(answer)
                 var viewCard:View? = null
 
                 question.setOnClickListener {
@@ -92,13 +112,16 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
 
                     dialog = builder.create()
                     dialog.show()
+
                     dialog.setCanceledOnTouchOutside(true)
 
+                    currentPositionCard = this.adapterPosition
                     addCard.setOnClickListener {
                         if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Campo de pregunta nulo o vacío")) {
                             SCard.updateCard(Card(card.getId(),tvEditCard.text.toString(),card.getAnswer()))
                             Toast.makeText(_context, "Se ha actualizado la pregunta",Toast.LENGTH_SHORT).show()
-                            dialog.hide()
+                            dialog.dismiss()
+                            returnToPosition(currentPositionCard)
                         }
                     }
                 }
@@ -117,23 +140,34 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
 
                     dialog = builder.create()
                     dialog.show()
+
                     dialog.setCanceledOnTouchOutside(true)
 
+
+                    currentPositionCard = this.adapterPosition
                     addCard.setOnClickListener {
                         if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Campo de pregunta nulo o vacío")) {
                             SCard.updateCard(Card(card.getId(),card.getQuestion(),tvEditCard.text.toString()))
                             Toast.makeText(_context, "Se ha actualizado la respuesta",Toast.LENGTH_SHORT).show()
-                            dialog.hide()
+                            dialog.dismiss()
+                            returnToPosition(currentPositionCard)
                         }
                     }
                 }
 
                 deleteCard.setOnClickListener{
+                    currentPositionCard = this.adapterPosition
                     builder.setTitle("Confirm delete")
                         .setMessage("\nDo you want to remove card?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
                            SCard.deleteCard(card.getId())
+                            Toast.makeText(_context, "Se ha eliminado la tarjeta correctamente",Toast.LENGTH_SHORT).show()
+                            if (currentPositionCard == 0) {
+                                returnToPosition(0)
+                            }else {
+                                returnToPosition(currentPositionCard - 1)
+                            }
                         }
                         .setNegativeButton("No"){dialogInterface, it ->
                             dialogInterface.cancel()
@@ -142,12 +176,18 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                 }
 
             }
+        private fun returnToPosition(_position:Int){
+            CoroutineScope(Dispatchers.Main).launch {
+                recyclerCard.scrollToPosition(_position)
+            }
+        }
         fun dialogItems(_viewCard:View?){
             tvEditCardTitle = _viewCard!!.findViewById(R.id.titl_title)
             tvEditCard = _viewCard!!.findViewById(R.id.et_title)
             cardHeader = _viewCard!!.findViewById(R.id.tv_header)
             addCard = _viewCard!!.findViewById(R.id.bt_create)
         }
+
         private lateinit var frontAnim: AnimatorSet
         private lateinit var backAnim: AnimatorSet
         private var isFront = true
@@ -161,24 +201,27 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                 backAnim = AnimatorInflater.loadAnimator(_context, R.animator.back_animation) as AnimatorSet
 
                 _btReverse.setOnClickListener{
-                    if(isFront){
-                        cardAnswer?.visibility = View.VISIBLE
-                        frontAnim.setTarget(cardQuestion)
-                        backAnim.setTarget(cardAnswer)
-                        frontAnim.start()
-                        backAnim.start()
-
-                        isFront = false
-                    } else{
-                        cardAnswer?.visibility = View.GONE
-                        frontAnim.setTarget(cardAnswer)
-                        backAnim.setTarget(cardQuestion)
-                        backAnim.start()
-                        frontAnim.start()
-
-                        isFront = true
-                    }
+                    activeAnimation()
                 }
             }
+        private fun activeAnimation(){
+            if(isFront){
+                cardAnswer?.visibility = View.VISIBLE
+                frontAnim.setTarget(cardQuestion)
+                backAnim.setTarget(cardAnswer)
+                frontAnim.start()
+                backAnim.start()
+
+                isFront = false
+            } else{
+                cardAnswer?.visibility = View.GONE
+                frontAnim.setTarget(cardAnswer)
+                backAnim.setTarget(cardQuestion)
+                backAnim.start()
+                frontAnim.start()
+
+                isFront = true
+            }
+        }
     }
 }

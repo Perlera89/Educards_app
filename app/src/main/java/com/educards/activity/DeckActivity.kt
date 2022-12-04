@@ -29,6 +29,7 @@ import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -53,6 +54,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     var cardsData = ArrayList<Card>()
     private lateinit var bundle: Bundle
     lateinit var cardListener:ValueEventListener
+    var isCardAdd = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +78,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         title = bundle?.getString("title")
 
         var horizontalLayoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-        val adapter = RecyclerCardAdapter(cardsData, btReverse, this, activity)
+        val adapter = RecyclerCardAdapter(cardsData, btReverse, this, activity,recyclerCard)
 
         cardListener = object :ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -87,6 +89,9 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
                         }
                     }
                     recyclerCard.adapter = adapter
+                    if (isCardAdd){
+                        recyclerCard.scrollToPosition(cardsData.size-1)
+                    }
                     Listeners.cardListener = cardListener
                 }
 
@@ -95,21 +100,10 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
                 }
 
             }
-        FirebaseConnection.refGlobal.child("/cards").child("${bundle?.getString("idDeck").toString()}").addValueEventListener(cardListener)
+        FirebaseConnection.refGlobal.child("/cards").child(bundle?.getString("idDeck").toString()).addValueEventListener(cardListener)
         recyclerCard.setHasFixedSize(true)
         recyclerCard.layoutManager = horizontalLayoutManager
         recyclerCard.adapter = adapter
-        recyclerCard.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener{
-            override fun onChildViewAttachedToWindow(view: View) {
-                recyclerCard.getChildAdapterPosition(view)
-                    .let { recyclerCard.layoutManager?.scrollToPosition(it) }
-            }
-            override fun onChildViewDetachedFromWindow(view: View) {
-                recyclerCard.getChildAdapterPosition(view)
-                    .let { recyclerCard.layoutManager?.scrollToPosition(it) }
-            }
-
-        })
 
         initView()
     }
@@ -118,7 +112,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var etTitle: EditText
     private lateinit var etHeader: TextView
     private lateinit var btUpdate: MaterialButton
-    private lateinit var etHover: EditText
+    private lateinit var etHover: TextInputLayout
 
     private fun initView() {
         toolbar = findViewById(R.id.toolbar_deck)
@@ -128,11 +122,9 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             btUpdate = view.findViewById(R.id.bt_create)
             etTitle = view.findViewById(R.id.et_title)
             etHeader = view.findViewById(R.id.tv_header)
-            etHover = view.findViewById(R.id.titl_title)
 
             etHeader.text = "Rename deck"
             btUpdate.text = "Update"
-            etHover.hint = "Descripción"
             etTitle.setText(title.toString())
             builder.setView(view)
 
@@ -160,9 +152,11 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             btUpdate = view.findViewById(R.id.bt_create)
             etTitle = view.findViewById(R.id.et_title)
             etHeader = view.findViewById(R.id.tv_header)
+            etHover = view.findViewById(R.id.titl_title)
 
             etHeader.text = "Update description"
             btUpdate.text = "Update"
+            etHover.hint = "Descripción"
             //contenido del input
             etTitle.setText(tvDescription.text)
             builder.setView(view)
@@ -250,9 +244,12 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             }
             R.id.fab_add -> {
                 IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
+                val newCardKey = IndexDeckOrCard.itemsCardInDeckSelected.plus(1)
+                isCardAdd = true
+                SCard.saveCard(Card("", "Click to edit this question $newCardKey", "Click to edit this answer $newCardKey"))
                 CoroutineScope(Dispatchers.IO).launch {
-                    Thread.sleep(1000)
-                    SCard.saveCard(Card("", "Click to edit this question ${cardsData.size+1}", "Click to edit this answer ${cardsData.size+1}"))
+                    Thread.sleep(500)
+                    isCardAdd = false
                 }
             }
         }

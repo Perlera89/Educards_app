@@ -31,4 +31,22 @@ object UTextView {
             it.setText("")
         }
     }
+    fun adjustTextInTextView(_textView:TextView){
+        val textLength = _textView.text.length
+        if (textLength in 1..100){
+            _textView.setTextSize(21F)
+        }else if (textLength in 101..140){
+            _textView.setTextSize(20F)
+        }else if (textLength in 141..180){
+            _textView.setTextSize(18F)
+        }else if (textLength in 181..250){
+            _textView.setTextSize(16F)
+        }else if (textLength in 251..350){
+            _textView.setTextSize(14F)
+        }else if (textLength in 351..450){
+            _textView.setTextSize(13F)
+        }else{
+            _textView.setTextSize(10F)
+        }
+    }
 }

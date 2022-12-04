@@ -17,6 +17,7 @@ import com.educards.adapter.RecyclerCardAdapter
 import com.educards.model.entities.Card
 import com.educards.service.FirebaseConnection
 import com.educards.util.IndexDeckOrCard
+import com.educards.util.UTextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -130,7 +131,9 @@ class EstudyActivity : AppCompatActivity() {
     private fun initCard(){
         if (cardsRandom.size > 0){
             tvQuestion.text = cardsRandom[0].getQuestion()
+            UTextView.adjustTextInTextView(tvQuestion)
             tvAnswer.text = cardsRandom[0].getAnswer()
+            UTextView.adjustTextInTextView(tvAnswer)
             tvCounter.text = "1/${cardsRandom.size}"
         }
     }
@@ -141,7 +144,9 @@ class EstudyActivity : AppCompatActivity() {
             if (indexCardShow < cardsRandom.size-1){
                 indexCardShow++
                 tvQuestion.text = cardsRandom[indexCardShow].getQuestion()
+                UTextView.adjustTextInTextView(tvQuestion)
                 tvAnswer.text = cardsRandom[indexCardShow].getAnswer()
+                UTextView.adjustTextInTextView(tvAnswer)
                 tvCounter.text = "${indexCardShow+1}/${cardsRandom.size}"
             }
         }
