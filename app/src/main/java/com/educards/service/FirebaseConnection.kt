@@ -19,6 +19,8 @@ object FirebaseConnection {
     val firebaseRealTimeDB: FirebaseDatabase by lazy{FirebaseDatabase.getInstance()}
     val firebaseAuth: FirebaseAuth by lazy { Firebase.auth }
     var refGlobal: DatabaseReference = firebaseRealTimeDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
-
+    fun refreshRefGlobal(){
+        refGlobal = firebaseRealTimeDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
+    }
 
 }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.entities.Card
 import com.educards.service.SCard
+import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -28,15 +29,18 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
         return ViewHolder(holder)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+   // @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val card = cards[position]
         holder.bind(card)
         //holder.itemView.setOnClickListener { holder.cardAnimation()}
-        holder.itemView.setOnTouchListener { view, motion ->
-            holder.cardAnimation()
-            true
-        }
+        holder.itemView.setOnTouchListener(object : View.OnTouchListener{
+            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                holder.cardAnimation()
+                return true
+            }
+
+        })
     }
 
     override fun getItemCount(): Int {
@@ -57,10 +61,6 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
             private lateinit var cardHeader: TextView
             private lateinit var addCard: MaterialButton
 
-            private lateinit var frontAnim: AnimatorSet
-            private lateinit var backAnim: AnimatorSet
-            private var isFront = true
-
             init {
                 cardQuestion = view.findViewById(R.id.cv_question)
                 cardAnswer = view.findViewById(R.id.cv_answer)
@@ -76,47 +76,55 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                 question.text = card.getQuestion()
                 answer.text = card.getAnswer()
 
-                val viewCard = activity?.layoutInflater?.inflate(R.layout.dialog_input, null)
-                tvEditCardTitle = viewCard!!.findViewById(R.id.titl_title)
-                tvEditCard = viewCard!!.findViewById(R.id.et_title)
-                cardHeader = viewCard!!.findViewById(R.id.tv_header)
-                addCard = viewCard!!.findViewById(R.id.bt_create)
+                var viewCard:View? = null
 
                 question.setOnClickListener {
+                    viewCard = activity?.layoutInflater?.inflate(R.layout.dialog_input, null)
+                    dialogItems(viewCard)
                     cardQuestion?.isEnabled
                     cardAnswer?.isEnabled = false
                     question.selectionStart
                     val builder = AlertDialog.Builder(_context)
                     tvEditCardTitle.hint = _context.getString(R.string.dialog_buttom_question)
                     cardHeader.text = "Add question"
+                    tvEditCard.setText(card.getQuestion())
                     builder.setView(viewCard)
 
                     dialog = builder.create()
                     dialog.show()
+                    dialog.setCanceledOnTouchOutside(true)
 
                     addCard.setOnClickListener {
-//                        TODO: Agregar pregunta
-                        Toast.makeText(_context, "Se ha agregado la pregunta", Toast.LENGTH_SHORT).show()
-                        dialog.hide()
+                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Campo de pregunta nulo o vacío")) {
+                            SCard.updateCard(Card(card.getId(),tvEditCard.text.toString(),card.getAnswer()))
+                            Toast.makeText(_context, "Se ha actualizado la pregunta",Toast.LENGTH_SHORT).show()
+                            dialog.hide()
+                        }
                     }
                 }
 
                 answer.setOnClickListener {
+                    viewCard = activity?.layoutInflater?.inflate(R.layout.dialog_input, null)
+                    dialogItems(viewCard)
                     cardAnswer?.isEnabled
                     cardQuestion?.isEnabled = false
                     answer.selectionStart
                     val builder = AlertDialog.Builder(_context)
                     tvEditCardTitle.hint = _context.getString(R.string.dialog_buttom_answer)
                     cardHeader.text = "Add answer"
+                    tvEditCard.setText(card.getAnswer())
                     builder.setView(viewCard)
 
                     dialog = builder.create()
                     dialog.show()
+                    dialog.setCanceledOnTouchOutside(true)
 
                     addCard.setOnClickListener {
-//                        TODO: Agregar respuesta
-                        Toast.makeText(_context, "Se ha agregado la respuesta", Toast.LENGTH_SHORT).show()
-                        dialog.hide()
+                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Campo de pregunta nulo o vacío")) {
+                            SCard.updateCard(Card(card.getId(),card.getQuestion(),tvEditCard.text.toString()))
+                            Toast.makeText(_context, "Se ha actualizado la respuesta",Toast.LENGTH_SHORT).show()
+                            dialog.hide()
+                        }
                     }
                 }
 
@@ -132,7 +140,17 @@ class RecyclerCardAdapter(private var cards: MutableList<Card>, private var _btR
                         }
                         .show()
                 }
+
             }
+        fun dialogItems(_viewCard:View?){
+            tvEditCardTitle = _viewCard!!.findViewById(R.id.titl_title)
+            tvEditCard = _viewCard!!.findViewById(R.id.et_title)
+            cardHeader = _viewCard!!.findViewById(R.id.tv_header)
+            addCard = _viewCard!!.findViewById(R.id.bt_create)
+        }
+        private lateinit var frontAnim: AnimatorSet
+        private lateinit var backAnim: AnimatorSet
+        private var isFront = true
 
             fun cardAnimation(){
                 val scale = _context.resources.displayMetrics.density

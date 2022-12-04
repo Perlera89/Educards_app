@@ -12,8 +12,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
@@ -40,8 +42,10 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val deck = decks[position]
-        holder.bind(deck)
+        if (decks.size > 0){
+            val deck = decks[position]
+            holder.bind(deck)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -57,6 +61,7 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
             var favorite: ImageView
             var delete: ImageView
             var builder: AlertDialog.Builder
+            var deckItem: CardView
 
             init {
                 title = view.findViewById(R.id.tv_title_deck)
@@ -64,6 +69,7 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                 countCards = view.findViewById(R.id.tv_count_cards)
                 favorite = view.findViewById(R.id.iv_favorite)
                 delete = view.findViewById(R.id.iv_delete)
+                deckItem = view.findViewById(R.id.cardDeck)
                 builder = AlertDialog.Builder(context)
             }
 
@@ -72,14 +78,14 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                 if(title.text.length > 20){
                     title.text = title.text.substring(0, 18) + "..."
                 }
-
-                if(decks.size > 0){
-                    index.text = deck?.getTitle()?.first()?.uppercaseChar()?.toString()
-                    if(index.text == decks[adapterPosition - 1]?.getTitle()?.first()?.uppercaseChar()?.toString()){
+                index.text = deck!!.getTitle().first().uppercaseChar().toString()
+                if (adapterPosition>0) {
+                    if (index.text == decks[adapterPosition - 1]!!.getTitle().first().uppercaseChar().toString()) {
                         index.alpha = 0f
                     }
                 }
-                countCards.text = deck?.getCount().toString()
+                countCards.text = deck.getCount().toString()
+
 
                 delete.setOnClickListener{
                     builder.setTitle("Confirm delete")
@@ -102,28 +108,29 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
 
                 favorite.setOnClickListener{
                     var message = ""
-                if(deck!=null){
-                    if (deck.getIsFavorite()){
-                        favorite.setImageResource(R.drawable.ic_favorite_select)
-                        deck.setIsFavorite(false)
-                        SDeck.updateDeck(deck)
-                        message ="${deck?.getTitle()} deck remove to favorites"
-                    }else{
-                        deck.setIsFavorite(true)
-                        SDeck.updateDeck(deck)
-                        message = "${deck?.getTitle()} deck move to favorites"
+                    if(deck!=null){
+                        if (deck.getIsFavorite()){
+                            favorite.setImageResource(R.drawable.ic_favorite_select)
+                            deck.setIsFavorite(false)
+                            SDeck.updateDeck(deck)
+                            message ="${deck?.getTitle()} deck remove to favorites"
+                        }else{
+                            deck.setIsFavorite(true)
+                            SDeck.updateDeck(deck)
+                            message = "${deck?.getTitle()} deck move to favorites"
+                        }
+                        val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main),message, Snackbar.LENGTH_LONG)
+                        snackBar.show()
                     }
-                    val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main),message, Snackbar.LENGTH_LONG)
-                    snackBar.show()
                 }
-
-                }
-                itemView.setOnClickListener{
+                deckItem.setOnClickListener{
                     if(deck != null && context != null){
                         val intentCard = Intent(context, DeckActivity::class.java)
                         intentCard.putExtra("idDeck",deck.getId())
                         intentCard.putExtra("title",deck.getTitle())
                         intentCard.putExtra("description",deck.getDescription())
+                        intentCard.putExtra("isFavorite",deck.getIsFavorite())
+                        intentCard.putExtra("count",deck.getCount())
                         startActivity(context,intentCard, Bundle())
                     }
                 }

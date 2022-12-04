@@ -151,6 +151,10 @@ detectar errores y dar alerta
         }
     }
 
+    fun userLogout(){
+        FirebaseConnection.firebaseAuth.signOut()
+    }
+
     fun sendEmailToResetPasswordToUser(_email:String){
         FirebaseConnection.firebaseAuth.sendPasswordResetEmail(_email)
             .addOnCompleteListener { task ->

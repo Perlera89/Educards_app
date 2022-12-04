@@ -36,7 +36,10 @@ import com.educards.fragment.FavoritesFragment
 import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
 import com.educards.service.SDeck
+import com.educards.service.SUser
 import com.educards.util.IndexDeckOrCard
+import com.educards.util.Listeners
+import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -45,7 +48,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.childEvents
 import com.google.firebase.database.ktx.getValue
+import kotlinx.coroutines.flow.cancellable
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     View.OnClickListener {
@@ -95,28 +100,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initView()
-        initViewPager()
+        if (SUser.getCurrentUser()!=null && SUser.getCurrentUserDetailData().getVerified()) {
+            IndexDeckOrCard.realTimeIndexDeck()
 
-        val sharedPreferences = getSharedPreferences("app", MODE_PRIVATE)
-        context = this
+            initView()
+            initViewPager()
 
-        if (isShowPageStart) {
-            relative_main.visibility = View.VISIBLE
-            Glide.with(this@MainActivity).load(R.mipmap.ic_launcher_round).into(page_start)
-            if (sharedPreferences.getBoolean("isFirst", true)) {
-            } else {
-                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 3000)
+            val sharedPreferences = getSharedPreferences("app", MODE_PRIVATE)
+            context = this
+
+            if (isShowPageStart) {
+                relative_main.visibility = View.VISIBLE
+                Glide.with(this@MainActivity).load(R.mipmap.ic_launcher_round).into(page_start)
+                if (sharedPreferences.getBoolean("isFirst", true)) {
+                } else {
+                    mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_START_PAGE, 3000)
+                }
+                isShowPageStart = false
             }
-            isShowPageStart = false
-        }
 
-        if (sharedPreferences.getBoolean("isFirst", true)) {
-            mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_DRAWER_LAYOUT, 2500)
+            if (sharedPreferences.getBoolean("isFirst", true)) {
+                mHandler.sendEmptyMessageDelayed(MESSAGE_SHOW_DRAWER_LAYOUT, 2500)
+            }
         }
-
-        IndexDeckOrCard.realTimeIndexDeck()
-        IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
     }
 
     private fun initView() {
@@ -137,6 +143,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val headerView: View = navigationView.getHeaderView(0)
         logout = headerView.findViewById(R.id.bt_logout)
+
+        //colocando wl email del usuario logeado
+        val titleUser:TextView = headerView.findViewById(R.id.tv_email)
+        titleUser.setText(SUser.getCurrentUserDetailData().getEmail())
 
         logout.setOnClickListener(this)
 
@@ -163,17 +173,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return fragments
     }
 
+    lateinit var deckListener:ValueEventListener
+    var deckData = ArrayList<Deck?>()
+    var deckFavoriteData = ArrayList<Deck?>()
     private fun initViewPager() {
         tabLayout = findViewById(R.id.tab_layout_main)
         viewPager = findViewById(R.id.view_pager_main)
 
-        var deckData = ArrayList<Deck?>()
-        var deckFavoriteData = ArrayList<Deck?>()
-
         viewPager.offscreenPageLimit = 2
 
         val mFragmentAdapter = FragmentAdapter(supportFragmentManager, getFragments(deckData,deckFavoriteData), getTitles())
-        FirebaseConnection.refGlobal.child("/decks").addValueEventListener(object:ValueEventListener{
+        tabLayout.setupWithViewPager(viewPager)
+        tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
+        fab.show()
+        deckListener = FirebaseConnection.refGlobal.child("/decks").addValueEventListener(object:ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 deckData.clear()
                 deckFavoriteData.clear()
@@ -183,17 +196,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                     deckData.add(it.getValue<Deck?>())
                 }
-                viewPager.adapter = mFragmentAdapter
+                if (deckData.size>0) {
+                    viewPager.adapter = mFragmentAdapter
+                }
+                Listeners.deckListener = deckListener
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.d("mainActivity", "Error al escuchar los cambios en la rama /decks. detalles: $error")
             }
         })
-
-        tabLayout.setupWithViewPager(viewPager)
-        tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
-        fab.show()
+        println("++++++++++++++++++++++++"+FirebaseConnection.refGlobal.path)
     }
 
     private lateinit var dialog: AlertDialog
@@ -203,11 +216,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onClick(view: View) {
         when (view.id) {
             R.id.bt_logout -> {
-//                TODO: Cerrar sesion. Mostrar este boton solo si esta logueado
+                Listeners.removeAllListeners()
+                SUser.userLogout()
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
-                val drawer: DrawerLayout =
-                    findViewById(R.id.drawer_main)
+                val drawer: DrawerLayout = findViewById(R.id.drawer_main)
                 drawer.closeDrawer(GravityCompat.START)
                 this.finish()
             }
@@ -223,10 +236,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 dialog = builder.create()
                 dialog.show()
-
+                dialog.setCanceledOnTouchOutside(true)
                 btAddDeck.setOnClickListener{
-                    SDeck.saveDeck(Deck("", etTitle.text.toString(), "Click para editar descripcion", false, 0))
-                    dialog.hide()
+                    if (UTextView.verifyContentInTextViews(this,etTitle,"Campo de título nulo o vacío")) {
+                        SDeck.saveDeck(Deck(
+                            "",
+                            etTitle.text.toString().replaceFirstChar { it.uppercase() },
+                            "Click para editar descripcion",
+                            false,
+                            0))
+                        dialog.dismiss()
+                    }
                 }
 //                val deckIntent = Intent(this, DeckActivity::class.java).apply {
 //                    putExtra("title", "Prueba titulo")

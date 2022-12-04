@@ -11,6 +11,7 @@ import com.educards.R
 import com.educards.model.User
 import com.educards.service.FirebaseConnection
 import com.educards.service.SUser
+import com.educards.util.Listeners
 import com.educards.util.UTextView
 import kotlinx.coroutines.*
 
@@ -19,17 +20,17 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPassword: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        etEmail =findViewById(R.id.etEmail)
-        etPassword = findViewById(R.id.etPassword)
-
         /*
         Se le cierra la sesion  al usuario que este logueado
          */
         if (SUser.getCurrentUser() != null){
-            FirebaseConnection.firebaseAuth.signOut()
+            startActivity(Intent(this,MainActivity::class.java))
+        }else{
+            setContentView(R.layout.activity_login)
+            etEmail = findViewById(R.id.etEmail)
+            etPassword = findViewById(R.id.etPassword)
         }
+
     }
 
     /*
@@ -55,9 +56,10 @@ class LoginActivity : AppCompatActivity() {
 
                     if (SUser.getCurrentUserDetailData().getVerified() && SUser.getCurrentUserDetailData().getIdUser() != "") {
                         this@LoginActivity.finish()
+                        FirebaseConnection.refreshRefGlobal()
                         startActivity(Intent(applicationContext, MainActivity::class.java))
                     }else if(SUser.getCurrentUserDetailData().getVerified()==false && SUser.getCurrentUserDetailData().getIdUser() != ""){
-                        Log.d("activity/LoginActivity","Debe verificar su correo correo electrónico para iniciar sesión.")
+                        //Log.d("activity/LoginActivity","Debe verificar su correo correo electrónico para iniciar sesión.")
                         Toast.makeText(this@LoginActivity, "Debe verificar su correo correo electrónico para iniciar sesión.", Toast.LENGTH_LONG).show()
                     }else{ }
                 }
