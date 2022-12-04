@@ -17,4 +17,5 @@ class FragmentAdapter(var fm: FragmentManager, var framents: List<Fragment>, var
     override fun getPageTitle(position: Int): CharSequence? {
         return titles!![position]
     }
+
 }

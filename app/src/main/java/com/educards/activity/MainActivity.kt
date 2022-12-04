@@ -176,6 +176,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var deckListener:ValueEventListener
     var deckData = ArrayList<Deck?>()
     var deckFavoriteData = ArrayList<Deck?>()
+    var currentTabSelectedPosition:Int = 0
     private fun initViewPager() {
         tabLayout = findViewById(R.id.tab_layout_main)
         viewPager = findViewById(R.id.view_pager_main)
@@ -183,13 +184,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         viewPager.offscreenPageLimit = 2
 
         val mFragmentAdapter = FragmentAdapter(supportFragmentManager, getFragments(deckData,deckFavoriteData), getTitles())
-        tabLayout.setupWithViewPager(viewPager)
-        tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
-        fab.show()
         deckListener = FirebaseConnection.refGlobal.child("/decks").addValueEventListener(object:ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 deckData.clear()
                 deckFavoriteData.clear()
+                currentTabSelectedPosition = tabLayout.selectedTabPosition
                 snapshot.children.forEach{
                     if (it?.getValue<Deck?>()?.getIsFavorite()==true){
                         deckFavoriteData.add(it.getValue<Deck?>())
@@ -198,6 +197,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
                 if (deckData.size>0) {
                     viewPager.adapter = mFragmentAdapter
+                    if (currentTabSelectedPosition == 1){
+                        tabLayout.selectTab(tabLayout.getTabAt(currentTabSelectedPosition))
+                        println("se habia seleccionado favoritos")
+                    }
                 }
                 Listeners.deckListener = deckListener
             }
@@ -206,7 +209,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Log.d("mainActivity", "Error al escuchar los cambios en la rama /decks. detalles: $error")
             }
         })
-        println("++++++++++++++++++++++++"+FirebaseConnection.refGlobal.path)
+        tabLayout.setupWithViewPager(viewPager)
+        tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
+        fab.show()
+        println("@@@@"+FirebaseConnection.refGlobal.path)
     }
 
     private lateinit var dialog: AlertDialog
@@ -238,6 +244,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.show()
                 dialog.setCanceledOnTouchOutside(true)
                 btAddDeck.setOnClickListener{
+                    val oldPosition = viewPager.verticalScrollbarPosition
                     if (UTextView.verifyContentInTextViews(this,etTitle,"Campo de título nulo o vacío")) {
                         SDeck.saveDeck(Deck(
                             "",
@@ -247,11 +254,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             0))
                         dialog.dismiss()
                     }
+                    viewPager.setCurrentItem(oldPosition,true)
                 }
-//                val deckIntent = Intent(this, DeckActivity::class.java).apply {
-//                    putExtra("title", "Prueba titulo")
-//                }
-//                startActivity(deckIntent)
             }
         }
     }

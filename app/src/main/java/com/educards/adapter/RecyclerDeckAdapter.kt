@@ -41,6 +41,7 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
         return ViewHolder(holder, context, activity)
     }
 
+    var positionItem = 0
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (decks.size > 0){
             val deck = decks[position]
@@ -86,6 +87,11 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                 }
                 countCards.text = deck.getCount().toString()
 
+                if (deck.getIsFavorite()){
+                    favorite.setImageResource(R.drawable.ic_favorite_select)
+                }else{
+                    favorite.setImageResource(R.drawable.ic_favorite)
+                }
 
                 delete.setOnClickListener{
                     builder.setTitle("Confirm delete")
@@ -94,7 +100,9 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                         .setPositiveButton("Yes"){dialogInterface, it ->
                             if(deck != null){
                                 IndexDeckOrCard.selectedDeckKey = deck.getId()
+                                positionItem = layoutPosition
                                 SDeck.deleteDeck(deck.getId())
+                                adapterPosition.plus(-1)
                             }
                         }
                         .setNegativeButton("No"){dialogInterface, it ->
@@ -110,7 +118,6 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                     var message = ""
                     if(deck!=null){
                         if (deck.getIsFavorite()){
-                            favorite.setImageResource(R.drawable.ic_favorite_select)
                             deck.setIsFavorite(false)
                             SDeck.updateDeck(deck)
                             message ="${deck?.getTitle()} deck remove to favorites"

@@ -31,9 +31,9 @@ class FavoritesFragment(var _favoriteDecks:ArrayList<Deck?>) : Fragment() {
 
         recyclerFavoriteDeck = view.findViewById(R.id.recycler_favorite_decks)
         emptyFavoriteDecks = view.findViewById(R.id.empty_favorite_deck)
-        val adapter = RecyclerDeckAdapter(_favoriteDecks, context, activity)
 
         if(_favoriteDecks.size > 0){
+            val adapter = RecyclerDeckAdapter(_favoriteDecks.sortedWith(compareBy { it?.getTitle() }) as MutableList<Deck?>, context, activity)
             recyclerFavoriteDeck.setHasFixedSize(true)
             recyclerFavoriteDeck.layoutManager = LinearLayoutManager(context)
             recyclerFavoriteDeck.adapter = adapter

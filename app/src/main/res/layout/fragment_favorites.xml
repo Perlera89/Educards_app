@@ -10,6 +10,9 @@
         android:id="@+id/fragment_favorite_decks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="16dp"
         tools:context=".fragment.DecksFragment">
 
         <androidx.cardview.widget.CardView
@@ -51,7 +54,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="1"
-            android:background="@color/activity_background"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"
             tools:layout_editor_absoluteX="0dp"

@@ -118,6 +118,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var etTitle: EditText
     private lateinit var etHeader: TextView
     private lateinit var btUpdate: MaterialButton
+    private lateinit var etHover: EditText
 
     private fun initView() {
         toolbar = findViewById(R.id.toolbar_deck)
@@ -127,9 +128,11 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             btUpdate = view.findViewById(R.id.bt_create)
             etTitle = view.findViewById(R.id.et_title)
             etHeader = view.findViewById(R.id.tv_header)
+            etHover = view.findViewById(R.id.titl_title)
 
             etHeader.text = "Rename deck"
             btUpdate.text = "Update"
+            etHover.hint = "Descripción"
             etTitle.setText(title.toString())
             builder.setView(view)
 
