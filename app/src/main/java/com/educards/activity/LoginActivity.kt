@@ -3,15 +3,13 @@ package com.educards.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
 import com.educards.R
 import com.educards.model.User
 import com.educards.service.FirebaseConnection
 import com.educards.service.SUser
-import com.educards.util.Listeners
+import com.educards.util.UAlertGenericDialog
 import com.educards.util.UTextView
 import kotlinx.coroutines.*
 
@@ -23,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
         /*
         Se le cierra la sesion  al usuario que este logueado
          */
-        if (SUser.getCurrentUser() != null){
+        if (SUser.getCurrentUser() != null && SUser.getCurrentUserDetailData().getVerified()){
             startActivity(Intent(this,MainActivity::class.java))
         }else{
             setContentView(R.layout.activity_login)
@@ -45,30 +43,29 @@ class LoginActivity : AppCompatActivity() {
     isEmailVerified es falso le indicamos por mensaje que debe verificarlo
      */
     fun logIn(view:View){
-        if (UTextView.verifyContentInTextViews(this,etEmail, "Campo de email nulo o vacío")) {
-            if (UTextView.verifyContentInTextViews(this,etPassword, "Campo de contraseña nulo o vacío")) {
-                CoroutineScope(Dispatchers.IO).launch {
+        if (UTextView.verifyContentInTextViews(this,etEmail, "Null or empty email field")) {
+            if (UTextView.verifyContentInTextViews(this,etPassword, "Null or empty password field")) {
                     User.clearUserData()
                     User.setEmail(etEmail.text.toString())
                     User.setPassword(etPassword.text.toString())
-                    SUser.loginToApp(this@LoginActivity, User)
-                    Thread.sleep(3000)
+                    SUser.loginToApp(this, User)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Thread.sleep(1500)
+                        if (SUser.getCurrentUserDetailData().getVerified() && SUser.getCurrentUserDetailData().getIdUser() != "") {
+                            FirebaseConnection.refreshRefGlobal()
+                            startActivity(Intent(applicationContext, MainActivity::class.java))
+                            this@LoginActivity.finish()
+                        }else if(SUser.getCurrentUserDetailData().getVerified()==false && SUser.getCurrentUserDetailData().getIdUser() != ""){
+                            UAlertGenericDialog.createDialogAlert(this@LoginActivity,"Login","You must verify your email to login.")
+                        }else{ }
+                    }
 
-                    if (SUser.getCurrentUserDetailData().getVerified() && SUser.getCurrentUserDetailData().getIdUser() != "") {
-                        this@LoginActivity.finish()
-                        FirebaseConnection.refreshRefGlobal()
-                        startActivity(Intent(applicationContext, MainActivity::class.java))
-                    }else if(SUser.getCurrentUserDetailData().getVerified()==false && SUser.getCurrentUserDetailData().getIdUser() != ""){
-                        //Log.d("activity/LoginActivity","Debe verificar su correo correo electrónico para iniciar sesión.")
-                        Toast.makeText(this@LoginActivity, "Debe verificar su correo correo electrónico para iniciar sesión.", Toast.LENGTH_LONG).show()
-                    }else{ }
-                }
             }
         }
     }
 
     fun signIn(view: View){
-        this@LoginActivity.finish()
         startActivity(Intent(applicationContext, SignInActivity::class.java))
+        this@LoginActivity.finish()
     }
 }

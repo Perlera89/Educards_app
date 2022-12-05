@@ -1,38 +1,49 @@
 package com.educards.service
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.educards.model.Deck
 import com.educards.model.entities.Card
-import com.educards.util.IndexDeckOrCard
-import com.google.firebase.database.ServerValue
+import com.educards.service.FirebaseConnection.refGlobal
+import com.educards.util.UAlertGenericDialog.createDialogAlert
+import com.educards.util.UIndexDeckOrCard.getItemsCardInDeckSelected
+import com.educards.util.UIndexDeckOrCard.getLastKeyCardDeckSelected
+import com.educards.util.UIndexDeckOrCard.getLastKeyDeck
+import com.educards.util.UIndexDeckOrCard.realTimeIndexCardInSelectedDeck
+import com.educards.util.UIndexDeckOrCard.setSelectedDeckKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 object SDeck {
-    var refGlobal = FirebaseConnection.firebaseRealTimeDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
-    fun saveDeck(_deck: Deck) {
-        //agregamos un indice para ordenar los datos
-        _deck.setId(IndexDeckOrCard.lastKeyDeck?.toInt()?.plus(1).toString())
-        refGlobal.child("/decks/${_deck.getId()}").setValue(_deck)
+
+    fun saveDeck(_deck: Deck,_context:Context) {
+        val newDeckKey = getLastKeyDeck()?.toInt()?.plus(1)
+        refGlobal.child("/decks/$newDeckKey")
+            .setValue(_deck)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    Log.d("service/RSDecks", "Mazo agregado exitosamente")
-                    IndexDeckOrCard.selectedDeckKey = _deck.getId()
-                    IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
-                    CoroutineScope(Dispatchers.IO).launch{
-                        Thread.sleep(1000)
-                        SCard.saveCard(Card("","Click to edit this question","Click to edit this answer"))
+                    //declaramos como seleccionado el mazo recien creado
+                    setSelectedDeckKey(_deck.getId())
+                    //se actualiza el contador de tarjetas y el indice de la ultima tarjeta del nuevo mazo seleccionado
+                    realTimeIndexCardInSelectedDeck()
+                    Toast.makeText(_context,"Deck added successfully",Toast.LENGTH_SHORT).show()
+                    CoroutineScope(Dispatchers.Main).launch{
+                        Thread.sleep(2000)
+                        //indice y llave de la tarjeta creada por defecto
+                        val cardIndex = getItemsCardInDeckSelected().plus(1)
+                        val newCardKey = getLastKeyCardDeckSelected()?.toInt()?.plus(1)
+                        SCard.saveCard(_context,Card("$newCardKey","Click to edit question $cardIndex","Click to edit answer $cardIndex"))
                     }
                 }
             }.addOnFailureListener {
-                Log.d("service/RSDecks", "Error al agregar mazo, Detalles: \n $it")
+                createDialogAlert(_context,"Deck","Failed to add deck.\nDetails: $it")
             }
     }
 
-    fun updateDeck(_deck: Deck){
-        //agregar el id del deck en la clase
-        //var selectedDeck = IndexDeckOrCard.selectedDeckKey
+    fun updateDeck(_context: Context,_deck: Deck,_type:String){
+        //la llave del deck seleccionado viene desde el bundle ya en el objeto deck
         val deck = mapOf(
             "id" to _deck.getId(),
             "title" to _deck.getTitle(),
@@ -40,34 +51,41 @@ object SDeck {
             "isFavorite" to _deck.getIsFavorite(),
             "count" to _deck.getCount()
         )
-        refGlobal.child("/decks/${_deck.getId()}").updateChildren(deck)
-            .addOnSuccessListener {
-                Log.d("RSDeck","El deck de id <${_deck.getId()}> se ha actualizado con éxito")
+        refGlobal.child("/decks/${_deck.getId()}")
+            .updateChildren(deck)
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    Toast.makeText(_context, "Deck $_type updated successfully", Toast.LENGTH_SHORT).show()
+                }
             }.addOnFailureListener{
-                Log.d("RSDeck","Error al actualizar el deck de id <${_deck.getId()}> . Detalles: \n ${it}")
+                createDialogAlert(_context,"Deck","Failed to update deck $_type.\n Details: ${it}")
             }
     }
 
-    fun deleteDeck(_deckId: String){
-        //agregar el id del deck en la clase
-        //var selectedDeck = IndexDeckOrCard.selectedDeckKey
-        refGlobal.child("/decks/${_deckId}").removeValue()
-            .addOnSuccessListener {
-                Log.d("RSDeck","El deck de id <${_deckId}> se ha eliminado con éxito")
-                //se borran las cards que tengan el mismo id del deck
-                SCard.deleteAllCards()
+    fun deleteDeck(_context: Context,_deckId: String){
+        refGlobal.child("/decks/${_deckId}")
+            .removeValue()
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    Toast.makeText(_context, "Deck successfully removed", Toast.LENGTH_SHORT).show()
+                    //se borran las tarjetas que esten en una rama que tenga la misma llavel del mazo eliminado
+                    SCard.deleteAllCards(_context)
+                }
             }.addOnFailureListener{
-                Log.d("RSDeck","Error al eliminar el deck de id <${_deckId}> . Detalles: \n ${it}")
+                createDialogAlert(_context,"Deck","Failed to delete deck.\nDetails: $it")
             }
     }
 
-    fun updateCountInDeck(_deck: Deck){
-        //agregar el id del deck en la clase
-        refGlobal.child("/decks/${_deck.getId()}").child("count").setValue(IndexDeckOrCard.itemsCardInDeckSelected)
-            .addOnSuccessListener {
-                Log.d("RSDeck","El contador del deck de id <${_deck.getId()}> se ha actualizado con éxito")
+    fun updateCountInDeck(_context: Context,_deck: Deck){
+        val currentCountCard = getItemsCardInDeckSelected()
+        refGlobal.child("/decks/${_deck.getId()}").child("count")
+            .setValue(currentCountCard)
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    Log.d("RSDeck","Id ${_deck.getId()} deck counter has been successfully updated")
+                }
             }.addOnFailureListener{
-                Log.d("RSDeck","Error al actualizar el contador del deck de id <${_deck.getId()}> . Detalles: \n ${it}")
+                createDialogAlert(_context,"Deck","Failed to update deck counter.\nDetails: $it")
             }
     }
 }

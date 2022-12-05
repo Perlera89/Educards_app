@@ -25,7 +25,7 @@ object UUser {
                         "de longitud mayor a 7 .Estado de aprobación es: ${statePassword}")
             }
         }else{
-            Toast.makeText(_pass.context, "Formato de contraseña inválido. Use mayúsculas, minúsculas, numeros. Debe tener más de 7 caracteres", Toast.LENGTH_LONG).show()
+            Toast.makeText(_pass.context, "Invalid password format. Use uppercase, lowercase, numbers. Must be more than 7 characters", Toast.LENGTH_LONG).show()
         }
         return statePassword
     }

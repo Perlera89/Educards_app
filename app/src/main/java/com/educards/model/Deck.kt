@@ -14,6 +14,9 @@ class Deck() {
         this.isFavorite = _isFavorite
         this.count = _count
     }
+    constructor(_id: String):this(){
+        this.id = _id
+    }
 
     fun getId(): String {
         return this.id

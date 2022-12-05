@@ -1,10 +1,8 @@
 package com.educards.activity
 
-import android.content.ClipDescription
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,8 +21,7 @@ import com.educards.model.entities.Card
 import com.educards.service.FirebaseConnection
 import com.educards.service.SCard
 import com.educards.service.SDeck
-import com.educards.util.IndexDeckOrCard
-import com.educards.util.Listeners
+import com.educards.util.UListeners
 import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -37,6 +34,12 @@ import com.google.firebase.database.ktx.getValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.educards.util.UAlertGenericDialog.createDialogAlert
+import com.educards.util.UIndexDeckOrCard.getItemsCardInDeckSelected
+import com.educards.util.UIndexDeckOrCard.getLastKeyCardDeckSelected
+import com.educards.util.UIndexDeckOrCard.realTimeIndexCardInSelectedDeck
+import com.educards.util.UIndexDeckOrCard.setSelectedDeckKey
+import com.educards.util.UListeners.setCardListener
 
 class DeckActivity : AppCompatActivity(), View.OnClickListener,
     NavigationView.OnNavigationItemSelectedListener {
@@ -70,10 +73,8 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
         activity = this
         bundle = this.intent.extras!!
 
-        IndexDeckOrCard.realTimeIndexDeck()
-        IndexDeckOrCard.selectedDeckKey = bundle?.getString("idDeck").toString()
-        IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
 
+        //agregando titulo y descripcion del mazo seleccionado
         tvDescription.text = bundle?.getString("description")
         title = bundle?.getString("title")
 
@@ -92,11 +93,10 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
                     if (isCardAdd){
                         recyclerCard.scrollToPosition(cardsData.size-1)
                     }
-                    Listeners.cardListener = cardListener
+                    setCardListener(cardListener)
                 }
-
                 override fun onCancelled(error: DatabaseError) {
-                    Log.d("DeckActivity", "Error al mostrar las tarjetas del deck seleccionado. ${error}")
+                    createDialogAlert(this@DeckActivity,"Cards","Error showing the cards of the selected deck.\nDetails: $error")
                 }
 
             }
@@ -123,8 +123,10 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             etTitle = view.findViewById(R.id.et_title)
             etHeader = view.findViewById(R.id.tv_header)
 
+            //personalizar el dialog para el titulo
             etHeader.text = "Rename deck"
             btUpdate.text = "Update"
+            //contenido del input
             etTitle.setText(title.toString())
             builder.setView(view)
 
@@ -132,16 +134,16 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             dialog.show()
 
             btUpdate.setOnClickListener {
-                if (UTextView.verifyContentInTextViews(this,etTitle,"Campo de título del mazo nulo o vacío")){
-                    SDeck.updateDeck(Deck(
+                if (UTextView.verifyContentInTextViews(this,etTitle,"Null or empty deck title field")){
+                    //los datos del mazo vienen del bundle y solo se actualiza el titulo
+                    SDeck.updateDeck(this,Deck(
                         bundle.getString("idDeck").toString(),
                         etTitle.text.toString().replaceFirstChar { it.uppercase() },
-                        bundle.getString("description").toString(),
+                        tvDescription.text.toString(),
                         bundle.getString("isFavorite").toString().toBoolean(),
                         bundle.getInt("count")
-                    ))
+                    ),"title")
                     title = etTitle.text.toString().replaceFirstChar { it.uppercase() }
-                    Toast.makeText(this, "Titulo del mazo actualizado exitosamente", Toast.LENGTH_LONG).show()
                     dialog.dismiss()
                 }
             }
@@ -154,9 +156,10 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             etHeader = view.findViewById(R.id.tv_header)
             etHover = view.findViewById(R.id.titl_title)
 
+            //personalizar el dialog para la descripcion
             etHeader.text = "Update description"
             btUpdate.text = "Update"
-            etHover.hint = "Descripción"
+            etHover.hint = "Description"
             //contenido del input
             etTitle.setText(tvDescription.text)
             builder.setView(view)
@@ -164,17 +167,18 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             dialog = builder.create()
             dialog.show()
 
+            realTimeIndexCardInSelectedDeck()
             btUpdate.setOnClickListener {
-                if (UTextView.verifyContentInTextViews(this,etTitle,"Campo de descripción del mazo nulo o vacío")){
-                    SDeck.updateDeck(Deck(
+                if (UTextView.verifyContentInTextViews(this,etTitle,"Null or empty deck description field")){
+                    //los datos del mazo vienen del bundle y la descripcion y el titulo de las edittext
+                    SDeck.updateDeck(this,Deck(
                         bundle.getString("idDeck").toString(),
                         title.toString(),
                         etTitle.text.toString(),
                         bundle.getString("isFavorite").toString().toBoolean(),
                         bundle.getInt("count")
-                    ))
-                    tvDescription.setText(etTitle.text)
-                    Toast.makeText(this, "Titulo del mazo actualizado exitosamente", Toast.LENGTH_LONG).show()
+                    ),"description")
+                    tvDescription.setText(etTitle.text.toString())
                     dialog.dismiss()
                 }
             }
@@ -243,12 +247,12 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
               }
             }
             R.id.fab_add -> {
-                IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
-                val newCardKey = IndexDeckOrCard.itemsCardInDeckSelected.plus(1)
+                val cardIndex = getItemsCardInDeckSelected().plus(1)
+                val newCardKey = getLastKeyCardDeckSelected()?.toInt()?.plus(1)
                 isCardAdd = true
-                SCard.saveCard(Card("", "Click to edit this question $newCardKey", "Click to edit this answer $newCardKey"))
+                SCard.saveCard(this,Card("$newCardKey", "Click to edit question $cardIndex", "Click to edit answer $cardIndex"))
                 CoroutineScope(Dispatchers.IO).launch {
-                    Thread.sleep(500)
+                    Thread.sleep(1500)
                     isCardAdd = false
                 }
             }
@@ -284,13 +288,4 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             super.onBackPressed()
         }
     }
-
-    /*private fun getCards(): MutableList<Card>{
-        val cards: MutableList<Card> = ArrayList()
-        cards.add(Card("1", "Pregunta 1", "Respuesta 1"))
-        cards.add(Card("2", "Pregunta 2", "Respuesta 2"))
-        cards.add(Card("3", "Pregunta 3", "Respuesta 3"))
-
-        return cards
-    }*/
 }

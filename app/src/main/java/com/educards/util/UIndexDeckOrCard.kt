@@ -1,43 +1,59 @@
 package com.educards.util
 
 import android.util.Log
+import com.educards.service.FirebaseConnection.refGlobal
 import com.educards.service.SUser
+import com.educards.util.UListeners.setCardListener
+import com.educards.util.UListeners.setRealTimeIndexCardInSelectedDeck
+import com.educards.util.UListeners.setRealTimeIndexDeck
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firestore.v1.StructuredQuery.Order
 
-object IndexDeckOrCard {
-    private val firebaseDB = FirebaseDatabase.getInstance()
-    var refGlobal = firebaseDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
+object UIndexDeckOrCard {
 
     //ultimo key de los deck del usuario
-    var lastKeyDeck:String?="0"
+    private var lastKeyDeck:String?="0"
     //ultimo key del card de un deck seleccionado
-    var lastKeyCardDeckSelected:String?=""
+    private var lastKeyCardDeckSelected:String?="0"
     //deck seleccionado en un momento determinado
-    var selectedDeckKey:String = "0"
+    private var selectedDeckKey:String = "0"
     //contiene la cantidad de cards en el deck seleccionado
-    var itemsCardInDeckSelected = 0
+    private var itemsCardInDeckSelected = 0
+
+    fun getLastKeyDeck():String?{
+        return this.lastKeyDeck
+    }
+    fun getLastKeyCardDeckSelected():String?{
+        return this.lastKeyCardDeckSelected
+    }
+    fun getSelectedDeckKey():String{
+        return this.selectedDeckKey
+    }
+    fun setSelectedDeckKey(_deckSelectedKey:String){
+        this.selectedDeckKey = _deckSelectedKey
+        realTimeIndexCardInSelectedDeck()
+    }
+    fun getItemsCardInDeckSelected():Int{
+        return this.itemsCardInDeckSelected
+    }
 
     fun realTimeIndexDeck(){
         if (!SUser.getCurrentUserDetailData().getIdUser().isEmpty()) {
-            refGlobal.child("decks").orderByKey().addValueEventListener(postListenerDeck)
+            refGlobal.child("decks").orderByKey()
+                .addValueEventListener(listenerDeck)
+            setRealTimeIndexDeck(listenerDeck)
         }
     }
     fun realTimeIndexCardInSelectedDeck(){
         if (!SUser.getCurrentUserDetailData().getIdUser().isEmpty()) {
-            refGlobal.child("cards").child(selectedDeckKey).orderByKey().addValueEventListener(postListenerCard)
+            refGlobal.child("cards").child(selectedDeckKey).orderByKey()
+                .addValueEventListener(listenerCard)
+            setRealTimeIndexCardInSelectedDeck(listenerCard)
         }
     }
-    val postListenerDeck = object : ValueEventListener {
+    val listenerDeck = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
-            // Get Post object and use the values to update the UI
-            //val post = dataSnapshot.value
-            /*dataSnapshot.children.forEach {
-                println()
-            }*/
             if (dataSnapshot.hasChildren()) {
                 lastKeyDeck = dataSnapshot.children.last().key
                 //println("LLAVE DEL ULTIMO MAZO: $lastKeyDeck")
@@ -52,7 +68,7 @@ object IndexDeckOrCard {
             Log.w("RSDeck", "loadPost:onCancelled", databaseError.toException())
         }
     }
-    val postListenerCard = object : ValueEventListener {
+    val listenerCard = object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             // Get Post object and use the values to update the UI
             //val post = dataSnapshot.value
@@ -66,6 +82,7 @@ object IndexDeckOrCard {
                     itemsCardInDeckSelected = dataSnapshot.children.count()
                     //println("LLAVE DE LA ULTIMA TARJETA DEL DECK <$selectedDeckKey>: $lastKeyCardDeckSelected")
                 }
+                println("Last card key: $lastKeyCardDeckSelected y numero de cartas en el mazo: $itemsCardInDeckSelected,")
             }
         }
 

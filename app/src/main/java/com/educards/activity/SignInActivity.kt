@@ -12,6 +12,9 @@ import com.educards.service.FirebaseConnection
 import com.educards.service.SUser
 import com.educards.util.UTextView
 import com.educards.util.UUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var etName: EditText
@@ -31,7 +34,7 @@ class SignInActivity : AppCompatActivity() {
         etPhoneNumber = findViewById(R.id.etPhone)
 
         if (SUser.getCurrentUser() != null){
-            FirebaseConnection.firebaseAuth.signOut()
+            SUser.userLogout(this)
         }
     }
 
@@ -47,10 +50,10 @@ class SignInActivity : AppCompatActivity() {
     7 Luego usamos el metodo clearContentInTextViews de la clase UTextView para limpiar todo el contenido de los textviews
      */
     fun registerUser(view:View){
-        if(UTextView.verifyContentInTextViews(this,etName,"Campo de nombre nulo o vacío")) {
-            if (UTextView.verifyContentInTextViews(this,etEmail,"Campo de email nulo o vacío")) {
-                if (UTextView.verifyContentInTextViews(this,etPass,"Campo de contraseña nulo o vacío")) {
-                    if (UTextView.verifyContentInTextViews(this,etConfirmPass,"Campo de confirmar contraseña nulo o vacío")) {
+        if(UTextView.verifyContentInTextViews(this,etName,"Null or empty name field")) {
+            if (UTextView.verifyContentInTextViews(this,etEmail,"Null or empty email field")) {
+                if (UTextView.verifyContentInTextViews(this,etPass,"Null or empty password field")) {
+                    if (UTextView.verifyContentInTextViews(this,etConfirmPass,"Confirm password field null or empty")) {
                         if (UUser.verifyPassword(etPass)) {
                             if (etPass.text.toString() == etConfirmPass.text.toString()) {
                                 User.clearUserData()
@@ -60,7 +63,7 @@ class SignInActivity : AppCompatActivity() {
                                 SUser.saveUser(this, User)
                                 UTextView.clearContentInTextViews(etName,etEmail,etPass,etConfirmPass,etPhoneNumber)
                             } else {
-                                Toast.makeText(this, "Las contraseñas son diferentes.", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this, "Passwords are different.", Toast.LENGTH_LONG).show()
                             }
                         }
                     }
@@ -70,7 +73,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     fun logIn(view: View){
-        this.finish()
         startActivity(Intent(this, LoginActivity::class.java))
+        this.finish()
     }
 }

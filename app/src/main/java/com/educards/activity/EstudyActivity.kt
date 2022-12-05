@@ -8,22 +8,17 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
-import com.educards.adapter.RecyclerCardAdapter
 import com.educards.model.entities.Card
 import com.educards.service.FirebaseConnection
-import com.educards.util.IndexDeckOrCard
+import com.educards.util.UIndexDeckOrCard.getSelectedDeckKey
 import com.educards.util.UTextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import com.google.firestore.admin.v1.Index
 
 @Suppress("DEPRECATION")
 class EstudyActivity : AppCompatActivity() {
@@ -36,6 +31,11 @@ class EstudyActivity : AppCompatActivity() {
     private lateinit var tvAnswer: TextView
     private lateinit var btReverse:FloatingActionButton
     private lateinit var btNext: FloatingActionButton
+
+    //elementos a esconder
+    private lateinit var btnDeleteCard:ImageView
+    private lateinit var btnMore:ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +54,12 @@ class EstudyActivity : AppCompatActivity() {
         btReverse = findViewById(R.id.fab_flip)
         btNext = findViewById(R.id.fab_next)
 
+        btnDeleteCard = findViewById(R.id.bt_delete_card)
+        btnMore = findViewById(R.id.bt_more)
+        //ocultado los elementos no requeridos
+        btnDeleteCard.alpha = 0F
+        btnMore.alpha = 0F
+
         tvStudyTitle.text = this.intent.extras?.getString("title")
 
         getCards()
@@ -65,8 +71,9 @@ class EstudyActivity : AppCompatActivity() {
     var cardsRandom = ArrayList<Card>()
 
     private fun getCards(){
+        val selectDeckKey = getSelectedDeckKey()
 
-        FirebaseConnection.refGlobal.child("/cards").child("${IndexDeckOrCard.selectedDeckKey}")
+        FirebaseConnection.refGlobal.child("/cards").child("$selectDeckKey")
             .get().addOnSuccessListener {
                 if (it != null){
                     it.children.forEach{
@@ -122,9 +129,6 @@ class EstudyActivity : AppCompatActivity() {
                 cardsData.remove(cardRandom)
             }
             initCard()
-            cardsRandom.forEach{
-                println(it.getId())
-            }
         }
     }
 

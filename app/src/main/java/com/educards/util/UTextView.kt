@@ -1,8 +1,10 @@
 package com.educards.util
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.widget.TextView
 import android.widget.Toast
+import com.educards.R
 
 object UTextView {
 
@@ -14,9 +16,10 @@ object UTextView {
         var state = false
         if(_textView.text.trim().isNotBlank() && _textView.text.trim().isNotEmpty()){
             state = true
+            _textView.error = null
         }else{
             _textView.setText("")
-            Toast.makeText(_context,_errorMessaje,Toast.LENGTH_LONG).show()
+            _textView.error = _errorMessaje
             state = false
         }
         return state

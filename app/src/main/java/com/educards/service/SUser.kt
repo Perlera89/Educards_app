@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.educards.model.User
+import com.educards.util.UAlertGenericDialog.createDialogAlert
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 
@@ -17,7 +18,6 @@ object SUser {
      */
     fun getCurrentUser(): FirebaseUser?{
         return FirebaseConnection.firebaseAuth.currentUser
-        Log.d("service/SUser", "Informacion de usuario enviada.")
     }
 
     /*
@@ -55,17 +55,19 @@ object SUser {
      */
     fun saveUser(_context: Context, _user:User){
         val name = User.getDisplayName()
-        FirebaseConnection.firebaseAuth.createUserWithEmailAndPassword(_user.getEmail(),_user.getPassword())
+        FirebaseConnection.firebaseAuth
+            .createUserWithEmailAndPassword(_user.getEmail(),_user.getPassword())
             .addOnCompleteListener {
                 if (it.isSuccessful){
-                    Log.d("service/SUser", "Usuario creado con exito.")
-                    sendEmailVerificationToUser()
-                    updateUserDisplayName(name)
+                    Toast.makeText(_context,"User created successfully.",Toast.LENGTH_SHORT).show()
+                    sendEmailVerificationToUser(_context)
+                    updateUserDisplayName(_context,name)
                     getCurrentUser()?.reload()
-                    Toast.makeText(_context,"Usuario creado correctamente",Toast.LENGTH_LONG).show()
+                    createDialogAlert(_context,"User register","The user has been created correctly, in order to log in you must validate your email." +
+                            " Find your verification email in the inbox or spam")
                 }
             }.addOnFailureListener{
-                Toast.makeText(_context,"Error al crear el usuario."+it.toString(),Toast.LENGTH_LONG).show()
+                createDialogAlert(_context,"User register", "Failed to register user.\nDetails: $it")
             }
     }
 
@@ -78,15 +80,15 @@ object SUser {
     4. Agregamos el método addOnFailureListener para escuchar errores y mandar mensajes de alerte
      */
     fun loginToApp(_context: Context,_user:User){
-        FirebaseConnection.firebaseAuth.signInWithEmailAndPassword(_user.getEmail(),_user.getPassword())
+        FirebaseConnection.firebaseAuth
+            .signInWithEmailAndPassword(_user.getEmail(),_user.getPassword())
             .addOnCompleteListener { task ->
                 if (task.isSuccessful){
-                    Log.d("service/SUser","El usuario ${getCurrentUserDetailData().getEmail()} ha iniciado sesión exitosamente")
+                    Log.d("service/SUser","The user ${getCurrentUserDetailData().getEmail()} has successfully logged in")
                 }
 
             }.addOnFailureListener{ e ->
-                Toast.makeText(_context,"Error al iniciar sesión. Ingrese datos válidos o regístrese. \nDetalles: "+e.toString(), Toast.LENGTH_LONG).show()
-                Log.d("service/SUser","Error al iniciar sesión, detalles: "+e.toString())
+                createDialogAlert(_context,"Login", "Failed to login.\nDetails: $e")
             }
     }
 
@@ -100,16 +102,16 @@ object SUser {
     propiedades del currentUser
     5. Agregamos el método addOnFailureListener para detectar errores y mandar alertas
      */
-    private fun updateUserDisplayName(_displayName:String?){
+    private fun updateUserDisplayName(_context: Context,_displayName:String?){
         getCurrentUser()?.updateProfile(userProfileChangeRequest {
             displayName = _displayName
         })?.addOnCompleteListener {
             if (it.isSuccessful){
-                Log.d("service/SUser","Se ha actualizado el displayname exitosamente")
+                Log.d("service/SUser","Displayname has been updated successfully")
                 getCurrentUser()?.reload()
             }
         }?.addOnFailureListener{
-            Log.d("service/SUser","Ha ocuarrido un error al actualizar el display name")
+            createDialogAlert(_context,"Displayname","An error occurred while updating the displayname")
         }
     }
 
@@ -134,25 +136,25 @@ object SUser {
 detectar errores y dar alerta
 
      */
-    private fun sendEmailVerificationToUser(){
+    private fun sendEmailVerificationToUser(_context: Context){
         if (getCurrentUser() != null) {
             if (getCurrentUserDetailData().getVerified() == false) {
                 getCurrentUser()?.sendEmailVerification()
                     ?.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Log.d("service/SUser", "Correo de verificación enviado")
+                            Toast.makeText(_context,"Verification email sent successfully",Toast.LENGTH_SHORT).show()
                         }
                     }?.addOnFailureListener {
-                        Log.d("service/SUser", "Error al enviar el correo de verificación" + it.toString()
-                        )
-
+                       createDialogAlert(_context,"Email verification","Error sending verification email. Details: $it")
                     }
             }
         }
     }
 
-    fun userLogout(){
+    fun userLogout(_context: Context){
         FirebaseConnection.firebaseAuth.signOut()
+        Toast.makeText(_context,"You have successfully logged out",Toast.LENGTH_SHORT).show()
+
     }
 
     fun sendEmailToResetPasswordToUser(_email:String){

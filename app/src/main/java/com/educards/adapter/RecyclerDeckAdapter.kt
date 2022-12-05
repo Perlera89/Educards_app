@@ -1,29 +1,24 @@
 package com.educards.adapter
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.activity.DeckActivity
 import com.educards.model.Deck
-import com.educards.service.FirebaseConnection
 import com.educards.service.SDeck
-import com.educards.util.IndexDeckOrCard
+import com.educards.util.UIndexDeckOrCard.realTimeIndexCardInSelectedDeck
+import com.educards.util.UIndexDeckOrCard.setSelectedDeckKey
 import com.google.android.material.snackbar.Snackbar
 /*
 import com.google.firebase.database.DataSnapshot
@@ -95,13 +90,13 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
 
                 delete.setOnClickListener{
                     builder.setTitle("Confirm delete")
-                        .setMessage("\nDo you want to remove ${deck?.getTitle()} deck?")
+                        .setMessage("\nDo you want to remove ${deck.getTitle()} deck?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
                             if(deck != null){
-                                IndexDeckOrCard.selectedDeckKey = deck.getId()
+                                setSelectedDeckKey(deck.getId())
                                 positionItem = layoutPosition
-                                SDeck.deleteDeck(deck.getId())
+                                SDeck.deleteDeck(context!!,deck.getId())
                                 adapterPosition.plus(-1)
                             }
                         }
@@ -119,12 +114,12 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                     if(deck!=null){
                         if (deck.getIsFavorite()){
                             deck.setIsFavorite(false)
-                            SDeck.updateDeck(deck)
-                            message ="${deck?.getTitle()} deck remove to favorites"
+                            SDeck.updateDeck(context!!,deck,"favorite status to false")
+                            message ="${deck.getTitle()} deck remove to favorites"
                         }else{
                             deck.setIsFavorite(true)
-                            SDeck.updateDeck(deck)
-                            message = "${deck?.getTitle()} deck move to favorites"
+                            SDeck.updateDeck(context!!,deck,"favorite status to true")
+                            message = "${deck.getTitle()} deck move to favorites"
                         }
                         val snackBar = Snackbar.make(activity!!.findViewById(R.id.cl_main),message, Snackbar.LENGTH_LONG)
                         snackBar.show()
@@ -132,6 +127,11 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
                 }
                 deckItem.setOnClickListener{
                     if(deck != null && context != null){
+                        //se guarda el nuevo mazo seleccionado
+                        setSelectedDeckKey(deck.getId())
+                        //se ejecuta el metodo para obtener el numero de cards en el mazo y la llave(index) del
+                        //la ultima tarjeta agregada al mazo
+                        realTimeIndexCardInSelectedDeck()
                         val intentCard = Intent(context, DeckActivity::class.java)
                         intentCard.putExtra("idDeck",deck.getId())
                         intentCard.putExtra("title",deck.getTitle())

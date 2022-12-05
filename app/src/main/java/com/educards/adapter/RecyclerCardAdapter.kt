@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.entities.Card
 import com.educards.service.SCard
+import com.educards.util.UAlertGenericDialog
+import com.educards.util.UAlertGenericDialog.createDialogAlert
 import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -117,11 +119,15 @@ class RecyclerCardAdapter(
 
                     currentPositionCard = this.adapterPosition
                     addCard.setOnClickListener {
-                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Campo de pregunta nulo o vacío")) {
-                            SCard.updateCard(Card(card.getId(),tvEditCard.text.toString(),card.getAnswer()))
-                            Toast.makeText(_context, "Se ha actualizado la pregunta",Toast.LENGTH_SHORT).show()
-                            dialog.dismiss()
-                            returnToPosition(currentPositionCard)
+                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Null or empty question field")) {
+                            //la llave la rama padre de la tarjeta fue guardada al dar click en el mazo
+                            if (tvEditCard.text.toString().length < 375) {
+                                SCard.updateCard(_context, Card(card.getId(), tvEditCard.text.toString(), card.getAnswer()), "pregunta")
+                                dialog.dismiss()
+                                returnToPosition(currentPositionCard)
+                            }else{
+                                createDialogAlert(_context,"Answer","Due to design and readability of the text, it is not allowed to save a question with more than 375 characters")
+                            }
                         }
                     }
                 }
@@ -146,11 +152,15 @@ class RecyclerCardAdapter(
 
                     currentPositionCard = this.adapterPosition
                     addCard.setOnClickListener {
-                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Campo de pregunta nulo o vacío")) {
-                            SCard.updateCard(Card(card.getId(),card.getQuestion(),tvEditCard.text.toString()))
-                            Toast.makeText(_context, "Se ha actualizado la respuesta",Toast.LENGTH_SHORT).show()
-                            dialog.dismiss()
-                            returnToPosition(currentPositionCard)
+                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Null or empty response field")) {
+                            //la llave la rama padre de la tarjeta fue guardada al dar click en el mazo
+                            if (tvEditCard.text.toString().length < 375) {
+                                SCard.updateCard(_context, Card(card.getId(), card.getQuestion(), tvEditCard.text.toString()), "respuesta")
+                                dialog.dismiss()
+                                returnToPosition(currentPositionCard)
+                            }else{
+                                createDialogAlert(_context,"Answer","Due to design and readability of the text, it is not allowed to save a response with more than 375 characters")
+                            }
                         }
                     }
                 }
@@ -161,8 +171,8 @@ class RecyclerCardAdapter(
                         .setMessage("\nDo you want to remove card?")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
-                           SCard.deleteCard(card.getId())
-                            Toast.makeText(_context, "Se ha eliminado la tarjeta correctamente",Toast.LENGTH_SHORT).show()
+                            //la llave la rama padre de la tarjeta fue guardada al dar click en el mazo
+                            SCard.deleteCard(_context,card.getId())
                             if (currentPositionCard == 0) {
                                 returnToPosition(0)
                             }else {

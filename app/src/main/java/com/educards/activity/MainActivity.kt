@@ -3,11 +3,9 @@ package com.educards.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,7 +14,6 @@ import android.view.animation.Animation
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -37,20 +34,20 @@ import com.educards.model.Deck
 import com.educards.service.FirebaseConnection
 import com.educards.service.SDeck
 import com.educards.service.SUser
-import com.educards.util.IndexDeckOrCard
-import com.educards.util.Listeners
+import com.educards.util.UAlertGenericDialog
+import com.educards.util.UIndexDeckOrCard
+import com.educards.util.UIndexDeckOrCard.getLastKeyDeck
+import com.educards.util.UListeners
+import com.educards.util.UListeners.setDeckListener
 import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.childEvents
 import com.google.firebase.database.ktx.getValue
-import kotlinx.coroutines.flow.cancellable
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     View.OnClickListener {
@@ -101,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (SUser.getCurrentUser()!=null && SUser.getCurrentUserDetailData().getVerified()) {
-            IndexDeckOrCard.realTimeIndexDeck()
+            UIndexDeckOrCard.realTimeIndexDeck()
 
             initView()
             initViewPager()
@@ -146,7 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //colocando wl email del usuario logeado
         val titleUser:TextView = headerView.findViewById(R.id.tv_email)
-        titleUser.setText(SUser.getCurrentUserDetailData().getEmail())
+        titleUser.setText(SUser.getCurrentUserDetailData().getDisplayName())
 
         logout.setOnClickListener(this)
 
@@ -195,23 +192,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                     deckData.add(it.getValue<Deck?>())
                 }
-                if (deckData.size>0) {
-                    viewPager.adapter = mFragmentAdapter
-                    if (currentTabSelectedPosition == 1){
-                        tabLayout.selectTab(tabLayout.getTabAt(currentTabSelectedPosition))
-                    }
+                viewPager.adapter = mFragmentAdapter
+                if (currentTabSelectedPosition == 1){
+                    tabLayout.selectTab(tabLayout.getTabAt(currentTabSelectedPosition))
                 }
-                Listeners.deckListener = deckListener
+
+                setDeckListener(deckListener)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.d("mainActivity", "Error al escuchar los cambios en la rama /decks. detalles: $error")
+                UAlertGenericDialog.createDialogAlert(this@MainActivity,"Recarga de datos","Error al en la función de escucha de los mazos. \nDetalles: $error")
             }
         })
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
         fab.show()
-        println("@@@@"+FirebaseConnection.refGlobal.path)
     }
 
     private lateinit var dialog: AlertDialog
@@ -221,8 +216,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onClick(view: View) {
         when (view.id) {
             R.id.bt_logout -> {
-                Listeners.removeAllListeners()
-                SUser.userLogout()
+                UListeners.removeAllListeners()
+                SUser.userLogout(this)
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 val drawer: DrawerLayout = findViewById(R.id.drawer_main)
@@ -244,13 +239,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 dialog.setCanceledOnTouchOutside(true)
                 btAddDeck.setOnClickListener{
                     val oldPosition = viewPager.verticalScrollbarPosition
-                    if (UTextView.verifyContentInTextViews(this,etTitle,"Campo de título nulo o vacío")) {
+                    val newDeckKey = getLastKeyDeck()?.toInt()?.plus(1)
+                    if (UTextView.verifyContentInTextViews(this,etTitle,"Null or empty title field")) {
                         SDeck.saveDeck(Deck(
-                            "",
+                            "$newDeckKey",
                             etTitle.text.toString().replaceFirstChar { it.uppercase() },
-                            "Click para editar descripcion",
+                            "Click to edit description",
                             false,
-                            0))
+                            0),this)
                         dialog.dismiss()
                     }
                     viewPager.setCurrentItem(oldPosition,false)
