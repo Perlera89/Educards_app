@@ -1,10 +1,7 @@
 package com.educards.util
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.widget.TextView
-import android.widget.Toast
-import com.educards.R
 
 object UTextView {
 
@@ -29,7 +26,7 @@ object UTextView {
     1. Permite limpiar el contenido de todos los textviews que reciba atraves de vararg y luego los itera asignando una cadena vacia
     al textview
      */
-    fun clearContentInTextViews(vararg _textViews: android.widget.TextView){
+    fun clearContentInTextViews(vararg _textViews: TextView){
         _textViews.forEach {
             it.setText("")
         }

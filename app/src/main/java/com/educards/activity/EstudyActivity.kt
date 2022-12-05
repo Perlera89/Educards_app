@@ -10,6 +10,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
@@ -31,6 +32,7 @@ class EstudyActivity : AppCompatActivity() {
     private lateinit var tvAnswer: TextView
     private lateinit var btReverse:FloatingActionButton
     private lateinit var btNext: FloatingActionButton
+    private lateinit var btDone: FloatingActionButton
 
     //elementos a esconder
     private lateinit var btnDeleteCard:ImageView
@@ -53,6 +55,7 @@ class EstudyActivity : AppCompatActivity() {
         tvAnswer = findViewById(R.id.et_answer)
         btReverse = findViewById(R.id.fab_flip)
         btNext = findViewById(R.id.fab_next)
+        btDone = findViewById(R.id.fab_done)
 
         btnDeleteCard = findViewById(R.id.bt_delete_card)
         btnMore = findViewById(R.id.bt_more)
@@ -153,6 +156,14 @@ class EstudyActivity : AppCompatActivity() {
                 UTextView.adjustTextInTextView(tvAnswer)
                 tvCounter.text = "${indexCardShow+1}/${cardsRandom.size}"
             }
+            if(indexCardShow+1 == cardsRandom.size){
+                btNext.visibility = View.GONE
+                btDone.visibility = View.VISIBLE
+            }
+        }
+
+        btDone.setOnClickListener{
+            this.finish()
         }
     }
 }

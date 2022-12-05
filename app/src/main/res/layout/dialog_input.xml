@@ -53,8 +53,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
+                    android:textColor="@color/blue_700"
                     android:maxLines="5"
                     android:minLines="1"
+                    android:lines="5"
+                    android:padding="16dp"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/titl_description"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titl_title"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:textColor="@color/blue_700"
+                android:hint="Description"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/blue_700"
+                    android:maxLines="5"
+                    android:minLines="3"
                     android:lines="5"
                     android:padding="16dp"
                     android:textSize="18sp" />
@@ -64,7 +93,7 @@
                 android:id="@+id/bt_create"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/titl_title"
+                android:layout_below="@id/titl_description"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginVertical="16dp"

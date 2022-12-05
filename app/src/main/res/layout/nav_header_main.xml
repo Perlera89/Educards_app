@@ -14,39 +14,48 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
         >
         <ImageView
             android:id="@+id/imageView_nav_header"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_centerVertical="true"
             android:src="@mipmap/ic_launcher_round"
             />
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_weight="3"
+            android:paddingTop="8dp"
+            android:layout_below="@id/imageView_nav_header"
+            android:maxLength="30"
+            android:maxLines="2"
+            android:text="@string/nav_header_user"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
         <TextView
             android:id="@+id/tv_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:layout_toEndOf="@id/imageView_nav_header"
-            android:layout_marginStart="8dp"
+            android:paddingTop="8dp"
+            android:layout_below="@id/tv_name"
             android:maxLength="30"
             android:maxLines="2"
-            android:text="@string/nav_header_text"
+            android:textSize="12sp"
+            android:text="@string/nav_header_email"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <Button
             android:id="@+id/bt_logout"
-            android:layout_below="@id/tv_email"
-            android:layout_toEndOf="@id/imageView_nav_header"
-            android:layout_marginStart="8dp"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_weight=".5"
-            android:layout_gravity="center|end"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:clickable="true"
             android:text="@string/log_out" />
 

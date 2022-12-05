@@ -5,16 +5,11 @@
 
     <item
         android:iconTint="@color/white"
-        android:id="@+id/menu_trash"
+        android:id="@+id/menu_deck_delete"
         android:title="@string/menu_trash"/>
 
     <item
-        android:iconTint="@color/white"
-        android:id="@+id/menu_all_decks"
-        android:title="@string/menu_set_list"/>
-
-    <item
-        android:id="@+id/menu_save_exit"
+        android:id="@+id/menu_deck_close"
         android:iconTint="@color/white"
         android:title="@string/menu_card_save"/>
 </menu>

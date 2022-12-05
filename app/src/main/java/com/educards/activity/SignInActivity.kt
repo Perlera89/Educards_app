@@ -8,20 +8,15 @@ import android.widget.EditText
 import android.widget.Toast
 import com.educards.R
 import com.educards.model.User
-import com.educards.service.FirebaseConnection
 import com.educards.service.SUser
 import com.educards.util.UTextView
 import com.educards.util.UUser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var etName: EditText
     private lateinit var etEmail:EditText
     private lateinit var etPass:EditText
     private lateinit var etConfirmPass:EditText
-    private lateinit var etPhoneNumber: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +26,6 @@ class SignInActivity : AppCompatActivity() {
         etEmail = findViewById(R.id.etEmail)
         etPass = findViewById(R.id.etPassword)
         etConfirmPass = findViewById(R.id.etConfirmPassword)
-        etPhoneNumber = findViewById(R.id.etPhone)
 
         if (SUser.getCurrentUser() != null){
             SUser.userLogout(this)
@@ -61,7 +55,7 @@ class SignInActivity : AppCompatActivity() {
                                 User.setPassword(etPass.text.toString())
                                 User.setDisplayName(etName.text.toString())
                                 SUser.saveUser(this, User)
-                                UTextView.clearContentInTextViews(etName,etEmail,etPass,etConfirmPass,etPhoneNumber)
+                                UTextView.clearContentInTextViews(etName,etEmail,etPass,etConfirmPass)
                             } else {
                                 Toast.makeText(this, "Passwords are different.", Toast.LENGTH_LONG).show()
                             }

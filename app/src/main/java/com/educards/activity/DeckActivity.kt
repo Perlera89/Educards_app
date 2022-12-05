@@ -113,6 +113,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var etHeader: TextView
     private lateinit var btUpdate: MaterialButton
     private lateinit var etHover: TextInputLayout
+    private lateinit var tiDescription: TextInputLayout
 
     private fun initView() {
         toolbar = findViewById(R.id.toolbar_deck)
@@ -213,13 +214,12 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_trash -> {
-                Toast.makeText(this, "All decks", Toast.LENGTH_SHORT).show()
+            R.id.menu_deck_delete -> {
+                Toast.makeText(this, "Delete deck", Toast.LENGTH_SHORT).show()
+//                TODO: Eliminar el mazo
             }
-            R.id.menu_all_decks -> {
-                Toast.makeText(this, "All decks", Toast.LENGTH_SHORT).show()
-            }
-            R.id.menu_save_exit -> {
+
+            R.id.menu_deck_close -> {
                 Toast.makeText(this, "Save and exit", Toast.LENGTH_SHORT).show()
             }
         }

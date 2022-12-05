@@ -24,7 +24,7 @@
     <!--    Menu-->
     <string name="menu_card_title">Card</string>
     <string name="menu_card_delete">Delete</string>
-    <string name="menu_card_save">Save and exit</string>
+    <string name="menu_card_save">Close deck</string>
     <string name="menu_card_reverse">View Reverse</string>
     <string name="menu_set_list">All Decks</string>
     <string name="menu_favorite_list">All favorites</string>
@@ -34,7 +34,8 @@
     <string name="nav_donate">Donations</string>
     <string name="nav_my_apps">Settings</string>
     <string name="nav_back">Back</string>
-    <string name="nav_header_text">usuario@mail.com</string>
+    <string name="nav_header_user">username</string>
+    <string name="nav_header_email">usuario@mail.com</string>
     <string name="navigation_drawer_open">Open navigation page</string>
     <string name="navigation_drawer_close">Close navigation page</string>
     <string name="tab_title_cards">Cards</string>
@@ -46,7 +47,7 @@
     <string name="app_start_text">Created by Educards</string>
     <string name="tab_title_decks">Decks</string>
     <string name="app_empty_text">Empty decks</string>
-    <string name="menu_trash">Move to trash</string>
+    <string name="menu_trash">Delete deck</string>
 
     <!--    Decks-->
     <string name="deck_name">Deck</string>
@@ -66,7 +67,7 @@
     <string name="about_email">Contact us by E-mail</string>
     <string name="about_github">Source code on GitHub</string>
     <string name="about_licenses">Open source licenses</string>
-    <string name="app_designed_by">Designed by July</string>
+    <string name="app_designed_by">Designed by Educards Team</string>
     <string name="about_not_found_email">Not found email app</string>
     <string name="about_email_intent">About:Educard App</string>
     <string name="share_with">Share with</string>

@@ -76,9 +76,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
+                android:visibility="visible"
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/blue_700"
                 android:src="@drawable/ic_navigate_next"
+                android:elevation="0dp"
+                app:layout_scrollFlags="scroll|enterAlways" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:visibility="gone"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/blue_700"
+                android:src="@drawable/ic_check"
                 android:elevation="0dp"
                 app:layout_scrollFlags="scroll|enterAlways" />
         </LinearLayout>

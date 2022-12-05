@@ -44,6 +44,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -141,9 +142,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val headerView: View = navigationView.getHeaderView(0)
         logout = headerView.findViewById(R.id.bt_logout)
 
-        //colocando wl email del usuario logeado
-        val titleUser:TextView = headerView.findViewById(R.id.tv_email)
-        titleUser.setText(SUser.getCurrentUserDetailData().getDisplayName())
+        //colocando el email del usuario logeado
+        val nameUser:TextView = headerView.findViewById(R.id.tv_name)
+        val emailUser:TextView = headerView.findViewById(R.id.tv_email)
+
+        nameUser.setText(SUser.getCurrentUserDetailData().getDisplayName())
+        emailUser.setText(SUser.getCurrentUserDetailData().getEmail())
 
         logout.setOnClickListener(this)
 
@@ -211,6 +215,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var dialog: AlertDialog
     private lateinit var etTitle: EditText
+    private lateinit var titleDescription: TextInputLayout
     private lateinit var btAddDeck: MaterialButton
 
     override fun onClick(view: View) {
@@ -230,8 +235,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val view = layoutInflater.inflate(R.layout.dialog_input, null)
                 btAddDeck = view.findViewById(R.id.bt_create)
                 etTitle = view.findViewById(R.id.et_title)
+                titleDescription = view.findViewById(R.id.titl_description)
                 btAddDeck = view.findViewById(R.id.bt_create)
 
+                titleDescription.visibility = View.VISIBLE
                 builder.setView(view)
 
                 dialog = builder.create()
