@@ -17,7 +17,7 @@ object FirebaseConnection {
     firebaseAuth ---- instancia de FirebaseAuth que nos permite usar los servicios de autentificacion de Firebase
      */
     val firebaseRealTimeDB: FirebaseDatabase by lazy{FirebaseDatabase.getInstance()}
-    val firebaseAuth: FirebaseAuth by lazy { Firebase.auth }
+    val firebaseAuth: FirebaseAuth by lazy { Firebase.auth }                    //usuario_data
     var refGlobal: DatabaseReference = firebaseRealTimeDB.getReference("${SUser.getCurrentUserDetailData().getIdUser()}_data")
 
 

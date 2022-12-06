@@ -8,11 +8,17 @@
     android:scrollbars="none"
     tools:context=".activity.LoginActivity">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+        <include layout="@layout/page_start" />
     <LinearLayout
+        android:id="@+id/ly_main"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -165,5 +171,6 @@
         </LinearLayout>
 
     </LinearLayout>
+</LinearLayout>
 
 </ScrollView>

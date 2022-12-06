@@ -22,6 +22,7 @@ object IndexDeckOrCard {
     var itemsCardInDeckSelected = 0
 
     fun realTimeIndexDeck(){
+        //-- idUsuario_data
         if (!SUser.getCurrentUserDetailData().getIdUser().isEmpty()) {
             refGlobal.child("decks").orderByKey().addValueEventListener(postListenerDeck)
         }

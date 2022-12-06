@@ -48,43 +48,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var fab: FloatingActionButton
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
-    private lateinit var relative_main: RelativeLayout
-    private lateinit var page_start: ImageView
     private lateinit var toolbar: Toolbar
     private lateinit var context: Context
-
-    private var isShowPageStart = true
-    private val MESSAGE_SHOW_DRAWER_LAYOUT = 0x001
-    private val MESSAGE_SHOW_START_PAGE = 0x002
-
-
-    var mHandler: Handler = @SuppressLint("HandlerLeak")
-    object : Handler() {
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                MESSAGE_SHOW_DRAWER_LAYOUT -> {
-                    drawer.openDrawer(androidx.core.view.GravityCompat.START)
-                    val sharedPreferences = getSharedPreferences("app", MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    editor.putBoolean("isFirst", false)
-                    editor.apply()
-                }
-                MESSAGE_SHOW_START_PAGE -> {
-                    val alphaAnimation = AlphaAnimation(1.0f, 0.0f)
-                    alphaAnimation.duration = 300
-                    alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
-                        override fun onAnimationStart(animation: Animation) {}
-                        override fun onAnimationEnd(animation: Animation) {
-                            relative_main.visibility = View.GONE
-                        }
-
-                        override fun onAnimationRepeat(animation: Animation) {}
-                    })
-                    relative_main.startAnimation(alphaAnimation)
-                }
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initView()
         initViewPager()
 
+<<<<<<< Updated upstream
         val sharedPreferences = getSharedPreferences("app", MODE_PRIVATE)
         context = this
 
@@ -111,6 +77,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         IndexDeckOrCard.realTimeIndexDeck()
         IndexDeckOrCard.realTimeIndexCardInSelectedDeck()
+=======
+            initView()
+            initViewPager()
+            context = this        }
+>>>>>>> Stashed changes
     }
 
     private fun initView() {
@@ -136,8 +107,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab = findViewById(R.id.fab_main)
         fab.setOnClickListener(this)
 
-        relative_main = findViewById(R.id.relative_main)
-        page_start = findViewById(R.id.img_page_start)
     }
 
     private fun getTitles():MutableList<String>{
@@ -267,8 +236,4 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onDestroy() {
-        mHandler.removeCallbacksAndMessages(null)
-        super.onDestroy()
-    }
 }
