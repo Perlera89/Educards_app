@@ -43,8 +43,8 @@ class LoginActivity : AppCompatActivity() {
     isEmailVerified es falso le indicamos por mensaje que debe verificarlo
      */
     fun logIn(view:View){
-        if (UTextView.verifyContentInTextViews(this,etEmail, "Null or empty email field")) {
-            if (UTextView.verifyContentInTextViews(this,etPassword, "Null or empty password field")) {
+        if (UTextView.verifyContentInEditText(this,etEmail, "Null or empty email field")) {
+            if (UTextView.verifyContentInEditText(this,etPassword, "Null or empty password field")) {
                     User.clearUserData()
                     User.setEmail(etEmail.text.toString())
                     User.setPassword(etPassword.text.toString())

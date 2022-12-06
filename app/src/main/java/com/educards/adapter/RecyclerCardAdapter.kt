@@ -2,7 +2,6 @@ package com.educards.adapter
 
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,13 +11,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
-import androidx.core.view.allViews
-import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.educards.R
 import com.educards.model.entities.Card
 import com.educards.service.SCard
-import com.educards.util.UAlertGenericDialog
 import com.educards.util.UAlertGenericDialog.createDialogAlert
 import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
@@ -119,7 +115,7 @@ class RecyclerCardAdapter(
 
                     currentPositionCard = this.adapterPosition
                     addCard.setOnClickListener {
-                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Null or empty question field")) {
+                        if (UTextView.verifyContentInEditText(_context,tvEditCard,"Null or empty question field")) {
                             //la llave la rama padre de la tarjeta fue guardada al dar click en el mazo
                             if (tvEditCard.text.toString().length < 375) {
                                 SCard.updateCard(_context, Card(card.getId(), tvEditCard.text.toString(), card.getAnswer()), "pregunta")
@@ -152,7 +148,7 @@ class RecyclerCardAdapter(
 
                     currentPositionCard = this.adapterPosition
                     addCard.setOnClickListener {
-                        if (UTextView.verifyContentInTextViews(_context,tvEditCard,"Null or empty response field")) {
+                        if (UTextView.verifyContentInEditText(_context,tvEditCard,"Null or empty response field")) {
                             //la llave la rama padre de la tarjeta fue guardada al dar click en el mazo
                             if (tvEditCard.text.toString().length < 375) {
                                 SCard.updateCard(_context, Card(card.getId(), card.getQuestion(), tvEditCard.text.toString()), "respuesta")

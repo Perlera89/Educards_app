@@ -90,7 +90,9 @@ class RecyclerDeckAdapter(private var decks: MutableList<Deck?>, val context: Co
 
                 delete.setOnClickListener{
                     builder.setTitle("Confirm delete")
-                        .setMessage("\nDo you want to remove ${deck.getTitle()} deck?")
+                        .setMessage("\nDo you want to remove ${deck.getTitle()} deck?" +
+                                "\nThis action is not reversible; if you confirm the action, " +
+                                "the deck will be permanently deleted")
                         .setCancelable(true)
                         .setPositiveButton("Yes"){dialogInterface, it ->
                             if(deck != null){

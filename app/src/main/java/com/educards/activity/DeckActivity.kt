@@ -21,7 +21,6 @@ import com.educards.model.entities.Card
 import com.educards.service.FirebaseConnection
 import com.educards.service.SCard
 import com.educards.service.SDeck
-import com.educards.util.UListeners
 import com.educards.util.UTextView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,7 +37,6 @@ import com.educards.util.UAlertGenericDialog.createDialogAlert
 import com.educards.util.UIndexDeckOrCard.getItemsCardInDeckSelected
 import com.educards.util.UIndexDeckOrCard.getLastKeyCardDeckSelected
 import com.educards.util.UIndexDeckOrCard.realTimeIndexCardInSelectedDeck
-import com.educards.util.UIndexDeckOrCard.setSelectedDeckKey
 import com.educards.util.UListeners.setCardListener
 
 class DeckActivity : AppCompatActivity(), View.OnClickListener,
@@ -135,7 +133,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
             dialog.show()
 
             btUpdate.setOnClickListener {
-                if (UTextView.verifyContentInTextViews(this,etTitle,"Null or empty deck title field")){
+                if (UTextView.verifyContentInEditText(this,etTitle,"Null or empty deck title field")){
                     //los datos del mazo vienen del bundle y solo se actualiza el titulo
                     SDeck.updateDeck(this,Deck(
                         bundle.getString("idDeck").toString(),
@@ -170,7 +168,7 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
             realTimeIndexCardInSelectedDeck()
             btUpdate.setOnClickListener {
-                if (UTextView.verifyContentInTextViews(this,etTitle,"Null or empty deck description field")){
+                if (UTextView.verifyContentInEditText(this,etTitle,"Null or empty deck description field")){
                     //los datos del mazo vienen del bundle y la descripcion y el titulo de las edittext
                     SDeck.updateDeck(this,Deck(
                         bundle.getString("idDeck").toString(),
@@ -214,13 +212,30 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            //Eliminar mazo completo
             R.id.menu_deck_delete -> {
-                Toast.makeText(this, "Delete deck", Toast.LENGTH_SHORT).show()
-//                TODO: Eliminar el mazo
+                val builder = android.app.AlertDialog.Builder(this)
+                builder.setTitle("Confirm delete")
+                    .setMessage("\nDo you want to remove ${title} deck?" +
+                            "\nThis action is not reversible; if you confirm the action, " +
+                            "the deck will be permanently deleted")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes"){dialogInterface, it ->
+                        val deckSelectedId = bundle.getString("idDeck")
+                        SDeck.deleteDeck(this,deckSelectedId!!)
+                        this.finish()
+                    }
+                    .setNegativeButton("No"){dialogInterface, it ->
+                        dialogInterface.cancel()
+                    }
+                    .setNeutralButton("Cancel"){dialogInterface, it ->
+                        dialogInterface.cancel()
+                    }
+                    .show()
             }
 
             R.id.menu_deck_close -> {
-                Toast.makeText(this, "Save and exit", Toast.LENGTH_SHORT).show()
+                this.finish()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -262,19 +277,25 @@ class DeckActivity : AppCompatActivity(), View.OnClickListener,
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_all_decks -> {
-                val mainIntent = Intent(this, MainActivity::class.java)
-                startActivity(mainIntent)
+                val intentMain = Intent(this, MainActivity::class.java)
+                startActivity(intentMain)
                 this.finish()
             }
             R.id.nav_all_favorites -> {
+                val intentMain = Intent(this, MainActivity::class.java)
+                intentMain.putExtra("allFavorites",true)
+                startActivity(intentMain)
+                this.finish()
             }
             R.id.nav_about -> {
                 val aboutIntent = Intent(this, AboutActivity::class.java)
                 startActivity(aboutIntent)
+                this.finish()
             }
             R.id.nav_donate -> {
                 val donateIntent = Intent(this, DonateActivity::class.java)
                 startActivity(donateIntent)
+                this.finish()
             }
         }
         drawer.closeDrawer(GravityCompat.START)

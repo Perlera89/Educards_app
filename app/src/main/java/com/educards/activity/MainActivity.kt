@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.*
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.*
@@ -211,6 +212,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.setTabsFromPagerAdapter(mFragmentAdapter)
         fab.show()
+
+        //si esta viendo las cards y decide ir a todos los decks o todos los favoritos
+        if (this.intent.extras?.getBoolean("allFavorites") == true){
+            tabLayout.selectTab(tabLayout.getTabAt(1))
+        }
     }
 
     private lateinit var dialog: AlertDialog
@@ -247,14 +253,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 btAddDeck.setOnClickListener{
                     val oldPosition = viewPager.verticalScrollbarPosition
                     val newDeckKey = getLastKeyDeck()?.toInt()?.plus(1)
-                    if (UTextView.verifyContentInTextViews(this,etTitle,"Null or empty title field")) {
-                        SDeck.saveDeck(Deck(
-                            "$newDeckKey",
-                            etTitle.text.toString().replaceFirstChar { it.uppercase() },
-                            "Click to edit description",
-                            false,
-                            0),this)
-                        dialog.dismiss()
+                    if (UTextView.verifyContentInEditText(this,etTitle,"Null or empty title field")) {
+                        if (UTextView.verifyContentInEditText(this,titleDescription.editText!!,"Null or empty description field")){
+                            SDeck.saveDeck(Deck(
+                                "$newDeckKey",
+                                etTitle.text.toString().replaceFirstChar { it.uppercase() },
+                                titleDescription.editText?.text.toString(),
+                                false,
+                                0),this)
+                            dialog.dismiss()
+                        }
                     }
                     viewPager.setCurrentItem(oldPosition,false)
                 }
@@ -284,12 +292,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_all_decks -> {
-                val mainIntent = Intent(this, MainActivity::class.java)
-                startActivity(mainIntent)
-                this.finish()
+                tabLayout.selectTab(tabLayout.getTabAt(0))
             }
             R.id.nav_all_favorites -> {
-                Toast.makeText(this, "Favorites", Toast.LENGTH_SHORT).show()
+                tabLayout.selectTab(tabLayout.getTabAt(1))
             }
             R.id.nav_about -> {
                 val aboutIntent = Intent(this, AboutActivity::class.java)

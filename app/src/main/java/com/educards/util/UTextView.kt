@@ -1,6 +1,7 @@
 package com.educards.util
 
 import android.content.Context
+import android.widget.EditText
 import android.widget.TextView
 
 object UTextView {
@@ -9,7 +10,7 @@ object UTextView {
     1. Permite verificar si los TextViews está vacios, recibe el contexto para dar los mensajes de alerta,
     la variable del textview a evaluar y un mesaje de error si está vacio, retorna un estado verdader si tiene datos y falso si está vacio
      */
-    fun verifyContentInTextViews(_context:Context, _textView: TextView, _errorMessaje:String):Boolean{
+    fun verifyContentInEditText(_context:Context, _textView: EditText, _errorMessaje:String):Boolean{
         var state = false
         if(_textView.text.trim().isNotBlank() && _textView.text.trim().isNotEmpty()){
             state = true

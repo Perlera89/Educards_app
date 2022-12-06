@@ -44,10 +44,10 @@ class SignInActivity : AppCompatActivity() {
     7 Luego usamos el metodo clearContentInTextViews de la clase UTextView para limpiar todo el contenido de los textviews
      */
     fun registerUser(view:View){
-        if(UTextView.verifyContentInTextViews(this,etName,"Null or empty name field")) {
-            if (UTextView.verifyContentInTextViews(this,etEmail,"Null or empty email field")) {
-                if (UTextView.verifyContentInTextViews(this,etPass,"Null or empty password field")) {
-                    if (UTextView.verifyContentInTextViews(this,etConfirmPass,"Confirm password field null or empty")) {
+        if(UTextView.verifyContentInEditText(this,etName,"Null or empty name field")) {
+            if (UTextView.verifyContentInEditText(this,etEmail,"Null or empty email field")) {
+                if (UTextView.verifyContentInEditText(this,etPass,"Null or empty password field")) {
+                    if (UTextView.verifyContentInEditText(this,etConfirmPass,"Confirm password field null or empty")) {
                         if (UUser.verifyPassword(etPass)) {
                             if (etPass.text.toString() == etConfirmPass.text.toString()) {
                                 User.clearUserData()
