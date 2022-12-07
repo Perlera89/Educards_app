@@ -40,6 +40,10 @@ class RecyclerCardAdapter(
    //@SuppressLint("ClickableViewAccessibility")
    var currentPositionCard = 0
 
+    var isReScrolled = false
+    var positionCardScrolled = 0
+    var isAnswer = false
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val card = cards[position]
         holder.bind(card)
@@ -52,6 +56,25 @@ class RecyclerCardAdapter(
             }
 
         })
+        when(position){
+            //al primer item se le agrega el evento de click para que no tenga que tocar la carta para girarla
+            0->{
+                holder.cardAnimation()
+            }
+            //cuando se agrega una pregunta se va a la ultima y se le agrega el click para que pueda girarla
+            //sin tocarla
+            cards.size-1 ->{
+                holder.cardAnimation()
+            }
+        }
+        if (isReScrolled && (position==positionCardScrolled)){
+            //se activa la animacion directamente solo al item donde se ha scrolleado
+            holder.cardAnimation()
+            //si el item donde se dezplaza se causo porque se edito una respuesta,se obliga a girar a la tarjeta
+            if (isAnswer){
+                _btReverse.performClick()
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -120,6 +143,8 @@ class RecyclerCardAdapter(
                             if (tvEditCard.text.toString().length < 375) {
                                 SCard.updateCard(_context, Card(card.getId(), tvEditCard.text.toString(), card.getAnswer()), "pregunta")
                                 dialog.dismiss()
+                                //re dezplazar donde estaba este item
+                                isAnswer = false
                                 returnToPosition(currentPositionCard)
                             }else{
                                 createDialogAlert(_context,"Answer","Due to design and readability of the text, it is not allowed to save a question with more than 375 characters")
@@ -153,6 +178,8 @@ class RecyclerCardAdapter(
                             if (tvEditCard.text.toString().length < 375) {
                                 SCard.updateCard(_context, Card(card.getId(), card.getQuestion(), tvEditCard.text.toString()), "respuesta")
                                 dialog.dismiss()
+                                //re dezplazar donde estaba este item
+                                isAnswer = true
                                 returnToPosition(currentPositionCard)
                             }else{
                                 createDialogAlert(_context,"Answer","Due to design and readability of the text, it is not allowed to save a response with more than 375 characters")
@@ -183,8 +210,11 @@ class RecyclerCardAdapter(
 
             }
         private fun returnToPosition(_position:Int){
+            isReScrolled = true
+            positionCardScrolled = _position
             CoroutineScope(Dispatchers.Main).launch {
                 recyclerCard.scrollToPosition(_position)
+                currentPositionCard = _position
             }
         }
         fun dialogItems(_viewCard:View?){
@@ -206,8 +236,23 @@ class RecyclerCardAdapter(
                 frontAnim = AnimatorInflater.loadAnimator(_context, R.animator.front_animation) as AnimatorSet
                 backAnim = AnimatorInflater.loadAnimator(_context, R.animator.back_animation) as AnimatorSet
 
+                //quita sonido del boton si se redezplaza a una respuesta
+                _btReverse.isSoundEffectsEnabled = !isAnswer
+
                 _btReverse.setOnClickListener{
-                    activeAnimation()
+                    //para evitar que se dectecte el giro
+                    if (isAnswer) {
+                        //a mayor magnitud mas veloz
+                        frontAnim.currentPlayTime= 1000L
+                        backAnim.currentPlayTime = 1000L
+                        //la animacion rapida solo debe suceder una vez
+                        activeAnimation()
+                        isAnswer = false
+                    }else{
+                        frontAnim.currentPlayTime = 1L
+                        backAnim.currentPlayTime = 1L
+                        activeAnimation()
+                    }
                 }
             }
         private fun activeAnimation(){

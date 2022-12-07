@@ -66,7 +66,6 @@ class EstudyActivity : AppCompatActivity() {
         tvStudyTitle.text = this.intent.extras?.getString("title")
 
         getCards()
-        cardAnimation()
         initStudy()
     }
 
@@ -94,7 +93,7 @@ class EstudyActivity : AppCompatActivity() {
     private lateinit var backAnim: AnimatorSet
     private var isFront = true
 
-    fun cardAnimation(){
+    private fun cardAnimation(){
         val scale = this.resources.displayMetrics.density
         questionCard.cameraDistance = 8000 * scale
         answerCard.cameraDistance = 8000 * scale
@@ -102,7 +101,6 @@ class EstudyActivity : AppCompatActivity() {
         frontAnim = AnimatorInflater.loadAnimator(this, R.animator.front_animation) as AnimatorSet
         backAnim = AnimatorInflater.loadAnimator(this, R.animator.back_animation) as AnimatorSet
 
-        btReverse.setOnClickListener{
             if(isFront){
                 answerCard.visibility = View.VISIBLE
                 frontAnim.setTarget(questionCard)
@@ -120,7 +118,6 @@ class EstudyActivity : AppCompatActivity() {
 
                 isFront = true
             }
-        }
     }
 
     private fun generateRandomCardsArray(){
@@ -148,20 +145,29 @@ class EstudyActivity : AppCompatActivity() {
     private fun initStudy(){
         var indexCardShow = 0
         btNext.setOnClickListener{
+            println("se ejecuta")
             if (indexCardShow < cardsRandom.size-1){
                 indexCardShow++
+                //si isFront = false --> la tarjeta esta mostrado una respuesta
+                if (isFront==false){
+                    //si se esta mostrando una respuesta y da click en siguiente, se gira la tarjeta y se muestra la pregunta
+                    cardAnimation()
+                }
                 tvQuestion.text = cardsRandom[indexCardShow].getQuestion()
                 UTextView.adjustTextInTextView(tvQuestion)
                 tvAnswer.text = cardsRandom[indexCardShow].getAnswer()
                 UTextView.adjustTextInTextView(tvAnswer)
                 tvCounter.text = "${indexCardShow+1}/${cardsRandom.size}"
             }
+
             if(indexCardShow+1 == cardsRandom.size){
                 btNext.visibility = View.GONE
                 btDone.visibility = View.VISIBLE
             }
         }
-
+        btReverse.setOnClickListener{
+                cardAnimation()
+        }
         btDone.setOnClickListener{
             this.finish()
         }
